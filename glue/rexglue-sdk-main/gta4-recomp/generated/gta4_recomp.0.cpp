@@ -28054,8 +28054,7 @@ loc_8285E3F0:
 	// cmplwi cr6,r11,3
 	cr6.compare<uint32_t>(ctx.r11.u32, 3, xer);
 	// bgt cr6,0x8285e420
-	// ERROR: conditional branch to unknown address 0x8285E420
-	if (cr6.gt) REX_FATAL("Unresolved branch from 0x8285E3F4 to 0x8285E420");
+	if (cr6.gt) goto loc_8285E420;
 	// lis r12,-32122
 	ctx.r12.s64 = -2105147392;
 	// addi r12,r12,-7152
@@ -28069,13 +28068,13 @@ loc_8285E3F0:
 	// bctr 
 	switch (ctx.r11.u32) {
 	case 0:
-		REX_FATAL("Jump target 0x8285E3E8 unresolved at bctr 0x8285E40C");
+		goto loc_8285E3E8;
 	case 1:
-		REX_FATAL("Jump target 0x8285E3E8 unresolved at bctr 0x8285E40C");
+		goto loc_8285E3E8;
 	case 2:
-		REX_FATAL("Jump target 0x8285E3E8 unresolved at bctr 0x8285E40C");
+		goto loc_8285E3E8;
 	case 3:
-		REX_FATAL("Jump target 0x8285E420 unresolved at bctr 0x8285E40C");
+		goto loc_8285E420;
 	default:
 		__builtin_trap(); // Switch case out of range
 	}

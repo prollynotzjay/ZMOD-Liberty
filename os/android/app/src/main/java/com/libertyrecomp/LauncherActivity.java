@@ -570,11 +570,11 @@ public class LauncherActivity extends Activity {
                 if (file.getName().toLowerCase(Locale.ROOT).endsWith(".iso")) disc = true;
                 else update = true;
             }
-            if (disc && update) {
+            if (disc) {
                 mStatus.setText("Game files found in install/. Press Install on the right.");
             } else {
-                mStatus.setText("Game not installed. Choose the disc image and Title Update 8 "
-                        + "on the right and press Install.");
+                mStatus.setText("Game not installed. Choose the disc image on the right and "
+                        + "press Install.");
             }
         }
         String result = null;
@@ -1257,6 +1257,11 @@ public class LauncherActivity extends Activity {
         mInstallBody.addView(mSourceRows, matchWrap(0));
         for (int i = 0; i < SOURCE_LABELS.length; ++i) {
             final int index = i;
+            if (i == SOURCE_UPDATE) {
+                // PAL: the European disc has no Title Update 8; the row is not shown.
+                mSourceValues[i] = text("Not selected", 12, R.color.picker_muted);
+                continue;
+            }
             TextView label = text(SOURCE_LABELS[i], 14, R.color.picker_text);
             mSourceRows.addView(label, matchWrap(dp(12)));
             mSourceValues[i] = text("Not selected", 12, R.color.picker_muted);
@@ -1337,8 +1342,8 @@ public class LauncherActivity extends Activity {
         boolean running = Installer.running();
         mInstallTitle.setText(mInstalled ? "Game installed" : "Install the game");
         mInstallNote.setText(mInstalled
-                ? "GTA IV with Title Update 8 is installed and ready."
-                : "You need your own USA disc image and Title Update 8 (0.0.8.5)."
+                ? "GTA IV is installed and ready."
+                : "You need your own European (PAL) disc image of GTA IV."
                         + (reason != null && !reason.equals("not installed")
                         && new File(Installer.installRoot(mDataRoot), "game").exists()
                         ? "\nCurrent installation: " + reason : ""));

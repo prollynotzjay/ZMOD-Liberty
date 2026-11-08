@@ -15,15 +15,15 @@ extern "C" void sub_828CCD60(PPCContext& context, uint8_t* base) {
 }
 #endif  // GTA4_PAL_SAFE_MODE sub_828CCD60
 
-#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
-extern "C" void sub_822B7DD0(PPCContext& context, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_821EEA40(PPCContext& context, uint8_t* base) {
   const uint32_t control = context.r3.u32;
   const uint32_t caller = static_cast<uint32_t>(context.lr);
-  __imp__sub_822B7DD0(context, base);
+  __imp__sub_821EEA40(context, base);
   GTA4_SonyReplay(context, base, control);
 #if defined(GTA4_TOUCH_LEGACY_HOST)
   GTA4_TouchObserveControlReplay(context, base, control, caller, GTA4_TouchCurrentEpoch());
 #endif
 }
-#endif  // GTA4_PAL_SAFE_MODE sub_822B7DD0
+#endif  // GTA4_PAL_SAFE_MODE sub_821EEA40
 #endif

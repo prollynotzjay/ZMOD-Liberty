@@ -43,13 +43,13 @@ using rex::input::AbsolutePointerEvent;
 using rex::input::AbsolutePointerPhase;
 
 constexpr uint32_t kMapScreen = 3;
-constexpr uint32_t kCurrentScreenAddress = 0x82BFA124;
-constexpr uint32_t kMapZoomLevelAddress = 0x82BF9D88;
+constexpr uint32_t kCurrentScreenAddress = 0x82BEC844;
+constexpr uint32_t kMapZoomLevelAddress = 0x82BEC4C8;
 constexpr uint32_t kMapZoomMinimum = 0;
 constexpr uint32_t kMapZoomMaximum = 5;
 
 constexpr uint32_t kFrontendChannel = 0;
-constexpr uint32_t kFrontendChannelTableAddress = 0x82CC7BD0;
+constexpr uint32_t kFrontendChannelTableAddress = 0x82C192F4;
 constexpr uint32_t kFrontendHudCaller = 0x8229E7C0;
 constexpr uint32_t kFrontendRowVisibleOffset = 2944;
 constexpr uint32_t kFrontendRowSelectableOffset = 2964;
@@ -72,7 +72,7 @@ constexpr uint32_t kActionArrayOffset = 2328;
 constexpr uint32_t kActionStride = 12;
 constexpr uint32_t kActionCurrentOffset = 2;
 constexpr uint32_t kLastInputTimeOffset = 4200;
-constexpr uint32_t kGameInputTimeAddress = 0x82C6C2A4;
+constexpr uint32_t kGameInputTimeAddress = 0x82C7E274;
 constexpr uint8_t kPressed = 255;
 
 enum class Action : uint32_t {
@@ -313,7 +313,7 @@ void SelectFrontendRow(PPCContext& context, uint8_t* base, uint32_t channel, uin
   PPCContext nested = context;
   nested.r3.u32 = channel;
   nested.r4.u32 = row;
-  __imp__sub_8224EE98(nested, base);
+  __imp__sub_8224B830(nested, base);
   if (REXCVAR_GET(gta4_touch_trace)) {
     REXLOG_INFO(
         "gta4-touch: epoch={} event={} pointer={} generation={} owner=frontend op=select "
@@ -560,9 +560,9 @@ void GTA4_TouchConsumePoll(PPCContext& context, uint8_t* base, uint64_t epoch) {
   const bool frontend_active = FrontendActive(context, base);
   const bool map_active = frontend_active && screen == kMapScreen;
   gta4::input::CaptureTouchContext(context, base, epoch, frontend_active, map_active);
-  // Liberty touch layout: the title's own pause-menu flag (0x82BF9EF4), so the
+  // Liberty touch layout: the title's own pause-menu flag (0x82BEC634), so the
   // menu controls follow the pause menu however it is opened or closed.
-  gta4::input::PublishLibertyPauseMenu(LoadU32(base, 0x82BF9EF4u), screen);
+  gta4::input::PublishLibertyPauseMenu(LoadU32(base, 0x82BEC634u), screen);
   const uint64_t presentation_revision = gta4::input::ContextTouchPresentationRevision();
   if (g_hud_presentation_revision != presentation_revision) {
     // A complete loading/cutscene transition may occur between input polls.
@@ -848,8 +848,8 @@ void GTA4_TouchCaptureFrontendDraw(PPCContext& context, uint8_t* base,
   g_row_capture = std::move(previous);
 }
 
-#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
-extern "C" void sub_821BF050(PPCContext& context, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_82190630(PPCContext& context, uint8_t* base) {
   if (g_radar_capture.active && context.lr == kRadarQuadCaller && context.r4.u32) {
     Rect quad{};
     bool first = true;
@@ -882,9 +882,9 @@ extern "C" void sub_821BF050(PPCContext& context, uint8_t* base) {
       g_radar_capture.has_quad = true;
     }
   }
-  __imp__sub_821BF050(context, base);
+  __imp__sub_82190630(context, base);
 }
-#endif  // GTA4_PAL_SAFE_MODE sub_821BF050
+#endif  // GTA4_PAL_SAFE_MODE sub_82190630
 
 #ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_8239C468(PPCContext& context, uint8_t* base) {

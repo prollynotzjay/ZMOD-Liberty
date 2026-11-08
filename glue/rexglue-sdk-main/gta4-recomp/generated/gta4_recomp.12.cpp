@@ -20939,11 +20939,9 @@ loc_82675798:
 	// cmpw cr6,r3,r11
 	cr6.compare<int32_t>(ctx.r3.s32, ctx.r11.s32, xer);
 	// bgt cr6,0x8267582c
-	// ERROR: conditional branch to unknown address 0x8267582C
-	if (cr6.gt) REX_FATAL("Unresolved branch from 0x826757A4 to 0x8267582C");
+	if (cr6.gt) goto loc_8267582C;
 	// beq cr6,0x82675790
-	// ERROR: conditional branch to unknown address 0x82675790
-	if (cr6.eq) REX_FATAL("Unresolved branch from 0x826757A8 to 0x82675790");
+	if (cr6.eq) goto loc_82675790;
 	// addis r11,r3,-4096
 	ctx.r11.s64 = ctx.r3.s64 + -268435456;
 	// addi r11,r11,-68
@@ -20951,8 +20949,7 @@ loc_82675798:
 	// cmplwi cr6,r11,21
 	cr6.compare<uint32_t>(ctx.r11.u32, 21, xer);
 	// bgt cr6,0x8267596c
-	// ERROR: conditional branch to unknown address 0x8267596C
-	if (cr6.gt) REX_FATAL("Unresolved branch from 0x826757B8 to 0x8267596C");
+	if (cr6.gt) goto loc_8267596C;
 	// lis r12,-32153
 	ctx.r12.s64 = -2107179008;
 	// addi r12,r12,22484
@@ -20966,49 +20963,49 @@ loc_82675798:
 	// bctr 
 	switch (ctx.r11.u32) {
 	case 0:
-		REX_FATAL("Jump target 0x82675790 unresolved at bctr 0x826757D0");
+		goto loc_82675790;
 	case 1:
-		REX_FATAL("Jump target 0x82675790 unresolved at bctr 0x826757D0");
+		goto loc_82675790;
 	case 2:
-		REX_FATAL("Jump target 0x82675790 unresolved at bctr 0x826757D0");
+		goto loc_82675790;
 	case 3:
-		REX_FATAL("Jump target 0x82675790 unresolved at bctr 0x826757D0");
+		goto loc_82675790;
 	case 4:
-		REX_FATAL("Jump target 0x82675790 unresolved at bctr 0x826757D0");
+		goto loc_82675790;
 	case 5:
-		REX_FATAL("Jump target 0x82675790 unresolved at bctr 0x826757D0");
+		goto loc_82675790;
 	case 6:
-		REX_FATAL("Jump target 0x8267596C unresolved at bctr 0x826757D0");
+		goto loc_8267596C;
 	case 7:
-		REX_FATAL("Jump target 0x82675790 unresolved at bctr 0x826757D0");
+		goto loc_82675790;
 	case 8:
-		REX_FATAL("Jump target 0x8267596C unresolved at bctr 0x826757D0");
+		goto loc_8267596C;
 	case 9:
-		REX_FATAL("Jump target 0x8267596C unresolved at bctr 0x826757D0");
+		goto loc_8267596C;
 	case 10:
-		REX_FATAL("Jump target 0x8267596C unresolved at bctr 0x826757D0");
+		goto loc_8267596C;
 	case 11:
-		REX_FATAL("Jump target 0x8267596C unresolved at bctr 0x826757D0");
+		goto loc_8267596C;
 	case 12:
-		REX_FATAL("Jump target 0x8267596C unresolved at bctr 0x826757D0");
+		goto loc_8267596C;
 	case 13:
-		REX_FATAL("Jump target 0x82675790 unresolved at bctr 0x826757D0");
+		goto loc_82675790;
 	case 14:
-		REX_FATAL("Jump target 0x8267596C unresolved at bctr 0x826757D0");
+		goto loc_8267596C;
 	case 15:
-		REX_FATAL("Jump target 0x8267596C unresolved at bctr 0x826757D0");
+		goto loc_8267596C;
 	case 16:
-		REX_FATAL("Jump target 0x8267596C unresolved at bctr 0x826757D0");
+		goto loc_8267596C;
 	case 17:
-		REX_FATAL("Jump target 0x82675790 unresolved at bctr 0x826757D0");
+		goto loc_82675790;
 	case 18:
-		REX_FATAL("Jump target 0x82675790 unresolved at bctr 0x826757D0");
+		goto loc_82675790;
 	case 19:
-		REX_FATAL("Jump target 0x82675790 unresolved at bctr 0x826757D0");
+		goto loc_82675790;
 	case 20:
-		REX_FATAL("Jump target 0x82675790 unresolved at bctr 0x826757D0");
+		goto loc_82675790;
 	case 21:
-		REX_FATAL("Jump target 0x82675790 unresolved at bctr 0x826757D0");
+		goto loc_82675790;
 	default:
 		__builtin_trap(); // Switch case out of range
 	}

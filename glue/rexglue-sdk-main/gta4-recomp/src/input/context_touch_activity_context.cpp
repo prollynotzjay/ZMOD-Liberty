@@ -7,12 +7,12 @@
 
 namespace gta4::input {
 namespace {
-// Derived from compiled sub_82844200, sub_828458C8 and sub_82845668. The
+// Derived from compiled sub_827D5840, sub_827D6F08 and sub_827D6CA8. The
 // table count is uint16; a live thread has serial+4, program+8, status+12,
 // and its local storage at +80. No IDA pseudocode participates in this reader.
-constexpr uint32_t kThreads = 0x83192788;
-constexpr uint32_t kCurrentThread = 0x8319277C;
-constexpr uint32_t kEpisode = 0x82B39504;
+constexpr uint32_t kThreads = 0x830F4FC8;
+constexpr uint32_t kCurrentThread = 0x830F4FBC;
+constexpr uint32_t kEpisode = 0x82B11174;
 constexpr size_t kMaximumThreads = 1024;
 struct Reader {
   const TouchContextMemory& memory;
@@ -54,7 +54,7 @@ bool ValidProgram(const Reader& read, uint32_t program, const TouchActivityProfi
   if (!program) return false;
   const auto key = read.Read<uint32_t>(program, 4);
   const auto size = read.Read<uint32_t>(program, 16);
-  // sub_82846780 copies the SCO local count to +20. The adjacent +22
+  // sub_827D7D30 copies the SCO local count to +20. The adjacent +22
   // halfword comes from the SCO flags and is not a local count.
   const auto locals = read.Read<uint16_t>(program, 20);
   return key && *key == p.program_key && size && *size == p.code_size && locals && *locals == p.local_count;

@@ -11365,8 +11365,7 @@ loc_823A5E2C:
 	// cmplwi cr6,r11,213
 	cr6.compare<uint32_t>(ctx.r11.u32, 213, xer);
 	// bgt cr6,0x823a5e04
-	// ERROR: conditional branch to unknown address 0x823A5E04
-	if (cr6.gt) REX_FATAL("Unresolved branch from 0x823A5E34 to 0x823A5E04");
+	if (cr6.gt) goto loc_823A5E04;
 	// lis r12,-32198
 	ctx.r12.s64 = -2110128128;
 	// addi r12,r12,24144
@@ -11380,433 +11379,433 @@ loc_823A5E2C:
 	// bctr 
 	switch (ctx.r11.u32) {
 	case 0:
-		REX_FATAL("Jump target 0x823A5E24 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E24;
 	case 1:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 2:
-		REX_FATAL("Jump target 0x823A5E24 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E24;
 	case 3:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 4:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 5:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 6:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 7:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 8:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 9:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 10:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 11:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 12:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 13:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 14:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 15:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 16:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 17:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 18:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 19:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 20:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 21:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 22:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 23:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 24:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 25:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 26:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 27:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 28:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 29:
-		REX_FATAL("Jump target 0x823A5E24 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E24;
 	case 30:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 31:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 32:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 33:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 34:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 35:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 36:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 37:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 38:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 39:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 40:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 41:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 42:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 43:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 44:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 45:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 46:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 47:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 48:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 49:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 50:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 51:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 52:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 53:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 54:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 55:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 56:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 57:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 58:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 59:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 60:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 61:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 62:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 63:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 64:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 65:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 66:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 67:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 68:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 69:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 70:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 71:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 72:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 73:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 74:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 75:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 76:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 77:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 78:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 79:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 80:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 81:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 82:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 83:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 84:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 85:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 86:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 87:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 88:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 89:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 90:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 91:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 92:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 93:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 94:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 95:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 96:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 97:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 98:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 99:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 100:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 101:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 102:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 103:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 104:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 105:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 106:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 107:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 108:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 109:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 110:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 111:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 112:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 113:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 114:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 115:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 116:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 117:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 118:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 119:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 120:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 121:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 122:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 123:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 124:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 125:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 126:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 127:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 128:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 129:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 130:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 131:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 132:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 133:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 134:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 135:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 136:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 137:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 138:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 139:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 140:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 141:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 142:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 143:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 144:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 145:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 146:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 147:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 148:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 149:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 150:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 151:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 152:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 153:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 154:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 155:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 156:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 157:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 158:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 159:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 160:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 161:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 162:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 163:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 164:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 165:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 166:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 167:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 168:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 169:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 170:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 171:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 172:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 173:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 174:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 175:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 176:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 177:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 178:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 179:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 180:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 181:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 182:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 183:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 184:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 185:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 186:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 187:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 188:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 189:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 190:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 191:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 192:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 193:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 194:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 195:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 196:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 197:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 198:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 199:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 200:
-		REX_FATAL("Jump target 0x823A5E24 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E24;
 	case 201:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 202:
-		REX_FATAL("Jump target 0x823A5E24 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E24;
 	case 203:
-		REX_FATAL("Jump target 0x823A5E24 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E24;
 	case 204:
-		REX_FATAL("Jump target 0x823A5E24 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E24;
 	case 205:
-		REX_FATAL("Jump target 0x823A5E24 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E24;
 	case 206:
-		REX_FATAL("Jump target 0x823A5E24 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E24;
 	case 207:
-		REX_FATAL("Jump target 0x823A5E24 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E24;
 	case 208:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 209:
-		REX_FATAL("Jump target 0x823A5E24 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E24;
 	case 210:
-		REX_FATAL("Jump target 0x823A5E24 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E24;
 	case 211:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 212:
-		REX_FATAL("Jump target 0x823A5E04 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E04;
 	case 213:
-		REX_FATAL("Jump target 0x823A5E24 unresolved at bctr 0x823A5E4C");
+		goto loc_823A5E24;
 	default:
 		__builtin_trap(); // Switch case out of range
 	}

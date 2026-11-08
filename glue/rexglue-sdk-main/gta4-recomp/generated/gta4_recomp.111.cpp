@@ -5584,8 +5584,7 @@ loc_82251DE4:
 	// cmpwi cr6,r22,24
 	cr6.compare<int32_t>(r22.s32, 24, xer);
 	// blt cr6,0x82251a88
-	// ERROR: conditional branch to unknown address 0x82251A88
-	if (cr6.lt) REX_FATAL("Unresolved branch from 0x82251DEC to 0x82251A88");
+	if (cr6.lt) goto loc_82251A88;
 	// addi r1,r1,320
 	ctx.r1.s64 = ctx.r1.s64 + 320;
 	// lfd f30,-120(r1)

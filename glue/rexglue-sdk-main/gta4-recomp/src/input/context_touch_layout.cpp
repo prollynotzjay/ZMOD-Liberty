@@ -51,7 +51,7 @@ const char* ActionIconId(TouchAction action) {
 }
 
 const char* ScriptLabel(TouchScriptControl control) {
-  // Raw indices: sub_825D1308 and accepted PAD tokens in sub_821F2360.
+  // Raw indices: sub_825928F0 and accepted PAD tokens in sub_821F2360.
   constexpr std::array raw = {"LB", "LT", "RB", "RT", "UP", "DOWN", "LEFT", "RIGHT",
                               "START", "BACK", "X", "Y", "A", "B", "L3", "R3"};
   if (control.kind == TouchScriptQueryKind::kRawButton) {

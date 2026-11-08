@@ -851,10 +851,16 @@ bool ValidateStagedEpisode(const std::filesystem::path& path, Episode episode) {
 }
 
 bool ValidateInstalledPair(const std::filesystem::path& game_root, std::string& reason) {
-  // PATCHED (local experiment): the install gate is skipped for the PAL disc.
-  (void)game_root;
-  (void)reason;
-  return true;
+  // PAL: the USA install gate (retail 1.00 + TU8 hashes) does not apply to the
+  // European disc. Only require an installed base executable.
+  {
+    std::error_code ec;
+    if (!std::filesystem::is_regular_file(game_root / "default.xex", ec)) {
+      reason = "not installed";
+      return false;
+    }
+    return true;
+  }
 
   const auto base_path = game_root / "default.xex";
   std::vector<uint8_t> base_bytes;

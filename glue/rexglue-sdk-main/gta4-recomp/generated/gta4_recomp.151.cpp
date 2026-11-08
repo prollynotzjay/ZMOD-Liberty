@@ -1349,8 +1349,7 @@ loc_8214A060:
 	// cmplwi cr6,r11,0
 	cr6.compare<uint32_t>(ctx.r11.u32, 0, xer);
 	// bne cr6,0x8214a118
-	// ERROR: conditional branch to unknown address 0x8214A118
-	if (!cr6.eq) REX_FATAL("Unresolved branch from 0x8214A06C to 0x8214A118");
+	if (!cr6.eq) goto loc_8214A118;
 	// lis r4,9
 	ctx.r4.s64 = 589824;
 	// li r3,1
@@ -1365,8 +1364,7 @@ loc_8214A060:
 	// cmplwi cr6,r11,0
 	cr6.compare<uint32_t>(ctx.r11.u32, 0, xer);
 	// bne cr6,0x8214a118
-	// ERROR: conditional branch to unknown address 0x8214A118
-	if (!cr6.eq) REX_FATAL("Unresolved branch from 0x8214A088 to 0x8214A118");
+	if (!cr6.eq) goto loc_8214A118;
 	// lis r4,9
 	ctx.r4.s64 = 589824;
 	// li r3,0
@@ -1381,8 +1379,7 @@ loc_8214A060:
 	// cmplwi cr6,r11,0
 	cr6.compare<uint32_t>(ctx.r11.u32, 0, xer);
 	// bne cr6,0x8214a118
-	// ERROR: conditional branch to unknown address 0x8214A118
-	if (!cr6.eq) REX_FATAL("Unresolved branch from 0x8214A0A4 to 0x8214A118");
+	if (!cr6.eq) goto loc_8214A118;
 	// li r3,14
 	ctx.r3.s64 = 14;
 	// bl 0x82671580
@@ -1393,8 +1390,7 @@ loc_8214A060:
 	// cmplwi cr6,r11,0
 	cr6.compare<uint32_t>(ctx.r11.u32, 0, xer);
 	// bne cr6,0x8214a118
-	// ERROR: conditional branch to unknown address 0x8214A118
-	if (!cr6.eq) REX_FATAL("Unresolved branch from 0x8214A0B8 to 0x8214A118");
+	if (!cr6.eq) goto loc_8214A118;
 	// lis r10,-31981
 	ctx.r10.s64 = -2095906816;
 	// lis r11,-32056
@@ -1406,8 +1402,7 @@ loc_8214A060:
 	// cmplw cr6,r9,r11
 	cr6.compare<uint32_t>(ctx.r9.u32, ctx.r11.u32, xer);
 	// ble cr6,0x8214a104
-	// ERROR: conditional branch to unknown address 0x8214A104
-	if (!cr6.gt) REX_FATAL("Unresolved branch from 0x8214A0D0 to 0x8214A104");
+	if (!cr6.gt) goto loc_8214A104;
 	// lis r10,-31981
 	ctx.r10.s64 = -2095906816;
 	// lwz r11,31796(r10)
@@ -1419,8 +1414,7 @@ loc_8214A060:
 	// stw r11,31796(r10)
 	REX_STORE_U32(ctx.r10.u32 + 31796, ctx.r11.u32);
 	// blt cr6,0x8214a118
-	// ERROR: conditional branch to unknown address 0x8214A118
-	if (cr6.lt) REX_FATAL("Unresolved branch from 0x8214A0E8 to 0x8214A118");
+	if (cr6.lt) goto loc_8214A118;
 	// li r3,14
 	ctx.r3.s64 = 14;
 	// bl 0x82671f48

@@ -26,22 +26,22 @@ void GTA4_RunWithPrimaryPlayerInfoAlias(PPCContext&, uint8_t*,
 namespace gta4::input {
 namespace {
 
-// Generated PPC source: player/control facts match sub_825B3320,
-// sub_825B56B0 and sub_821B41E8. All address/size derivations checked in Python.
-constexpr uint32_t kPlayer = 0x82A98778;
-constexpr uint32_t kPlayerInfo = 0x82C01C70;
-constexpr uint32_t kPlayerGeneration = 0x82C01C30;
-constexpr uint32_t kControl = 0x82B2A2F0;
-constexpr uint32_t kGameMode = 0x82B3950C;
-constexpr uint32_t kAliveThreshold = 0x82000D68;
-constexpr uint32_t kCutscene = 0x82B977F0;
-constexpr uint32_t kCutscenePreparation = 0x82B977FC;
-constexpr uint32_t kLoadingActive = 0x831D5335;
-constexpr uint32_t kMinigame = 0x82BA1D40;
-constexpr uint32_t kPhoneCreated = 0x831D4DD4;
-constexpr uint32_t kPhoneOffscreen = 0x831D534C;
+// Generated PPC source: player/control facts match sub_825779F8,
+// sub_82579B50 and sub_8219F808. All address/size derivations checked in Python.
+constexpr uint32_t kPlayer = 0x82A2CFC8;
+constexpr uint32_t kPlayerInfo = 0x82C51C10;
+constexpr uint32_t kPlayerGeneration = 0x82C51BD0;
+constexpr uint32_t kControl = 0x82ACC138;
+constexpr uint32_t kGameMode = 0x82B1117C;
+constexpr uint32_t kAliveThreshold = 0x820026C8;
+constexpr uint32_t kCutscene = 0x82CC102C;
+constexpr uint32_t kCutscenePreparation = 0x82CC1038;
+constexpr uint32_t kLoadingActive = 0x83137BB7;
+constexpr uint32_t kMinigame = 0x82B806EC;
+constexpr uint32_t kPhoneCreated = 0x83137668;
+constexpr uint32_t kPhoneOffscreen = 0x83137BCD;
 constexpr uint32_t kWeaponScopeWidgetIndex = 0x82B3A0F0;
-constexpr uint32_t kHudWidgets = 0x82B39990;
+constexpr uint32_t kHudWidgets = 0x82AAD0D8;
 
 struct Reader {
   const TouchContextMemory& memory;
@@ -86,7 +86,7 @@ void ReadPhone(const Reader& read, TouchContextSnapshot& out) noexcept {
   out.phone_visible = *scope_visible == 0;
 }
 
-// Checked bounded equivalent of sub_82159078 with r5=0, as called by
+// Checked bounded equivalent of sub_82128400 with r5=0, as called by
 // IS_PED_IN_COVER (sub_825BE450). The status id is 1054, not the task's 1046.
 std::optional<bool> InCover(const Reader& read, uint32_t intelligence) noexcept {
   auto node = read.U32(intelligence, 736);
@@ -125,8 +125,8 @@ std::optional<bool> MeleeChain(const Reader& read, uint32_t task,
 }
 
 std::optional<bool> InMelee(const Reader& read, uint32_t intelligence) noexcept {
-  // sub_823C0E88 -> sub_82158F28: first occupied primary slot, the first
-  // uninhibited extra slot selected by sub_82158ED8, then six secondary slots.
+  // sub_823C0E88 -> sub_821282B0: first occupied primary slot, the first
+  // uninhibited extra slot selected by sub_82128260, then six secondary slots.
   constexpr std::array<uint32_t, 5> primary = {0, 4, 8, 12, 16};
   constexpr std::array<uint32_t, 3> extra = {44, 48, 52};
   constexpr std::array<uint32_t, 6> secondary = {20, 24, 28, 32, 36, 40};
@@ -163,7 +163,7 @@ std::optional<bool> InMelee(const Reader& read, uint32_t intelligence) noexcept 
 void ReadWeapon(const Reader& read, uint32_t ped, TouchContextSnapshot& out) noexcept {
   if (uint64_t{ped} + 640 > UINT32_MAX) return;
   const uint32_t manager = ped + 640;
-  // sub_823D52D0's forward cycle predicate, with bounded type lookup from
+  // sub_823C3040's forward cycle predicate, with bounded type lookup from
   // sub_82299AD0. This is availability, not permission to bypass the decoder.
   out.inventory_known = true;
   for (uint32_t index = 0; index < out.weapons.size(); ++index) {
@@ -179,7 +179,7 @@ void ReadWeapon(const Reader& read, uint32_t ped, TouchContextSnapshot& out) noe
     // The native weapon type-name table, also used by the weapon data parser.
     // Episode entries deliberately retain their native EPISODIC_N identity.
     if (*type < 58) {
-      const auto name = read.U32(0x82A993E8, *type * 4);
+      const auto name = read.U32(0x82A2F300, *type * 4);
       bool terminated = false;
       if (name && *name) {
         for (size_t letter = 0; letter < entry.native_identifier.size(); ++letter) {
@@ -190,7 +190,7 @@ void ReadWeapon(const Reader& read, uint32_t ped, TouchContextSnapshot& out) noe
       }
       if (!terminated) entry.native_identifier = {};
     }
-    const auto fire_type = read.U32(0x82CB8AB0, *type * 272 + 12);
+    const auto fire_type = read.U32(0x82EE5000, *type * 272 + 12);
     if (!fire_type) { out.inventory_known = false; continue; }
     entry.selectable = index == 0 || entry.ammo != 0 || *fire_type == 1;
   }
@@ -236,7 +236,7 @@ void ReadVehicleEntry(const Reader& read, uint32_t ped, TouchContextQueries quer
   if (!vehicle) return;
   const auto kind = read.U32(vehicle, 40), subtype = read.U32(vehicle, 4836);
   if (!kind || (*kind & 0x03C00000u) != 0x00800000u || !subtype) return;
-  // sub_823C9A08 performs this extra gate between selection and entry-task
+  // sub_823BD000 performs this extra gate between selection and entry-task
   // creation: subtype 3 must have bit 0x40 in its byte at +5316.
   if (*subtype == 3) {
     const auto flags = read.U8(vehicle, 5316);
@@ -357,7 +357,7 @@ TouchContextSnapshot ReadTouchContextFacts(const TouchContextMemory& memory,
   // sub_821E3788 tests the main state. sub_821EC8C8 also processes native
   // preparation when that state is zero, before playback has begun.
   out.cutscene = !cutscene || !preparation || *cutscene != 0 || *preparation != 0;
-  const auto threshold = read.U8(0x82AA1B0F), alternate = read.U8(0x82FD1E3C);
+  const auto threshold = read.U8(0x82A318DF), alternate = read.U8(0x82F0C9D4);
   if (threshold && alternate) {
     out.aim_settings_known = true;
     out.aim_threshold = *threshold;
@@ -397,9 +397,9 @@ TouchContextSnapshot ReadTouchContextFacts(const TouchContextMemory& memory,
     } else {
       out.vehicle_identity = *vehicle;
       if (*driver != *ped) out.base_mode = ContextTouchMode::kVehiclePassenger;
-      else if (*vtable == 0x8200B8D4) out.base_mode = ContextTouchMode::kVehicleHelicopter;
-      else if (*vtable == 0x8204205C) out.base_mode = ContextTouchMode::kVehicleBike;
-      else if (*vtable == 0x8204356C) out.base_mode = ContextTouchMode::kVehicleBoat;
+      else if (*vtable == 0x8200D38C) out.base_mode = ContextTouchMode::kVehicleHelicopter;
+      else if (*vtable == 0x8203BA7C) out.base_mode = ContextTouchMode::kVehicleBike;
+      else if (*vtable == 0x8203CBBC) out.base_mode = ContextTouchMode::kVehicleBoat;
       else if (*vtable == 0x82041D8C) out.base_mode = ContextTouchMode::kVehicleAutomobile;
       else out.base_mode = ContextTouchMode::kVehicleDriverUnknown;
     }
@@ -534,7 +534,7 @@ std::optional<TouchScriptControl> DecodeTouchHelpToken(
   token = std::string_view(uppercase.data(), token.size());
   if (token.starts_with("INPUT_") && binding_action && *binding_action < 86)
     return TouchScriptControl{TouchScriptQueryKind::kControlHeld, *binding_action};
-  // sub_825D1308's raw pad indices; names and accepted glyphs are from
+  // sub_825928F0's raw pad indices; names and accepted glyphs are from
   // sub_821F2360. The left/right stick image families remain native sticks.
   struct RawToken { std::string_view text; uint32_t glyph; uint32_t button; };
   constexpr std::array raw_tokens = {
@@ -601,12 +601,12 @@ TouchVisiblePromptSnapshot GetTouchVisiblePromptSnapshot(uint64_t epoch,
 
 uint32_t ReadTouchScriptThread(const TouchContextMemory& memory) noexcept {
   const Reader read{memory};
-  const auto thread = read.U32(0x8319277C);
+  const auto thread = read.U32(0x830F4FBC);
   if (!thread || !*thread) return 0;
   const auto identity = read.U32(*thread, 4), state = read.U32(*thread, 12);
-  // GET_ID_OF_THIS_THREAD (sub_825885B0) returns +4. sub_828458C8
-  // assigns the incremented 0x83192778 serial on each allocation, and
-  // sub_82845AB8 clears it on destruction. IS_THREAD_ACTIVE rejects state 2.
+  // GET_ID_OF_THIS_THREAD (sub_8254E5A8) returns +4. sub_827D6F08
+  // assigns the incremented 0x830F4FB8 serial on each allocation, and
+  // sub_827D70F8 clears it on destruction. IS_THREAD_ACTIVE rejects state 2.
   return identity && state && *state != 2 ? *identity : 0;
 }
 
@@ -632,9 +632,9 @@ bool TouchActivityQueryMatches(uint8_t* base, const TouchActivitySnapshot& expec
 std::optional<uint32_t> ReadTouchParachuteState(const TouchContextMemory& memory) noexcept {
   if (!ReadTouchScriptThread(memory)) return std::nullopt;
   const Reader read{memory};
-  const auto thread = read.U32(0x8319277C);
+  const auto thread = read.U32(0x830F4FBC);
   if (!thread || !*thread) return std::nullopt;
-  const auto program = read.U32(*thread, 8), globals = read.U32(0x831927B4);
+  const auto program = read.U32(*thread, 8), globals = read.U32(0x830F4FF4);
   // Same compiled parachute_player program and shared-global slot verified
   // by the existing SDK input hooks. A background script never inherits it.
   if (!program || *program != 0x98751695 || !globals || !*globals) return std::nullopt;
