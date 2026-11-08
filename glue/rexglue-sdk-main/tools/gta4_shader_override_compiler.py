@@ -378,6 +378,24 @@ def _run_tool(command: Sequence[str], environment: dict[str, str] | None = None)
         env=environment,
     )
     if result.returncode:
+        # DXC's bundled SPIRV-Tools AggressiveDCEPass has a known crash (SIGSEGV,
+        # exit 139) on certain shaders at -O3. Retry once with optimizations
+        # disabled before giving up. This keeps host-side shader compilation
+        # working without requiring a newer DXC build.
+        if result.returncode in (139, -11) and "-O3" in command:
+            fallback = ["-Od" if arg == "-O3" else arg for arg in command]
+            result2 = subprocess.run(
+                fallback,
+                check=False,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                text=True,
+                env=environment,
+            )
+            if not result2.returncode:
+                return
+            rendered = " ".join(fallback)
+            raise ManifestError(f"shader tool failed (fallback -Od) ({rendered}):\n{result2.stdout}")
         rendered = " ".join(command)
         raise ManifestError(f"shader tool failed ({rendered}):\n{result.stdout}")
 

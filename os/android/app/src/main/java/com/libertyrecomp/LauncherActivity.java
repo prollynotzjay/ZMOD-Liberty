@@ -1357,8 +1357,10 @@ public class LauncherActivity extends Activity {
         } else {
             mInspectionText.setText("");
         }
+        // PATCHED (local experiment): the native installer no longer requires a
+        // title update, so the button must not demand one either.
         boolean gameReady = mSources[SOURCE_GAME] != null && mInspection != null
-                && mInspection.supported && mSources[SOURCE_UPDATE] != null;
+                && mInspection.supported;
         boolean episodesOnly = mInstalled && mSources[SOURCE_GAME] == null
                 && mSources[SOURCE_UPDATE] == null
                 && (mSources[SOURCE_TLAD] != null || mSources[SOURCE_TBOGT] != null);

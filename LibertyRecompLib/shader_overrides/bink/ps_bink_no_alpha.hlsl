@@ -249,15 +249,17 @@ PixelShaderOutput shaderMain(
 	BRANCH if (g_SpecConstants() & SPEC_CONSTANT_ALPHA_TEST)
 	{
 		uint alphaTestFunction = (g_SpecConstants() >> SPEC_CONSTANT_ALPHA_TEST_FUNCTION_SHIFT) & 7u;
-		bool alphaTestPass;
-		if (alphaTestFunction == 0u) alphaTestPass = false;
-		else if (alphaTestFunction == 1u) alphaTestPass = output.oC0.w < g_AlphaThreshold;
-		else if (alphaTestFunction == 2u) alphaTestPass = output.oC0.w == g_AlphaThreshold;
-		else if (alphaTestFunction == 3u) alphaTestPass = output.oC0.w <= g_AlphaThreshold;
-		else if (alphaTestFunction == 4u) alphaTestPass = output.oC0.w > g_AlphaThreshold;
-		else if (alphaTestFunction == 5u) alphaTestPass = isnan(output.oC0.w) || isnan(g_AlphaThreshold) || output.oC0.w != g_AlphaThreshold;
-		else if (alphaTestFunction == 6u) alphaTestPass = output.oC0.w >= g_AlphaThreshold;
-		else alphaTestPass = true;
+		float _alpha = output.oC0.w;
+		float _ref   = g_AlphaThreshold;
+		bool alphaTestPass =
+			(alphaTestFunction == 7u) ||
+			(alphaTestFunction != 0u && (
+				(alphaTestFunction == 1u && _alpha < _ref) ||
+				(alphaTestFunction == 2u && _alpha == _ref) ||
+				(alphaTestFunction == 3u && _alpha <= _ref) ||
+				(alphaTestFunction == 4u && _alpha > _ref) ||
+				(alphaTestFunction == 5u && (isnan(_alpha) || isnan(_ref) || _alpha != _ref)) ||
+				(alphaTestFunction == 6u && _alpha >= _ref)));
 		clip(alphaTestPass ? 1.0 : -1.0);
 	}
 	return output;

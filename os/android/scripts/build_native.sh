@@ -34,7 +34,16 @@ CPU_FLAGS="$CPU_TARGET -fno-emulated-tls"
 echo "== CPU target: ${LIBERTY_CPU:-compatible} ($CPU_FLAGS)"
 # Reconfigure whenever the flags differ from the cached configuration, so a
 # new CPU target really recompiles everything instead of reusing old objects.
-if [ ! -f "$BUILD_DIR/build.ninja" ] || \
+#
+# Also reconfigure once when ccache is available but the cached configuration
+# does not use it yet: the restored build.ninja from an older run has plain
+# compiler commands, and without a reconfigure ccache would never be wired in.
+NEEDS_CCACHE_RECONFIG=
+if command -v ccache >/dev/null 2>&1 && \
+   ! grep -q "^CMAKE_CXX_COMPILER_LAUNCHER:" "$BUILD_DIR/CMakeCache.txt" 2>/dev/null; then
+  NEEDS_CCACHE_RECONFIG=1
+fi
+if [ ! -f "$BUILD_DIR/build.ninja" ] || [ -n "$NEEDS_CCACHE_RECONFIG" ] || \
    ! grep -qxF -- "CMAKE_CXX_FLAGS:STRING=$CPU_FLAGS" "$BUILD_DIR/CMakeCache.txt"; then
   echo "== configuring $BUILD_TYPE in $BUILD_DIR"
   cmake -S "$REPO" -B "$BUILD_DIR" -G Ninja \

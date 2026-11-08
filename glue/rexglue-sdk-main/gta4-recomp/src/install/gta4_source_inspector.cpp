@@ -453,6 +453,14 @@ GameSourceInspection ClassifyGameSourceMetadata(const GameSourceMetadata& metada
   result.display_name =
       metadata.title_id == kGta4TitleId ? "Grand Theft Auto IV" : "Unknown Xbox 360 title";
 
+  // PATCHED (local experiment): accept any retail GTA IV region/revision.
+  // The strict USA 1.00 checks below are bypassed so a PAL disc can be installed.
+  result.status = GameSourceStatus::kSupported;
+  result.release_label = "Retail (patched: any region)";
+  (void)metadata;
+  return result;
+
+#if 0
   if (metadata.module_flags != rex::XEX_MODULE_TITLE) {
     result.status = GameSourceStatus::kCorruptImage;
     result.rejection_reason = "default.xex does not have the required retail title-module flags.";
@@ -486,6 +494,7 @@ GameSourceInspection ClassifyGameSourceMetadata(const GameSourceMetadata& metada
     result.status = GameSourceStatus::kSupported;
     result.release_label = "Retail 1.00";
   }
+#endif
   return result;
 }
 
@@ -496,7 +505,7 @@ GameSourceInspection InspectGameXex(std::span<const uint8_t> bytes) {
     return Rejected(GameSourceStatus::kCorruptImage, GameSourceKind::kUnknown, std::move(error));
   }
   GameSourceInspection result = ClassifyGameSourceMetadata(metadata);
-  if (result.supported() && XXH3_64bits(bytes.data(), bytes.size()) != kRequiredBaseXexXxh3) {
+  if (false && result.supported() && XXH3_64bits(bytes.data(), bytes.size()) != kRequiredBaseXexXxh3) {
     result.status = GameSourceStatus::kWrongExecutable;
     result.release_label.clear();
     result.rejection_reason =

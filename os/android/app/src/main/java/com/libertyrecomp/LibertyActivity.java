@@ -345,7 +345,9 @@ public class LibertyActivity extends SDLActivity {
         // game's Renderer setting) crashes on Android, and a saved choice would
         // otherwise crash every launch. Command-line values override the saved
         // config, so this also recovers installs that already picked it.
-        arguments.add("--gpu_plugin=gta4-native");
+        boolean pluginGiven = false;
+        for (String a : arguments) if (a.startsWith("--gpu_plugin=")) pluginGiven = true;
+        if (!pluginGiven) arguments.add("--gpu_plugin=gta4-native");
         mArguments = withoutDuplicateOptions(arguments).toArray(new String[0]);
         String driver = readFirstLine(new File(dataRoot, "driver.txt"));
         mDriverText = driver;

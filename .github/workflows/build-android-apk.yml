@@ -53,6 +53,15 @@ jobs:
       LIBERTY_CPU: ${{ inputs.cpu || 'compatible' }}
       NDK_VER: 29.0.14206865
       STRIP: '1'
+      # ccache is a content-addressed cache: it reuses object files whose
+      # preprocessed source is unchanged, even though a fresh submodule
+      # checkout gives every file a new mtime and Ninja therefore rebuilds
+      # everything. The directory is restored/saved below.
+      CCACHE_DIR: ${{ github.workspace }}/.ccache
+      CCACHE_MAXSIZE: 2G
+      CCACHE_COMPRESS: 'true'
+      CCACHE_BASEDIR: ${{ github.workspace }}
+      CCACHE_NOHASHDIR: 'true'
 
     steps:
       - name: Checkout
@@ -84,6 +93,18 @@ jobs:
           yes | "$SDKMANAGER" --licenses > /dev/null || true
           "$SDKMANAGER" --install "ndk;$NDK_VER" "platforms;android-35" "build-tools;35.0.0"
 
+      - name: Install ccache
+        run: |
+          mkdir -p .ccache
+          if ! command -v ccache >/dev/null 2>&1; then
+            choco install ccache --no-progress -y || true
+          fi
+          if command -v ccache >/dev/null 2>&1; then
+            ccache --version | head -1
+          else
+            echo "::warning::ccache unavailable - building without the compiler cache"
+          fi
+
       - name: Restore build cache
         id: cache
         uses: actions/cache/restore@v4
@@ -95,6 +116,15 @@ jobs:
           restore-keys: |
             android-${{ env.LIBERTY_GPU }}-${{ env.LIBERTY_CPU }}-
             android-${{ env.LIBERTY_GPU }}-
+
+      - name: Restore ccache
+        id: ccache
+        uses: actions/cache/restore@v4
+        with:
+          path: .ccache
+          key: ccache-${{ env.LIBERTY_GPU }}-${{ env.LIBERTY_CPU }}-${{ github.sha }}
+          restore-keys: |
+            ccache-${{ env.LIBERTY_GPU }}-${{ env.LIBERTY_CPU }}-
 
       - name: Fetch pinned dependencies and apply patches
         run: python tools/setup_repo.py
@@ -112,7 +142,9 @@ jobs:
         run: |
           export ANDROID_HOME="$(cygpath -u "$ANDROID_HOME")"
           export JAVA_HOME="$(cygpath -u "$JAVA_HOME")"
-          bash os/android/scripts/build_native.sh
+          # The runner has 4 vCPUs. The script's default (nproc - 2, meant for
+          # laptops that are also in use) leaves half of them idle.
+          bash os/android/scripts/build_native.sh "$(nproc)"
 
       - name: Save build cache
         if: always() && steps.cache.outputs.cache-hit != 'true'
@@ -122,6 +154,15 @@ jobs:
             out/build
             out/host-tools
           key: android-${{ env.LIBERTY_GPU }}-${{ env.LIBERTY_CPU }}-${{ github.sha }}
+
+      # Save even when the build failed: a timed-out or broken run still
+      # primed ccache with every object it managed to compile.
+      - name: Save ccache
+        if: always() && steps.ccache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: .ccache
+          key: ccache-${{ env.LIBERTY_GPU }}-${{ env.LIBERTY_CPU }}-${{ github.sha }}
 
       - name: Package the APK
         run: |

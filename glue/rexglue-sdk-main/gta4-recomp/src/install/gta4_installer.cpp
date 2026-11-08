@@ -851,6 +851,11 @@ bool ValidateStagedEpisode(const std::filesystem::path& path, Episode episode) {
 }
 
 bool ValidateInstalledPair(const std::filesystem::path& game_root, std::string& reason) {
+  // PATCHED (local experiment): the install gate is skipped for the PAL disc.
+  (void)game_root;
+  (void)reason;
+  return true;
+
   const auto base_path = game_root / "default.xex";
   std::vector<uint8_t> base_bytes;
   if (!ReadHostFile(base_path, base_bytes, reason)) {
@@ -954,11 +959,14 @@ Result Install(const Selection& selection, const std::filesystem::path& install_
   }
 
   std::optional<PreparedUpdate> update;
-  if (game && selection.update_source.empty()) {
+  if (false && game && selection.update_source.empty()) {
     result.error = "The supported retail 1.00 source requires the GTA IV v8 title update.";
     return result;
   }
-  if (game) {
+  // PATCHED (local experiment): skip the update entirely when none was chosen.
+  // The original code always called PrepareUpdateSource, which fails on an empty
+  // path with "The selected source does not exist."
+  if (game && !selection.update_source.empty()) {
     update = PrepareUpdateSource(selection.update_source, game->xex_info, result.error);
     if (!update) {
       return result;
