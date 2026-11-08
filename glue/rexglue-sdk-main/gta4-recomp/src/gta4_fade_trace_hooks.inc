@@ -157,13 +157,16 @@ void TraceFadeDcReady(uint8_t* base, uint32_t dc, uint32_t creator) {
 }
 }  // namespace
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_8233BA30(PPCContext& ctx, uint8_t* base) {
   const uint32_t object = ctx.r3.u32, caller = uint32_t(ctx.lr);
   __imp__sub_8233BA30(ctx, base);
-  if (FadeTraceEnabled() && caller == 0x8233C310)
+  if (FadeTraceEnabled() && caller == 0x821D0FE8)
     ObserveFadeAlpha(base, object, caller, ctx.r3.u32);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_8233BA30
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_8233C2F8(PPCContext& ctx, uint8_t* base) {
   if (!FadeTraceEnabled()) { __imp__sub_8233C2F8(ctx, base); return; }
   const uint32_t previous = g_fade_builder_object;
@@ -175,7 +178,9 @@ extern "C" void sub_8233C2F8(PPCContext& ctx, uint8_t* base) {
   g_fade_builder_object = previous;
   g_fade_builder_kind = previous_kind;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_8233C2F8
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_8233C110(PPCContext& ctx, uint8_t* base) {
   if (!FadeTraceEnabled()) { __imp__sub_8233C110(ctx, base); return; }
   const uint32_t object = ctx.r3.u32, caller = uint32_t(ctx.lr);
@@ -195,7 +200,9 @@ extern "C" void sub_8233C110(PPCContext& ctx, uint8_t* base) {
         LoadU32(base, object + 20)));
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_8233C110
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_8233C3F0(PPCContext& ctx, uint8_t* base) {
   if (!FadeTraceEnabled()) { __imp__sub_8233C3F0(ctx, base); return; }
   const uint32_t object = ctx.r3.u32, phase = ctx.r4.u8, caller = uint32_t(ctx.lr);
@@ -219,7 +226,9 @@ extern "C" void sub_8233C3F0(PPCContext& ctx, uint8_t* base) {
   }
   __imp__sub_8233C3F0(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_8233C3F0
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82333800(PPCContext& ctx, uint8_t* base) {
   if (!FadeTraceEnabled() || !ctx.r3.u32 || LoadU32(base, ctx.r3.u32 + 8) != 0x82369F08) {
     __imp__sub_82333800(ctx, base);
@@ -259,7 +268,9 @@ extern "C" void sub_82333800(PPCContext& ctx, uint8_t* base) {
   g_fade_executing_dc = previous_dc;
   g_fade_executing_origin = previous_origin;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82333800
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82369F08(PPCContext& ctx, uint8_t* base) {
   if (!FadeTraceEnabled()) { __imp__sub_82369F08(ctx, base); return; }
   const uint32_t color = ctx.r3.u32, caller = uint32_t(ctx.lr);
@@ -269,14 +280,16 @@ extern "C" void sub_82369F08(PPCContext& ctx, uint8_t* base) {
       "run={} event={} frame={} caller={:08X} color={:08X} alpha={} direct-fade={} builder={:08X} "
       "dc={:08X} queued-fade={} fade-object={:08X} origin-run={} origin-event={} creator={:08X} kind={}",
       g_phone_run.load(), g_phone_context.event, GetNativeLightSubmittedFrame(base), caller,
-      color, color >> 24, caller == 0x8233C3DC, g_fade_builder_object,
+      color, color >> 24, caller == 0x821D10B4, g_fade_builder_object,
       g_fade_executing_dc, g_fade_executing_origin.object != 0, g_fade_executing_origin.object,
       g_fade_executing_origin.run, g_fade_executing_origin.event, g_fade_executing_origin.creator, g_fade_executing_origin.kind));
   __imp__sub_82369F08(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82369F08
 
 // The main screen fade is separate from the viewport-effect fade. Generated .9
 // sub_82252DE8 either emits the actual packed ARGB callback or emits no such draw.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82252DE8(PPCContext& ctx, uint8_t* base) {
   if (!FadeTraceEnabled()) { __imp__sub_82252DE8(ctx, base); return; }
   const uint32_t object = ctx.r3.u32, caller = uint32_t(ctx.lr);
@@ -321,3 +334,4 @@ extern "C" void sub_82252DE8(PPCContext& ctx, uint8_t* base) {
   g_fade_builder_kind = previous_kind;
   g_fade_builder_object = previous_object;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82252DE8

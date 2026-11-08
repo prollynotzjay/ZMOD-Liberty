@@ -4,6 +4,7 @@
 #include "input/context_touch_context.h"
 #include "input/context_touch_controls.h"
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_822B7958(PPCContext& context, uint8_t* base) {
   const auto action = gta4::input::TouchScopedZoomActionForCaller(static_cast<uint32_t>(context.lr));
   // r28 is the control object retained by the admitted native camera caller.
@@ -20,3 +21,4 @@ extern "C" void sub_822B7958(PPCContext& context, uint8_t* base) {
   context.r3.u64 = static_cast<uint32_t>(gta4::input::MergeTouchScopedZoom(
       snapshot.epoch, input_user, action, static_cast<int32_t>(context.r3.u32)));
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_822B7958

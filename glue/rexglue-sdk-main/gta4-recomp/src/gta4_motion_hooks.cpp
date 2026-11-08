@@ -17,7 +17,7 @@ namespace gta4 {
 namespace {
 
 // GTA IV script-native context layout, verified against generated
-// sub_825D2138/sub_825DE6E8 and checked by verify_motion_context_layout.py.
+// sub_825936B0/sub_825DE6E8 and checked by verify_motion_context_layout.py.
 constexpr uint32_t kReturnStorageOffset = 0;
 constexpr uint32_t kArgumentVectorOffset = 8;
 constexpr std::array<uint32_t, 3> kArgumentOffsets = {0, 4, 8};
@@ -117,14 +117,14 @@ struct MotionNativeRegistration {
 // verify_motion_native_sites.py. Every match also checks the live guest string,
 // original handler, and unique registration return address before replacing it.
 std::array<MotionNativeRegistration, 5> g_motion_native_registrations = {{
-    {0x825D2344, 0x82037240, 0x825DE6E8, "GET_PAD_PITCH_ROLL", NativeGetPadPitchRoll},
-    {0x825D2358, 0x82037224, 0x825D2138, "GET_MOTION_CONTROLS_ENABLED",
+    {0x825D2344, 0x82037240, 0x8259EF40, "GET_PAD_PITCH_ROLL", NativeGetPadPitchRoll},
+    {0x825D2358, 0x82037224, 0x825936B0, "GET_MOTION_CONTROLS_ENABLED",
      NativeGetMotionControlsEnabled},
-    {0x825D236C, 0x82037200, 0x825DE6E8, "HAS_RELOADED_WITH_MOTION_CONTROL",
+    {0x825D236C, 0x82037200, 0x8259EF40, "HAS_RELOADED_WITH_MOTION_CONTROL",
      NativeHasReloadedWithMotionControl},
-    {0x825D2380, 0x820371D4, 0x822BCA90, "SET_ALL_MOTION_CONTROL_PREFERENCES_ON_OFF",
+    {0x825D2380, 0x820371D4, 0x828E0A68, "SET_ALL_MOTION_CONTROL_PREFERENCES_ON_OFF",
      NativeSetAllMotionControlPreferences},
-    {0x825D2394, 0x820371B4, 0x825DE6E8, "GET_MOTION_CONTROL_PREFERENCE",
+    {0x825D2394, 0x820371B4, 0x8259EF40, "GET_MOTION_CONTROL_PREFERENCE",
      NativeGetMotionControlPreference},
 }};
 
@@ -147,12 +147,13 @@ MotionNativeRegistration* FindRegistration(uint32_t return_address) {
 }  // namespace
 }  // namespace gta4
 
-extern "C" void sub_82845600(PPCContext& ctx, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_827D6C40(PPCContext& ctx, uint8_t* base) {
   gta4::quicksave::ObserveNativeRegistration(ctx, base);
   const uint32_t return_address = static_cast<uint32_t>(ctx.lr);
   auto* registration = gta4::FindRegistration(return_address);
   if (!registration) {
-    __imp__sub_82845600(ctx, base);
+    __imp__sub_827D6C40(ctx, base);
     return;
   }
 
@@ -165,7 +166,7 @@ extern "C" void sub_82845600(PPCContext& ctx, uint8_t* base) {
         "name={:08X} handler={:08X} expected_name={:08X} expected_handler={:08X}",
         return_address, ctx.r3.u32, ctx.r4.u32, registration->name_address,
         registration->original_handler);
-    __imp__sub_82845600(ctx, base);
+    __imp__sub_827D6C40(ctx, base);
     return;
   }
 
@@ -188,5 +189,6 @@ extern "C" void sub_82845600(PPCContext& ctx, uint8_t* base) {
     }
   }
 
-  __imp__sub_82845600(ctx, base);
+  __imp__sub_827D6C40(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82845600

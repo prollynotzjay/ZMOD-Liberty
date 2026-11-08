@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 3.25)
 project(gta4_recomp LANGUAGES CXX)
+# PAL build: disable all USA-address hook overrides (tools/pal_guard_hooks.py)
+add_compile_definitions(GTA4_PAL_SAFE_MODE=1)
+
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -16,6 +19,7 @@ include(generated/sources.cmake)
 set(GTA4_APP_SOURCES
     src/main.cpp
     src/gta4_app.cpp
+    src/gta4_pal_stubs.cpp
     src/gta4_frontend_hooks.cpp
     src/gta4_font_selection_trace.cpp
     src/gta4_presentation_options.cpp
@@ -404,7 +408,6 @@ elseif(ANDROID)
         src/android/android_frame_wait_hook.cpp
         src/android/android_perf_overlay.cpp
         src/android/android_performance_hint.cpp
-        src/android/android_stale_object_guard.cpp
         src/android/android_thread_pinning.cpp
         src/android/android_power.cpp)
     # The launcher's installer: the same source inspection and installation

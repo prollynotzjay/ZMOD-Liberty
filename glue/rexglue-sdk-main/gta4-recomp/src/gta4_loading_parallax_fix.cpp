@@ -11,10 +11,10 @@ namespace {
 
 // Layout and limits are taken from the generated sub_82143DC8 animator and
 // sub_82145968 loading-screen definition parser.
-constexpr uint32_t kCumulativeElapsedGlobal = 0x831D5338;
+constexpr uint32_t kCumulativeElapsedGlobal = 0x83137BB8;
 constexpr uint32_t kFrameDeltaGlobal = 0x831D533C;
-constexpr uint32_t kCurrentScreenGlobal = 0x831D5340;
-constexpr uint32_t kDefinitionsBase = 0x831D5498;
+constexpr uint32_t kCurrentScreenGlobal = 0x83137BC0;
+constexpr uint32_t kDefinitionsBase = 0x83137D18;
 constexpr uint32_t kScreenStride = 400;
 constexpr uint32_t kLayerCountOffset = 4;
 constexpr uint32_t kLayerStride = 96;
@@ -43,6 +43,7 @@ void StoreGuestFloat(uint8_t* base, uint32_t address, float value) {
 
 }  // namespace
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82143DC8(PPCContext& ctx, uint8_t* base) {
   const uint32_t screen = REX_LOAD_U32(kCurrentScreenGlobal);
   if (screen >= kScreenCount) {
@@ -111,3 +112,4 @@ extern "C" void sub_82143DC8(PPCContext& ctx, uint8_t* base) {
     }
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82143DC8

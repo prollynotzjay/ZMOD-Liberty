@@ -45,14 +45,14 @@ namespace {
 constexpr uint32_t kDisplayScreen = 8;
 constexpr uint32_t kAudioScreen = 7;
 constexpr uint32_t kGameScreen = 9;
-constexpr uint32_t kScreenDescriptorsAddress = 0x831DAE28;
+constexpr uint32_t kScreenDescriptorsAddress = 0x83142B00;
 constexpr uint32_t kScreenDescriptorSize = 24;
 constexpr uint32_t kScreenOptionsOffset = 16;
 constexpr uint32_t kDisplayOptionsPointer = 0x831DAEF8;
 constexpr uint32_t kDisplayOptionsCount = 0x831DAEFC;
 constexpr uint32_t kDisplayOptionsCapacity = 0x831DAEFE;
-constexpr uint32_t kCurrentScreenAddress = 0x82BFA124;
-constexpr uint32_t kPauseMenuActiveAddress = 0x82BF9EF4;
+constexpr uint32_t kCurrentScreenAddress = 0x82BEC844;
+constexpr uint32_t kPauseMenuActiveAddress = 0x82BEC634;
 constexpr uint32_t kOptionRecordSize = 22;
 constexpr uint32_t kOptionActionOffset = 0;
 constexpr uint32_t kOptionLabelOffset = 1;
@@ -72,13 +72,13 @@ constexpr uint32_t kMenuTraceCallLimit = 256;
 constexpr uint32_t kUiRowRecordSize = 68;
 constexpr uint32_t kUiRowLabelCapacity = 60;
 constexpr uint32_t kLeftListBuildReturnAddress = 0x82255E38;
-constexpr uint32_t kFrontendWidgetPointerTable = 0x82CC7BD0;
+constexpr uint32_t kFrontendWidgetPointerTable = 0x82C192F4;
 constexpr uint32_t kFrontendWidgetActiveCountOffset = 3020;
 constexpr uint32_t kFrontendWidgetSelectedOffset = 3196;
 constexpr uint32_t kFrontendWidgetTransitionProgressOffset = 3208;
 constexpr uint32_t kFrontendWidgetTransitionAnchorOffset = 3212;
 constexpr uint32_t kFrontendWidgetStateSize = 3216;
-// sub_8229CD40 fills and clears exactly 20 fixed list slots in the retail UI
+// sub_8225E928 fills and clears exactly 20 fixed list slots in the retail UI
 // object. Keep this diagnostic constant tied to that generated-code bound.
 constexpr int32_t kRetailListSlotCapacity = gta4::frontend_menu::policy::kRetailListSlotCapacity;
 
@@ -1366,7 +1366,7 @@ void ReleaseDisplayExtension(PPCContext& ctx, uint8_t* base) {
   g_display_menu = {};
   if (gta4::frontend_menu::policy::ShouldFreeGuestAllocation(owns_published_descriptor,
                                                               allocation)) {
-    InvokeGuest(ctx, base, sub_821B3560, allocation);
+    InvokeGuest(ctx, base, sub_8218BE78, allocation);
   } else if (allocation != 0) {
     // Host-side menu state survives an episode/title reload, but its guest
     // allocation does not. A changed descriptor means the guest no longer
@@ -1470,7 +1470,7 @@ void InstallDisplayExtension(PPCContext& ctx, uint8_t* base) {
   if (!IsGuestSpanValid(allocation, allocation_bytes)) {
     REXLOG_ERROR("GTA IV Advanced Graphics disabled: allocator returned invalid span {:08X}+{}",
                  allocation, allocation_bytes);
-    InvokeGuest(ctx, base, sub_821B3560, allocation);
+    InvokeGuest(ctx, base, sub_8218BE78, allocation);
     return;
   }
 
@@ -1490,7 +1490,7 @@ void InstallDisplayExtension(PPCContext& ctx, uint8_t* base) {
   const uint32_t primary_extension =
       next.primary_rows + static_cast<uint32_t>(sentinel_index) * kOptionRecordSize;
   if (!WriteJumpRow(base, primary_extension, kAdvancedKey)) {
-    InvokeGuest(ctx, base, sub_821B3560, allocation);
+    InvokeGuest(ctx, base, sub_8218BE78, allocation);
     return;
   }
   WriteSentinelRow(base, primary_extension + kOptionRecordSize);
@@ -1508,32 +1508,32 @@ void InstallDisplayExtension(PPCContext& ctx, uint8_t* base) {
     for (std::size_t index = 0; index < slice.item_count; ++index) {
       const Setting& setting = *visible_settings[slice.first_item + index];
       if (!WriteSettingRow(base, destination, setting)) {
-        InvokeGuest(ctx, base, sub_821B3560, allocation);
+        InvokeGuest(ctx, base, sub_8218BE78, allocation);
         return;
       }
       destination += kOptionRecordSize;
     }
     if (slice.has_previous) {
       if (!WriteJumpRow(base, destination, kPreviousPageKey)) {
-        InvokeGuest(ctx, base, sub_821B3560, allocation);
+        InvokeGuest(ctx, base, sub_8218BE78, allocation);
         return;
       }
       destination += kOptionRecordSize;
     }
     if (slice.has_next) {
       if (!WriteJumpRow(base, destination, kNextPageKey)) {
-        InvokeGuest(ctx, base, sub_821B3560, allocation);
+        InvokeGuest(ctx, base, sub_8218BE78, allocation);
         return;
       }
       destination += kOptionRecordSize;
     }
     if (!WriteJumpRow(base, destination, kSaveKey)) {
-      InvokeGuest(ctx, base, sub_821B3560, allocation);
+      InvokeGuest(ctx, base, sub_8218BE78, allocation);
       return;
     }
     destination += kOptionRecordSize;
     if (!WriteJumpRow(base, destination, kBackKey)) {
-      InvokeGuest(ctx, base, sub_821B3560, allocation);
+      InvokeGuest(ctx, base, sub_8218BE78, allocation);
       return;
     }
     destination += kOptionRecordSize;
@@ -1545,7 +1545,7 @@ void InstallDisplayExtension(PPCContext& ctx, uint8_t* base) {
     REXLOG_ERROR(
         "GTA IV native menu disabled: row layout ended at {:08X}, expected string pool {:08X}",
         destination, next.string_pool);
-    InvokeGuest(ctx, base, sub_821B3560, allocation);
+    InvokeGuest(ctx, base, sub_8218BE78, allocation);
     return;
   }
   WriteStringPool(base, next, next.string_pool);
@@ -1569,7 +1569,7 @@ void SwitchDisplayPage(PPCContext& ctx, uint8_t* base, gta4::frontend_menu::poli
   } else {
     PublishPrimaryPage(base);
   }
-  InvokeGuest(ctx, base, __imp__sub_82256D08, g_display_menu.last_frontend_channel, kDisplayScreen,
+  InvokeGuest(ctx, base, __imp__sub_8224FF68, g_display_menu.last_frontend_channel, kDisplayScreen,
               selected_row);
 }
 
@@ -1762,7 +1762,7 @@ bool SwitchPauseTab(PPCContext& parent, uint8_t* base, policy::PauseTabDirection
   if (policy::ShouldRestorePrimaryBeforeSwitch(g_display_menu.page, target, kDisplayScreen)) {
     PublishPrimaryPage(base);
   }
-  InvokeGuest(parent, base, __imp__sub_82256D08, g_last_frontend_channel, target, 0);
+  InvokeGuest(parent, base, __imp__sub_8224FF68, g_last_frontend_channel, target, 0);
   if (rex::input::IsInputTraceEnabled()) {
     REXLOG_INFO(
         "input-e2e: seq={} stage=pause-tab result=switched direction={} channel={} "
@@ -1775,6 +1775,7 @@ bool SwitchPauseTab(PPCContext& parent, uint8_t* base, policy::PauseTabDirection
 
 }  // namespace gta4::frontend_menu
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82241428(PPCContext& ctx, uint8_t* base) {
   __imp__sub_82241428(ctx, base);
   const int32_t retail_episode = ctx.r3.s32;
@@ -1793,7 +1794,9 @@ extern "C" void sub_82241428(PPCContext& ctx, uint8_t* base) {
   REXLOG_INFO("GTA IV episode startup: policy={} retail-result={} preserved", policy,
               retail_episode);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82241428
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82157F90(PPCContext& ctx, uint8_t* base) {
   ReleaseDisplayExtension(ctx, base);
   __imp__sub_82157F90(ctx, base);
@@ -1803,8 +1806,10 @@ extern "C" void sub_82157F90(PPCContext& ctx, uint8_t* base) {
   TraceScreenRows(base, "extension-published", kAudioScreen);
   TraceScreenRows(base, "extension-published", kDisplayScreen);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82157F90
 
-extern "C" void sub_8221FD88(PPCContext& ctx, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_822735D0(PPCContext& ctx, uint8_t* base) {
   if (gta4::quicksave::ResolveText(ctx, base))
     return;
   const bool diagnostics = FrontendDiagnosticsEnabled();
@@ -1828,7 +1833,7 @@ extern "C" void sub_8221FD88(PPCContext& ctx, uint8_t* base) {
       return;
     }
   }
-  __imp__sub_8221FD88(ctx, base);
+  __imp__sub_822735D0(ctx, base);
   if (diagnostics && IsBodyTraceScreen(screen) && g_menu_trace_label_calls < kMenuTraceCallLimit) {
     ++g_menu_trace_label_calls;
     REXLOG_INFO(
@@ -1839,7 +1844,9 @@ extern "C" void sub_8221FD88(PPCContext& ctx, uint8_t* base) {
         ReadGuestString(base, ctx.r3.u32, kMenuTraceStringCapacity));
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_8221FD88
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_8223F9F0(PPCContext& ctx, uint8_t* base) {
   // The stock storage dialog uses the same localized message for several
   // failures. These are its original r3 case IDs, also set by sub_82240C18
@@ -1867,7 +1874,9 @@ extern "C" void sub_8223F9F0(PPCContext& ctx, uint8_t* base) {
   // later attempt to report the same failure again.
   if (ctx.r3.u32) previous_reason = std::numeric_limits<uint32_t>::max();
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_8223F9F0
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82252A98(PPCContext& ctx, uint8_t* base) {
   const bool diagnostics = FrontendDiagnosticsEnabled();
   const uint32_t frontend_channel = ctx.r3.u32;
@@ -1907,7 +1916,9 @@ extern "C" void sub_82252A98(PPCContext& ctx, uint8_t* base) {
         ReadGuestString(base, ctx.r3.u32, kMenuTraceStringCapacity));
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82252A98
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82255D00(PPCContext& ctx, uint8_t* base) {
   const uint32_t frontend_channel = ctx.r3.u32;
   g_last_frontend_channel = frontend_channel;
@@ -1949,8 +1960,10 @@ extern "C" void sub_82255D00(PPCContext& ctx, uint8_t* base) {
         g_menu_trace_label_calls, g_menu_trace_value_calls);
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82255D00
 
-extern "C" void sub_8229D360(PPCContext& ctx, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_8225EF20(PPCContext& ctx, uint8_t* base) {
   const uint32_t channel = ctx.r3.u32;
   const bool owns_advanced = IsDisplayScreen(base) && IsOwnedAdvancedPage(base);
   const FrontendWidgetState before =
@@ -1962,20 +1975,22 @@ extern "C" void sub_8229D360(PPCContext& ctx, uint8_t* base) {
         "channel={} caller={:08X} ui={:08X}",
         ++g_menu_trace_sequence, channel, ctx.lr, before.widget);
   }
-  __imp__sub_8229D360(ctx, base);
+  __imp__sub_8225EF20(ctx, base);
   if (owns_advanced && IsDisplayScreen(base) && IsOwnedAdvancedPage(base)) {
     const FrontendWidgetState after = ReadFrontendWidgetState(base, channel);
     TraceOwnedScrollState("owned-scroll-input", channel, before, after);
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_8229D360
 
-extern "C" void sub_8229D258(PPCContext& ctx, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_8225EE18(PPCContext& ctx, uint8_t* base) {
   const uint32_t channel = ctx.r3.u32;
   const uint32_t first_row_address = ctx.r4.u32;
   const uint32_t end_row_address = ctx.r5.u32;
   const uint32_t caller = ctx.lr;
   const bool owns_advanced = IsDisplayScreen(base) && IsOwnedAdvancedPage(base);
-  __imp__sub_8229D258(ctx, base);
+  __imp__sub_8225EE18(ctx, base);
   if (!owns_advanced || !IsDisplayScreen(base) || !IsOwnedAdvancedPage(base) ||
       !IsGuestSpanValid(first_row_address, sizeof(uint32_t)) ||
       !IsGuestSpanValid(end_row_address, sizeof(uint32_t))) {
@@ -2004,7 +2019,9 @@ extern "C" void sub_8229D258(PPCContext& ctx, uint8_t* base) {
   }
   TraceOwnedLayoutBounds(channel, caller, first_row, end_row, widget);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_8229D258
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_8229D8A8(PPCContext& ctx, uint8_t* base) {
   const uint32_t channel = ctx.r3.u32;
   const uint32_t list_index = ctx.r4.u32;
@@ -2024,8 +2041,10 @@ extern "C" void sub_8229D8A8(PPCContext& ctx, uint8_t* base) {
     TraceOwnedScrollState("owned-layout-draw", channel, before, after);
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_8229D8A8
 
-extern "C" void sub_8229CD40(PPCContext& ctx, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_8225E928(PPCContext& ctx, uint8_t* base) {
   const bool trace_page = FrontendDiagnosticsEnabled() &&
                           g_menu_trace_page_screen != std::numeric_limits<uint32_t>::max();
   const uint32_t caller = ctx.lr;
@@ -2082,7 +2101,7 @@ extern "C" void sub_8229CD40(PPCContext& ctx, uint8_t* base) {
         TraceScreenName(g_menu_trace_page_screen), caller, frontend_ui, list_index, title,
         row_payload, count, kRetailListSlotCapacity, count > kRetailListSlotCapacity);
   }
-  __imp__sub_8229CD40(ctx, base);
+  __imp__sub_8225E928(ctx, base);
   if (is_owned_display_list && IsOwnedAdvancedPage(base)) {
     const FrontendWidgetState widget = ReadFrontendWidgetState(base, frontend_ui);
     TraceOwnedScrollState("owned-row-materialization", frontend_ui, {}, widget);
@@ -2096,7 +2115,9 @@ extern "C" void sub_8229CD40(PPCContext& ctx, uint8_t* base) {
         ctx.r3.u32);
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_8229CD40
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82258FB0(PPCContext& ctx, uint8_t* base) {
   if (gta4::input::ContextTouchEditorCapturesInput()) {
     // This routine polls list events, dispatches selection/adjustment and
@@ -2123,7 +2144,9 @@ extern "C" void sub_82258FB0(PPCContext& ctx, uint8_t* base) {
     }
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82258FB0
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_8229C4F8(PPCContext& ctx, uint8_t* base) {
   __imp__sub_8229C4F8(ctx, base);
   if (g_adjustment.active && ctx.lr == kAdjustmentDeltaReturnAddress) {
@@ -2135,7 +2158,9 @@ extern "C" void sub_8229C4F8(PPCContext& ctx, uint8_t* base) {
     }
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_8229C4F8
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82253370(PPCContext& ctx, uint8_t* base) {
   if (g_adjustment.active) {
     const int32_t row_index = ctx.r3.s32;
@@ -2160,7 +2185,9 @@ extern "C" void sub_82253370(PPCContext& ctx, uint8_t* base) {
   }
   __imp__sub_82253370(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82253370
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82258388(PPCContext& ctx, uint8_t* base) {
   const uint32_t frontend_channel = ctx.r3.u32;
   const int32_t selected_row = ctx.r4.s32;
@@ -2247,16 +2274,20 @@ extern "C" void sub_82258388(PPCContext& ctx, uint8_t* base) {
   }
   GTA4_RunWithPrimaryPlayerInfoAlias(ctx, base, __imp__sub_82258388);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82258388
 
-extern "C" void sub_82256D08(PPCContext& ctx, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_8224FF68(PPCContext& ctx, uint8_t* base) {
   if (gta4::frontend_menu::policy::ShouldRestorePrimaryBeforeSwitch(g_display_menu.page, ctx.r4.u32,
                                                                     kDisplayScreen)) {
     PublishPrimaryPage(base);
   }
-  __imp__sub_82256D08(ctx, base);
+  __imp__sub_8224FF68(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82256D08
 
-extern "C" void sub_82257450(PPCContext& ctx, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_822508A0(PPCContext& ctx, uint8_t* base) {
   if (IsDisplayScreen(base) && IsOwnedAdvancedPage(base)) {
     if (FrontendDiagnosticsEnabled()) {
       REXLOG_INFO("GTA4MenuTrace seq={} point=cancel action=back page-index={}",
@@ -2266,26 +2297,33 @@ extern "C" void sub_82257450(PPCContext& ctx, uint8_t* base) {
                       g_display_menu.advanced_entry_index);
     return;
   }
-  __imp__sub_82257450(ctx, base);
+  __imp__sub_822508A0(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82257450
 
-extern "C" void sub_8224F4D0(PPCContext& ctx, uint8_t* base) {
-  __imp__sub_8224F4D0(ctx, base);
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_8224C1F0(PPCContext& ctx, uint8_t* base) {
+  __imp__sub_8224C1F0(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_8224F4D0
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_8224FEA8(PPCContext& ctx, uint8_t* base) {
   if (g_display_menu.page == gta4::frontend_menu::policy::Page::kAdvanced) {
     PublishPrimaryPage(base);
   }
   __imp__sub_8224FEA8(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_8224FEA8
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82258EC0(PPCContext& ctx, uint8_t* base) {
   if (g_display_menu.page == gta4::frontend_menu::policy::Page::kAdvanced) {
     PublishPrimaryPage(base);
   }
   __imp__sub_82258EC0(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82258EC0
 
 // The retail bar renderer reads our slider's position through the cvar bridge.
 #include "gta4_frontend_slider_guest.inc"

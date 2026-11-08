@@ -48,8 +48,8 @@ namespace gta4::streaming {
 namespace {
 
 // Verified in generated gta4_recomp.4/.33 and the parser's data references.
-constexpr uint32_t kManager = 0x82A9AA7C;
-constexpr uint32_t kEntriesGlobal = 0x83032744;
+constexpr uint32_t kManager = 0x82A2EEB4;
+constexpr uint32_t kEntriesGlobal = 0x82F4E7EC;
 constexpr size_t kTraceCapacity = 32768;
 constexpr uint64_t kTraceEventLimit = 65536;
 
@@ -218,8 +218,8 @@ struct WorldScope {
   ~WorldScope() { world = previous; }
 };
 
-// Only the operand of the final preload test in sub_821D8848 calls this.
-// The existing caller consumes return code 3 via sub_821D00F0 -> sub_825120E8.
+// Only the operand of the final preload test in sub_82223AC0 calls this.
+// The existing caller consumes return code 3 via sub_821D00F0 -> sub_824DFB40.
 // No visible-distance, alpha, entity transform or script-owned state is changed.
 float EntityPreloadMargin(uint8_t* base, uint32_t entity, uint32_t view,
                           double distance, double draw_distance, float retail_margin) {
@@ -251,14 +251,14 @@ void ObserveClassification(uint8_t* base, uint32_t entity, uint32_t view,
   if (!trace_enabled.load(std::memory_order_relaxed)) return;
   uint32_t index = kInvalidEntry;
   uint32_t bytes = 0;
-  // Same model->module-base addition as generated sub_8251D960 and
+  // Same model->module-base addition as generated sub_82529E80 and
   // sub_821D00F0. Reject the signed invalid model ID and module sentinel.
   const int16_t model_id = std::bit_cast<int16_t>(static_cast<uint16_t>(world.model));
-  const uint32_t module = REX_LOAD_U32(0x82B58604);
+  const uint32_t module = REX_LOAD_U32(0x82ACBD34);
   const uint32_t table = REX_LOAD_U32(kEntriesGlobal);
   if (model_id >= 0 && module < 0xFF && table && table == REX_LOAD_U32(kManager)) {
     BindTable(table);
-    const uint32_t module_base = REX_LOAD_U32(0x82D515B8 + module * 100 + 88);
+    const uint32_t module_base = REX_LOAD_U32(0x82D04260 + module * 100 + 88);
     const uint64_t candidate = static_cast<uint64_t>(module_base) + model_id;
     const uint64_t address = static_cast<uint64_t>(table) + candidate * kEntryStride;
     if (candidate < kInvalidEntry && address + kEntryStride <= (uint64_t{1} << 32) &&
@@ -391,15 +391,18 @@ void Initialize(uint8_t* base) {
 
 using namespace gta4::streaming;
 
-extern "C" void sub_8251D960(PPCContext& ctx, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_82529E80(PPCContext& ctx, uint8_t* base) {
   if (!config.modern && !trace_enabled.load(std::memory_order_relaxed)) {
-    __imp__sub_8251D960(ctx, base); return;
+    __imp__sub_82529E80(ctx, base); return;
   }
   WorldScope scope(base, ctx.r3.u32, ctx.r5.u32);
-  __imp__sub_8251D960(ctx, base);
+  __imp__sub_82529E80(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_8251D960
 
-extern "C" void sub_825120E8(PPCContext& ctx, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_824DFB40(PPCContext& ctx, uint8_t* base) {
   const uint32_t manager = ctx.r3.u32;
   const uint32_t index = ctx.r4.u32;
   const bool observed = manager == kManager && index < kInvalidEntry &&
@@ -430,7 +433,7 @@ extern "C" void sub_825120E8(PPCContext& ctx, uint8_t* base) {
       }
     }
   }
-  __imp__sub_825120E8(ctx, base);
+  __imp__sub_824DFB40(ctx, base);
   if (observed) {
     pending_count.store(REX_LOAD_U32(manager + 56), std::memory_order_relaxed);
     const uint32_t table = REX_LOAD_U32(manager);
@@ -444,15 +447,17 @@ extern "C" void sub_825120E8(PPCContext& ctx, uint8_t* base) {
     }
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_825120E8
 
-extern "C" void sub_82511890(PPCContext& ctx, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_824DF2D8(PPCContext& ctx, uint8_t* base) {
   if (!config.modern && !trace_enabled.load(std::memory_order_relaxed)) {
-    __imp__sub_82511890(ctx, base);
+    __imp__sub_824DF2D8(ctx, base);
     return;
   }
   const uint32_t entry = ctx.r3.u32;
   const uint32_t before = REX_LOAD_U32(entry + 8) >> kStateShift;
-  __imp__sub_82511890(ctx, base);
+  __imp__sub_824DF2D8(ctx, base);
   if (!config.modern && !trace_enabled.load(std::memory_order_relaxed)) return;
   const uint32_t table = REX_LOAD_U32(kEntriesGlobal);
   const uint32_t index = EntryIndex(table, entry);
@@ -485,7 +490,9 @@ extern "C" void sub_82511890(PPCContext& ctx, uint8_t* base) {
     record.entity = 0; record.model = 0; record.release_time = now;
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82511890
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82511C50(PPCContext& ctx, uint8_t* base) {
   const uint32_t manager = ctx.r3.u32, requested = ctx.r4.u32;
   if (config.modern && manager == kManager) {
@@ -496,6 +503,8 @@ extern "C" void sub_82511C50(PPCContext& ctx, uint8_t* base) {
   if (manager == kManager) REXLOG_INFO("gta4-streaming: budget virtual original={} target={} effective={}",
                                      requested, target, REX_LOAD_U32(manager + 32));
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82511C50
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82511CD8(PPCContext& ctx, uint8_t* base) {
   const uint32_t manager = ctx.r3.u32, requested = ctx.r4.u32;
   if (config.modern && manager == kManager) {
@@ -514,6 +523,7 @@ extern "C" void sub_82511CD8(PPCContext& ctx, uint8_t* base) {
                 config.physical_reserve_bytes.load(), effective);
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82511CD8
 
 // Mechanically derived complete functions. Only the preload operand and queue
 // ranking sites differ; the generator verifies source hashes and site counts.

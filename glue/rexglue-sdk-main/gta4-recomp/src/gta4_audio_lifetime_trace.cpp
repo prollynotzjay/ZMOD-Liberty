@@ -46,7 +46,7 @@ constexpr uint32_t kCrFrameSecondOffset = 0x24;
 constexpr uint32_t kInternalSelectorOffset = 0xE7;
 constexpr uint32_t kInternalSelectedRecordStride = 0x20;
 constexpr uint32_t kInternalSelectedRecordFlagOffset = 0x5F;
-constexpr uint32_t kPartyStopCallSite = 0x8262AF34;
+constexpr uint32_t kPartyStopCallSite = 0x826016AC;
 constexpr uint64_t kGuestAddressSpaceSize = 0x100000000ULL;
 constexpr size_t kMaximumTrackedAllocators = 1024;
 constexpr size_t kMaximumPartyStopEntries = 16;
@@ -590,6 +590,7 @@ void TraceCrFrameArray(uint8_t* base, uint32_t caller, uint32_t frame, uint32_t 
 
 }  // namespace
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_8219A350(PPCContext& ctx, uint8_t* base) {
   // Disabled diagnostics must not scan records or read guest snapshots.
   // The source-publication lock above, when present, remains unconditional.
@@ -611,7 +612,9 @@ extern "C" void sub_8219A350(PPCContext& ctx, uint8_t* base) {
   const auto record = RegisterAllocator(allocator, requested_size, backing);
   LogRecord("allocator-create", 0x8219A350, caller, base, record, allocation_flags, output_pointer);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_8219A350
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_8219A5C8(PPCContext& ctx, uint8_t* base) {
   // Disabled diagnostics must not scan records or read guest snapshots.
   // The source-publication lock above, when present, remains unconditional.
@@ -629,7 +632,9 @@ extern "C" void sub_8219A5C8(PPCContext& ctx, uint8_t* base) {
               ctx.r3.u32);
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_8219A5C8
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82192BC8(PPCContext& ctx, uint8_t* base) {
   // Disabled diagnostics must not scan records or read guest snapshots.
   // The source-publication lock above, when present, remains unconditional.
@@ -660,7 +665,9 @@ extern "C" void sub_82192BC8(PPCContext& ctx, uint8_t* base) {
                 link_proven ? 1 : 0);
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82192BC8
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82192E40(PPCContext& ctx, uint8_t* base) {
   // Disabled diagnostics must not scan records or read guest snapshots.
   // The source-publication lock above, when present, remains unconditional.
@@ -681,7 +688,9 @@ extern "C" void sub_82192E40(PPCContext& ctx, uint8_t* base) {
               ctx.r3.u32);
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82192E40
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_821929C8(PPCContext& ctx, uint8_t* base) {
   // Disabled diagnostics must not scan records or read guest snapshots.
   // The source-publication lock above, when present, remains unconditional.
@@ -703,7 +712,9 @@ extern "C" void sub_821929C8(PPCContext& ctx, uint8_t* base) {
               output_slot, source, ctx.r3.u32);
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_821929C8
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_829335B0(PPCContext& ctx, uint8_t* base) {
   // Disabled diagnostics must not scan records or read guest snapshots.
   // The source-publication lock above, when present, remains unconditional.
@@ -720,7 +731,9 @@ extern "C" void sub_829335B0(PPCContext& ctx, uint8_t* base) {
     LogRecord("source-addref", 0x829335B0, caller, *record, before, before.source_ref, ctx.r3.u32);
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_829335B0
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82192460(PPCContext& ctx, uint8_t* base) {
   // Disabled diagnostics must not scan records or read guest snapshots.
   // The source-publication lock above, when present, remains unconditional.
@@ -741,7 +754,9 @@ extern "C" void sub_82192460(PPCContext& ctx, uint8_t* base) {
               ctx.r3.u32);
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82192460
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_8218FF28(PPCContext& ctx, uint8_t* base) {
   // Disabled diagnostics must not scan records or read guest snapshots.
   // The source-publication lock above, when present, remains unconditional.
@@ -763,7 +778,9 @@ extern "C" void sub_8218FF28(PPCContext& ctx, uint8_t* base) {
               ctx.r3.u32);
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_8218FF28
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82192CF0(PPCContext& ctx, uint8_t* base) {
   // Disabled diagnostics must not scan records or read guest snapshots.
   // The source-publication lock above, when present, remains unconditional.
@@ -793,7 +810,9 @@ extern "C" void sub_82192CF0(PPCContext& ctx, uint8_t* base) {
               unlink_proven ? 1 : 0);
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82192CF0
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_8219FE60(PPCContext& ctx, uint8_t* base) {
   // Disabled diagnostics must not scan records or read guest snapshots.
   // The source-publication lock above, when present, remains unconditional.
@@ -811,7 +830,9 @@ extern "C" void sub_8219FE60(PPCContext& ctx, uint8_t* base) {
               ctx.r3.u32);
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_8219FE60
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82194438(PPCContext& ctx, uint8_t* base) {
   // Disabled diagnostics must not scan records or read guest snapshots.
   // The source-publication lock above, when present, remains unconditional.
@@ -833,7 +854,9 @@ extern "C" void sub_82194438(PPCContext& ctx, uint8_t* base) {
               ctx.r3.u32);
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82194438
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_8219A4B8(PPCContext& ctx, uint8_t* base) {
   // Disabled diagnostics must not scan records or read guest snapshots.
   // The source-publication lock above, when present, remains unconditional.
@@ -854,7 +877,9 @@ extern "C" void sub_8219A4B8(PPCContext& ctx, uint8_t* base) {
     LogRecord("allocator-dtor-exit", 0x8219A4B8, caller, *record, GuestSnapshot{}, allocator, 0);
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_8219A4B8
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_8219A6F8(PPCContext& ctx, uint8_t* base) {
   // Disabled diagnostics must not scan records or read guest snapshots.
   // The source-publication lock above, when present, remains unconditional.
@@ -886,7 +911,9 @@ extern "C" void sub_8219A6F8(PPCContext& ctx, uint8_t* base) {
               aggregate_interface, allocation_tag);
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_8219A6F8
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_821B3608(PPCContext& ctx, uint8_t* base) {
   // Disabled diagnostics must not scan records or read guest snapshots.
   // The source-publication lock above, when present, remains unconditional.
@@ -901,7 +928,9 @@ extern "C" void sub_821B3608(PPCContext& ctx, uint8_t* base) {
   LogHeapReuse("aggregate-alloc-reuse", 0x821B3608, caller, base, ctx.r3.u32, requested_size);
   (void)flags;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_821B3608
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_821B3510(PPCContext& ctx, uint8_t* base) {
   // Disabled diagnostics must not scan records or read guest snapshots.
   // The source-publication lock above, when present, remains unconditional.
@@ -914,7 +943,9 @@ extern "C" void sub_821B3510(PPCContext& ctx, uint8_t* base) {
   __imp__sub_821B3510(ctx, base);
   LogHeapReuse("default-alloc-reuse", 0x821B3510, caller, base, ctx.r3.u32, requested_size);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_821B3510
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_821B3538(PPCContext& ctx, uint8_t* base) {
   // Disabled diagnostics must not scan records or read guest snapshots.
   // The source-publication lock above, when present, remains unconditional.
@@ -929,7 +960,9 @@ extern "C" void sub_821B3538(PPCContext& ctx, uint8_t* base) {
   LogHeapReuse("default-aligned-alloc-reuse", 0x821B3538, caller, base, ctx.r3.u32, requested_size);
   (void)alignment;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_821B3538
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_8291F2C8(PPCContext& ctx, uint8_t* base) {
   // Disabled diagnostics must not scan records or read guest snapshots.
   // The source-publication lock above, when present, remains unconditional.
@@ -944,7 +977,9 @@ extern "C" void sub_8291F2C8(PPCContext& ctx, uint8_t* base) {
   LogHeapReuse("title-heap-alloc-reuse", 0x8291F2C8, caller, base, ctx.r3.u32, requested_size);
   (void)flags;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_8291F2C8
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_821B3700(PPCContext& ctx, uint8_t* base) {
   if (!IsAudioLifetimeTraceLoggingEnabled()) {
     __imp__sub_821B3700(ctx, base);
@@ -959,7 +994,9 @@ extern "C" void sub_821B3700(PPCContext& ctx, uint8_t* base) {
   if (record)
     NoteHeapFreeReturn("aggregate-free-return", 0x821B3700, caller, *record, allocation, flags);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_821B3700
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_821B3560(PPCContext& ctx, uint8_t* base) {
   if (!IsAudioLifetimeTraceLoggingEnabled()) {
     __imp__sub_821B3560(ctx, base);
@@ -973,7 +1010,9 @@ extern "C" void sub_821B3560(PPCContext& ctx, uint8_t* base) {
   if (record)
     NoteHeapFreeReturn("default-free-return", 0x821B3560, caller, *record, allocation, 0);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_821B3560
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_8291F330(PPCContext& ctx, uint8_t* base) {
   // Disabled diagnostics must not scan records or read guest snapshots.
   // The source-publication lock above, when present, remains unconditional.
@@ -993,7 +1032,9 @@ extern "C" void sub_8291F330(PPCContext& ctx, uint8_t* base) {
                       secondary);
   __imp__sub_8291F330(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_8291F330
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_8218F700(PPCContext& ctx, uint8_t* base) {
   // Disabled diagnostics must not scan records or read guest snapshots.
   // The source-publication lock above, when present, remains unconditional.
@@ -1012,7 +1053,9 @@ extern "C" void sub_8218F700(PPCContext& ctx, uint8_t* base) {
     LogRecord("outer-source-published", 0x8218F700, caller, base, *record, output_slot, source);
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_8218F700
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_8292FAB8(PPCContext& ctx, uint8_t* base) {
   // This initializer publishes outer+316 through sub_8218F700 and then
   // immediately reloads and uses the published source. It must participate in
@@ -1021,7 +1064,9 @@ extern "C" void sub_8292FAB8(PPCContext& ctx, uint8_t* base) {
   AudVoiceSourcePublicationLock publication_lock(0x8292FAB8);
   __imp__sub_8292FAB8(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_8292FAB8
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_8292F0E8(PPCContext& ctx, uint8_t* base) {
   AudVoiceSourcePublicationLock publication_lock(0x8292F0E8);
   // Disabled diagnostics must not scan records or read guest snapshots.
@@ -1047,7 +1092,9 @@ extern "C" void sub_8292F0E8(PPCContext& ctx, uint8_t* base) {
               current_source);
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_8292F0E8
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_8218EDB8(PPCContext& ctx, uint8_t* base) {
   // Disabled diagnostics must not scan records or read guest snapshots.
   // The source-publication lock above, when present, remains unconditional.
@@ -1067,7 +1114,9 @@ extern "C" void sub_8218EDB8(PPCContext& ctx, uint8_t* base) {
               ctx.r3.u32);
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_8218EDB8
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_829304A0(PPCContext& ctx, uint8_t* base) {
   AudVoiceSourcePublicationLock publication_lock(0x829304A0);
   // Disabled diagnostics must not scan records or read guest snapshots.
@@ -1085,42 +1134,58 @@ extern "C" void sub_829304A0(PPCContext& ctx, uint8_t* base) {
   LogMethodAnomaly("outer-update-stale-slot", 0x829304A0, caller, base, source);
   __imp__sub_829304A0(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_829304A0
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_8292F130(PPCContext& ctx, uint8_t* base) {
   AudVoiceSourcePublicationLock publication_lock(0x8292F130);
   __imp__sub_8292F130(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_8292F130
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_8292F250(PPCContext& ctx, uint8_t* base) {
   AudVoiceSourcePublicationLock publication_lock(0x8292F250);
   __imp__sub_8292F250(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_8292F250
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_8292F2C0(PPCContext& ctx, uint8_t* base) {
   AudVoiceSourcePublicationLock publication_lock(0x8292F2C0);
   __imp__sub_8292F2C0(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_8292F2C0
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_8292FDE0(PPCContext& ctx, uint8_t* base) {
   AudVoiceSourcePublicationLock publication_lock(0x8292FDE0);
   __imp__sub_8292FDE0(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_8292FDE0
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_8292FFD0(PPCContext& ctx, uint8_t* base) {
   AudVoiceSourcePublicationLock publication_lock(0x8292FFD0);
   __imp__sub_8292FFD0(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_8292FFD0
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82930078(PPCContext& ctx, uint8_t* base) {
   AudVoiceSourcePublicationLock publication_lock(0x82930078);
   __imp__sub_82930078(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82930078
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_829302A8(PPCContext& ctx, uint8_t* base) {
   AudVoiceSourcePublicationLock publication_lock(0x829302A8);
   __imp__sub_829302A8(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_829302A8
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_8218EE20(PPCContext& ctx, uint8_t* base) {
   // Disabled diagnostics must not scan records or read guest snapshots.
   // The source-publication lock above, when present, remains unconditional.
@@ -1133,7 +1198,9 @@ extern "C" void sub_8218EE20(PPCContext& ctx, uint8_t* base) {
   LogMethodAnomaly("source-method32-stale", 0x8218EE20, caller, base, source);
   __imp__sub_8218EE20(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_8218EE20
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_8218F0B8(PPCContext& ctx, uint8_t* base) {
   // Disabled diagnostics must not scan records or read guest snapshots.
   // The source-publication lock above, when present, remains unconditional.
@@ -1146,7 +1213,9 @@ extern "C" void sub_8218F0B8(PPCContext& ctx, uint8_t* base) {
   LogMethodAnomaly("source-method60-stale", 0x8218F0B8, caller, base, source);
   __imp__sub_8218F0B8(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_8218F0B8
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_8262AE58(PPCContext& ctx, uint8_t* base) {
   // Disabled diagnostics must not scan records or read guest snapshots.
   // The source-publication lock above, when present, remains unconditional.
@@ -1228,7 +1297,9 @@ extern "C" void sub_8262AE58(PPCContext& ctx, uint8_t* base) {
   LogCheckpoint("party-stop-exit", 0x8262AE58, caller, manager, script_id, script_index, total,
                 static_cast<uint32_t>(captured), static_cast<uint32_t>(epoch));
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_8262AE58
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_829093B0(PPCContext& ctx, uint8_t* base) {
   // Disabled diagnostics must not scan records or read guest snapshots.
   // The source-publication lock above, when present, remains unconditional.
@@ -1256,7 +1327,9 @@ extern "C" void sub_829093B0(PPCContext& ctx, uint8_t* base) {
                   static_cast<uint32_t>(g_party_transition_epoch.load(std::memory_order_acquire)));
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_829093B0
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82910118(PPCContext& ctx, uint8_t* base) {
   // Disabled diagnostics must not scan records or read guest snapshots.
   // The source-publication lock above, when present, remains unconditional.
@@ -1279,7 +1352,9 @@ extern "C" void sub_82910118(PPCContext& ctx, uint8_t* base) {
   LogCheckpoint("party-publish-after", 0x82910118, caller, after.internal, after.selector,
                 after.selected_index, after.selected_record, after.selected_flag, bit);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82910118
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_8290FD90(PPCContext& ctx, uint8_t* base) {
   // Disabled diagnostics must not scan records or read guest snapshots.
   // The source-publication lock above, when present, remains unconditional.
@@ -1304,7 +1379,9 @@ extern "C" void sub_8290FD90(PPCContext& ctx, uint8_t* base) {
                 after.producer_index, after.consumer_index, after.producer_record,
                 after.consumer_record);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_8290FD90
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_8291DF00(PPCContext& ctx, uint8_t* base) {
   // Disabled diagnostics must not scan records or read guest snapshots.
   // The source-publication lock above, when present, remains unconditional.
@@ -1327,7 +1404,9 @@ extern "C" void sub_8291DF00(PPCContext& ctx, uint8_t* base) {
   LogCheckpoint("party-worker-after", 0x8291DF00, caller, after.output, after.root, after.table,
                 after.count, static_cast<uint32_t>(epoch), ctx.r3.u32);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_8291DF00
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82444A30(PPCContext& ctx, uint8_t* base) {
   // Disabled diagnostics must not scan records or read guest snapshots.
   // The source-publication lock above, when present, remains unconditional.
@@ -1346,3 +1425,4 @@ extern "C" void sub_82444A30(PPCContext& ctx, uint8_t* base) {
     TraceCrFrameArray(base, caller, second_frame, data_source, 1);
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82444A30

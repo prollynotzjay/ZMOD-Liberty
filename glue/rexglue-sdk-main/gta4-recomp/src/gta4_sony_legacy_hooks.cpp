@@ -5,6 +5,7 @@
 // Legacy SDL consumers do not compile gta4_input_hooks.cpp. Keep their
 // adapter limited to the same two proven input boundaries.
 #if defined(GTA4_SONY_LEGACY_HOST)
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_828CCD60(PPCContext& context, uint8_t* base) {
 #if defined(GTA4_TOUCH_LEGACY_HOST)
   GTA4_TouchConsumePoll(context, base, GTA4_TouchCurrentEpoch() + 1);
@@ -12,7 +13,9 @@ extern "C" void sub_828CCD60(PPCContext& context, uint8_t* base) {
   __imp__sub_828CCD60(context, base);
   GTA4_SonyEndPoll(context, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_828CCD60
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_822B7DD0(PPCContext& context, uint8_t* base) {
   const uint32_t control = context.r3.u32;
   const uint32_t caller = static_cast<uint32_t>(context.lr);
@@ -22,4 +25,5 @@ extern "C" void sub_822B7DD0(PPCContext& context, uint8_t* base) {
   GTA4_TouchObserveControlReplay(context, base, control, caller, GTA4_TouchCurrentEpoch());
 #endif
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_822B7DD0
 #endif

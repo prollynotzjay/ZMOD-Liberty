@@ -48,7 +48,7 @@ std::atomic<uint64_t> g_motion_application_count = 0;
 uint32_t ResolvePlayerPad(const PPCContext& parent, uint8_t* base, uint32_t controller) {
   PPCContext nested = parent;
   nested.r3.u32 = controller;
-  __imp__sub_823CF688(nested, base);
+  __imp__sub_823C6A60(nested, base);
   return nested.r3.u32;
 }
 
@@ -145,10 +145,11 @@ void InvokeVehicleControl(PPCContext& ctx, uint8_t* base, PPCFunc* original,
 }  // namespace
 }  // namespace gta4
 
-extern "C" void sub_82163CE0(PPCContext& ctx, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_8212F818(PPCContext& ctx, uint8_t* base) {
   const uint32_t action_record = ctx.r3.u32;
   const uint32_t caller = ctx.lr;
-  __imp__sub_82163CE0(ctx, base);
+  __imp__sub_8212F818(ctx, base);
   gta4::input::MaybeForceDirectWeaponAction(ctx, base, action_record, caller);
   if (action_record != gta4::kPrimaryReloadActionRecord) {
     return;
@@ -162,19 +163,28 @@ extern "C" void sub_82163CE0(PPCContext& ctx, uint8_t* base) {
     ctx.r3.u64 = 1;
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82163CE0
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_822ABEE0(PPCContext& ctx, uint8_t* base) {
   gta4::InvokeVehicleControl(ctx, base, __imp__sub_822ABEE0, gta4::VehicleMotionKind::kHelicopter);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_822ABEE0
 
-extern "C" void sub_82643870(PPCContext& ctx, uint8_t* base) {
-  gta4::InvokeVehicleControl(ctx, base, __imp__sub_82643870, gta4::VehicleMotionKind::kAutomobile);
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_825AD698(PPCContext& ctx, uint8_t* base) {
+  gta4::InvokeVehicleControl(ctx, base, __imp__sub_825AD698, gta4::VehicleMotionKind::kAutomobile);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82643870
 
-extern "C" void sub_82647DD0(PPCContext& ctx, uint8_t* base) {
-  gta4::InvokeVehicleControl(ctx, base, __imp__sub_82647DD0, gta4::VehicleMotionKind::kBike);
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_825B1BD8(PPCContext& ctx, uint8_t* base) {
+  gta4::InvokeVehicleControl(ctx, base, __imp__sub_825B1BD8, gta4::VehicleMotionKind::kBike);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82647DD0
 
-extern "C" void sub_82664450(PPCContext& ctx, uint8_t* base) {
-  gta4::InvokeVehicleControl(ctx, base, __imp__sub_82664450, gta4::VehicleMotionKind::kBoat);
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_825D6630(PPCContext& ctx, uint8_t* base) {
+  gta4::InvokeVehicleControl(ctx, base, __imp__sub_825D6630, gta4::VehicleMotionKind::kBoat);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82664450

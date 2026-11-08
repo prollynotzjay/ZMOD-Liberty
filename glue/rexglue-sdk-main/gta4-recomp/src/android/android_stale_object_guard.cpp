@@ -123,14 +123,18 @@ extern "C" bool GTA4_StaleChildGuard(uint32_t child) {
   return false;
 }
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_8296E480(PPCContext& ctx, uint8_t* base) {
   if (GuardedMatrixCopy(ctx, base, 56, 112, "sub_8296E480")) __imp__sub_8296E480(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_8296E480
 
 // Same routine for the object at owner+52 (table at owner+104).
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_8296E310(PPCContext& ctx, uint8_t* base) {
   if (GuardedMatrixCopy(ctx, base, 52, 104, "sub_8296E310")) __imp__sub_8296E310(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_8296E310
 
 // sub_82477EF0 walks the title's global entity list every frame and calls
 // sub_82477E30 for each entity's children (entity+652+i*4), the table
@@ -138,6 +142,7 @@ extern "C" void sub_8296E310(PPCContext& ctx, uint8_t* base) {
 // then 00000002, 2026-10-10): sub_8297CE78's guard took its empty path, and
 // sub_82477E30 then faulted reading the child's +52. A child that does not
 // lead to mapped memory is skipped; the next frame walks the table again.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82477E30(PPCContext& ctx, uint8_t* base) {
   const uint32_t child = ctx.r3.u32;
   if (!REXCVAR_GET(gta4_stale_object_guard) || Readable(child + 52, 8)) {
@@ -151,3 +156,4 @@ extern "C" void sub_82477E30(PPCContext& ctx, uint8_t* base) {
                         static_cast<unsigned long long>(count), child);
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82477E30

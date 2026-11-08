@@ -270,6 +270,7 @@ void PumpReceivedVoice(PPCContext& parent_ctx, uint8_t* base,
 
 }  // namespace
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82575E20(PPCContext& ctx, uint8_t* base) {
   const uint32_t invitation_index = ctx.r3.u32;
   PPCContext lookup_ctx = ctx;
@@ -312,7 +313,9 @@ extern "C" void sub_82575E20(PPCContext& ctx, uint8_t* base) {
       "result={}",
       invitation_index, session_id, accepted->session_id, sender_xuid, ctx.r3.u32);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82575E20
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_827D7FA8(PPCContext& ctx, uint8_t* base) {
   const uint32_t multiplayer_manager = ctx.r3.u32;
   __imp__sub_827D7FA8(ctx, base);
@@ -321,7 +324,9 @@ extern "C" void sub_827D7FA8(PPCContext& ctx, uint8_t* base) {
                                      : nullptr);
   PumpReceivedVoice(ctx, base, multiplayer_manager);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_827D7FA8
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_827D7658(PPCContext& ctx, uint8_t* base) {
   const uint32_t payload_ptr = ctx.r5.u32;
   const uint32_t payload_size_ptr = ctx.r6.u32;
@@ -367,26 +372,34 @@ extern "C" void sub_827D7658(PPCContext& ctx, uint8_t* base) {
         "GTA IV local talker packets are using the authenticated community voice relay");
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_827D7658
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82576060(PPCContext& ctx, uint8_t* base) {
   const uint32_t peer_id = ctx.r3.u32;
   const bool muted = ctx.r4.u8 != 0;
   __imp__sub_82576060(ctx, base);
   SetVoiceManualMute(peer_id, muted);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82576060
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_825760E0(PPCContext& ctx, uint8_t* base) {
   const int32_t peer_id = ctx.r3.s32;
   __imp__sub_825760E0(ctx, base);
   SetVoiceFocus(peer_id);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_825760E0
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826FDFD0(PPCContext& ctx, uint8_t* base) {
   const bool enabled = ctx.r4.u8 != 0;
   __imp__sub_826FDFD0(ctx, base);
   SetVoiceTeamOnly(enabled);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826FDFD0
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82A355E0(PPCContext& ctx, uint8_t* base) {
   (void)base;
   const rex::X_RESULT result =
@@ -407,3 +420,4 @@ extern "C" void sub_82A355E0(PPCContext& ctx, uint8_t* base) {
   REXSYS_DEBUG("GTA IV invite builder sent {} recipients with result {:08X}", ctx.r4.u32,
                result);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82A355E0

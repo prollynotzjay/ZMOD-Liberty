@@ -38,6 +38,7 @@ REXCVAR_DEFINE_UINT32(gta4_extra_frames_in_flight, 0, "GTA IV/Performance",
 // Latest game update rate, shown by the in-game "Show FPS" overlay.
 std::atomic<float> g_liberty_title_fps{0.0f};
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82A46D70(PPCContext& ctx, uint8_t* base) {
   const uint32_t out = ctx.r4.u32;
   __imp__sub_82A46D70(ctx, base);
@@ -81,3 +82,4 @@ extern "C" void sub_82A46D70(PPCContext& ctx, uint8_t* base) {
     nanosleep(&delay, nullptr);
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82A46D70

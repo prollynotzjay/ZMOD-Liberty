@@ -848,6 +848,7 @@ void GTA4_TouchCaptureFrontendDraw(PPCContext& context, uint8_t* base,
   g_row_capture = std::move(previous);
 }
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_821BF050(PPCContext& context, uint8_t* base) {
   if (g_radar_capture.active && context.lr == kRadarQuadCaller && context.r4.u32) {
     Rect quad{};
@@ -883,7 +884,9 @@ extern "C" void sub_821BF050(PPCContext& context, uint8_t* base) {
   }
   __imp__sub_821BF050(context, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_821BF050
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_8239C468(PPCContext& context, uint8_t* base) {
   const auto pass = gta4::input::ConsumeTouchRadarPass(base, context.r3.u32);
   RadarCapture previous = g_radar_capture;
@@ -904,3 +907,4 @@ extern "C" void sub_8239C468(PPCContext& context, uint8_t* base) {
                                 Rect{});
   g_radar_capture = previous;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_8239C468

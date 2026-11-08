@@ -149,24 +149,24 @@ constexpr Action kPhoneButtonActions[] = {
     Action::kPhoneTakeOut, Action::kPhonePutAway,
 };
 
-// These values are recovered from generated sub_822B7DD0/sub_822B7CD8 and
-// sub_821B4768. tools/verify_gta4_input_layout.py verifies all derived offsets.
+// These values are recovered from generated sub_821EEA40/sub_821EE948 and
+// sub_8219FD88. tools/verify_gta4_input_layout.py verifies all derived offsets.
 constexpr uint32_t kActionArrayOffset = 2328;
 constexpr uint32_t kActionStride = 12;
 constexpr uint32_t kActionCurrentOffset = 2;
 constexpr uint32_t kActionPreviousOffset = 3;
-// sub_822B7DD0 caches the previous signed action-75 value here, and
-// sub_8224FFC8 consumes it for right-stick vertical scroll edge events.
+// sub_821EEA40 caches the previous signed action-75 value here, and
+// sub_8224CCB8 consumes it for right-stick vertical scroll edge events.
 constexpr uint32_t kFrontendScrollPreviousOffset = 4212;
 constexpr uint32_t kControlUserIndexOffset = 3412;
-// sub_825D1468 suppresses raw LB press edges while this byte is set.
+// sub_82592A50 suppresses raw LB press edges while this byte is set.
 constexpr uint32_t kRawContextButtonDisabledOffset = 3408;
 constexpr uint32_t kLastInputTimeOffset = 4200;
-// Generated sub_828CC9D0 converts the XInput state into one of four retail
+// Generated sub_82869078 converts the XInput state into one of four retail
 // controller records before native PC actions are merged. The record geometry
 // and addresses are independently checked by
 // /tmp/verify_controller_record_layout.py.
-constexpr uint32_t kRetailControllerRecordsAddress = 0x831C4FF8;
+constexpr uint32_t kRetailControllerRecordsAddress = 0x83127890;
 constexpr uint32_t kRetailControllerRecordStride = 56;
 constexpr uint32_t kRetailControllerRecordCount = 4;
 constexpr uint32_t kRetailControllerFlagsOffset = 4;
@@ -176,45 +176,45 @@ constexpr uint32_t kRetailControllerDpadUpFlag = 0x1000;
 constexpr uint32_t kRetailControllerDpadDownFlag = 0x4000;
 constexpr uint32_t kRetailControllerDpadLeftFlag = 0x8000;
 constexpr uint32_t kRetailControllerDpadRightFlag = 0x2000;
-constexpr uint32_t kGameInputTimeAddress = 0x82C6C2A4;
-constexpr uint32_t kGameplayTimeStepAddress = 0x82C6C2AC;
-constexpr uint32_t kCurrentScreenAddress = 0x82BFA124;
+constexpr uint32_t kGameInputTimeAddress = 0x82C7E274;
+constexpr uint32_t kGameplayTimeStepAddress = 0x82C7E27C;
+constexpr uint32_t kCurrentScreenAddress = 0x82BEC844;
 constexpr uint32_t kMapScreen = 3;
-constexpr uint32_t kMapZoomLevelAddress = 0x82BF9D88;
-constexpr uint32_t kMapZoomSettledAddress = 0x82BF9D8C;
+constexpr uint32_t kMapZoomLevelAddress = 0x82BEC4C8;
+constexpr uint32_t kMapZoomSettledAddress = 0x82BEC4CC;
 constexpr uint32_t kMapZoomMinimum = 0;
 constexpr uint32_t kMapZoomMaximum = 5;
-// Generated sub_8224FFC8 reads and clears this one-shot frontend refresh flag.
+// Generated sub_8224CCB8 reads and clears this one-shot frontend refresh flag.
 // The address is independently derived by tools/verify_gta4_input_layout.py.
-constexpr uint32_t kFrontendOneShotFlagAddress = 0x82BFA129;
-// Registered IS_PAUSE_MENU_ACTIVE native sub_825DAA40, via sub_825DD3E8.
-constexpr uint32_t kPauseMenuTransitionAddress = 0x82BFA13C;
-constexpr uint32_t kPauseMenuVisibleAddress = 0x82BFA144;
+constexpr uint32_t kFrontendOneShotFlagAddress = 0x82BEC849;
+// Registered IS_PAUSE_MENU_ACTIVE native sub_8259B780, via sub_825DD3E8.
+constexpr uint32_t kPauseMenuTransitionAddress = 0x82BEC858;
+constexpr uint32_t kPauseMenuVisibleAddress = 0x82BEC860;
 // The registered CAN_PHONE_BE_SEEN_ON_SCREEN native (sub_8217D3E0) loads the
 // active phone render object through this index/table pair, then evaluates
-// sub_821C2FA8. That retail leaf returns the object's byte-17 hidden state;
+// sub_82197B80. That retail leaf returns the object's byte-17 hidden state;
 // CAN_PHONE_BE_SEEN_ON_SCREEN returns its inverse. The absolute addresses are
 // checked against generated instructions by verify_gta4_keyboard_consumers.py.
 constexpr uint32_t kPhoneRenderIndexAddress = 0x82B3A0F0;
-constexpr uint32_t kPhoneRenderObjectTableAddress = 0x82B39990;
+constexpr uint32_t kPhoneRenderObjectTableAddress = 0x82AAD0D8;
 // The retail data definition reserves 0x100 bytes at dword_82B39990 before
 // dword_82B39A90. /tmp/phone_table_geometry.py derives 64 guest pointers.
 // Retail callers index the initialized value directly; this poll hook runs
 // more broadly, so reject an out-of-range startup/corruption value first.
 constexpr uint32_t kPhoneRenderObjectCount = 64;
 constexpr uint32_t kPhoneHiddenStateOffset = 17;
-// CREATE_MOBILE_PHONE (sub_8217C958) sets this byte and
-// DESTROY_MOBILE_PHONE (sub_82146BE8) clears it. The persistent HUD widget
+// CREATE_MOBILE_PHONE (sub_82152778) sets this byte and
+// DESTROY_MOBILE_PHONE (sub_821255F8) clears it. The persistent HUD widget
 // queried by CAN_PHONE_BE_SEEN_ON_SCREEN is not proof that a phone exists.
-// Generated sub_823CA860/sub_823CE3A8 additionally reject the offscreen state
+// Generated sub_823CA860/sub_823C1868 additionally reject the offscreen state
 // written by SCRIPT_IS_MOVING_MOBILE_PHONE_OFFSCREEN (sub_8217D3C0).
-constexpr uint32_t kPhoneCreatedAddress = 0x831D4DD4;
-constexpr uint32_t kPhoneMovingOffscreenAddress = 0x831D534C;
+constexpr uint32_t kPhoneCreatedAddress = 0x83137668;
+constexpr uint32_t kPhoneMovingOffscreenAddress = 0x83137BCD;
 constexpr uint32_t kPhoneConsumerDisableFlagAOffset = 528;
 constexpr uint32_t kPhoneConsumerDisableFlagBOffset = 529;
 constexpr uint32_t kPhoneConsumerStateOffset = 640;
-constexpr uint32_t kCurrentPlayerIndexAddress = 0x82A98778;
-constexpr uint32_t kPlayerInfoTableAddress = 0x82C01C70;
+constexpr uint32_t kCurrentPlayerIndexAddress = 0x82A2CFC8;
+constexpr uint32_t kPlayerInfoTableAddress = 0x82C51C10;
 constexpr uint32_t kPlayerInfoPedOffset = 1400;
 constexpr uint32_t kPedVehicleFlagsOffset = 572;
 constexpr uint32_t kPedVehicleOffset = 2688;
@@ -242,13 +242,13 @@ constexpr uint32_t kDirectWeaponPredicateCaller = 0x823CFD54;
 constexpr uint32_t kVehicleWeaponPressPredicateCaller = 0x823CFB28;
 constexpr uint32_t kVehicleWeaponReleasePredicateCaller = 0x823CFAF0;
 constexpr uint32_t kDirectWeaponSelectionCaller = 0x823CFD94;
-constexpr uint32_t kRadioOffPredicateCaller = 0x822D4A18;
+constexpr uint32_t kRadioOffPredicateCaller = 0x8225C400;
 constexpr uint32_t kPedWeaponManagerOffset = 640;
 // rage::scrThread* is installed here only while the interpreter is executing
 // a native call. The script key and shared-global layout are recovered from
-// generated sub_82844200 and the executable parachute_player SCO.
-constexpr uint32_t kExecutingScriptThreadAddress = 0x8319277C;
-constexpr uint32_t kScriptGlobalsAddress = 0x831927B4;
+// generated sub_827D5840 and the executable parachute_player SCO.
+constexpr uint32_t kExecutingScriptThreadAddress = 0x830F4FBC;
+constexpr uint32_t kScriptGlobalsAddress = 0x830F4FF4;
 constexpr uint32_t kScriptProgramKeyOffset = 8;
 constexpr uint32_t kParachutePlayerProgramKey = 0x98751695;
 constexpr uint32_t kParachuteStateOffset = 0x2A18;
@@ -573,7 +573,7 @@ struct VehicleInputContext {
 
 VehicleInputContext ReadVehicleInputContext(uint8_t* base) {
   VehicleInputContext context;
-  // This is the leaf lookup performed by generated sub_82238C28(0). The
+  // This is the leaf lookup performed by generated sub_822FDD50(0). The
   // in-vehicle bit and pointer are updated by the retail set-in/set-out tasks,
   // so recomputing them here also covers vehicle transitions without a stale
   // host-side tracker.
@@ -724,12 +724,12 @@ bool ConfigureKeyboardControllerForPoll(const PPCContext& parent, uint8_t* base)
 }
 
 uint32_t SelectInterfaceControl(const PPCContext& parent, uint8_t* base) {
-  // Every action read in generated sub_8224FFC8 obtains its control through
-  // sub_821B42B8(1). Use the same selector at the consumer boundary rather
+  // Every action read in generated sub_8224CCB8 obtains its control through
+  // sub_8219F8D8(1). Use the same selector at the consumer boundary rather
   // than guessing that the normal gameplay replay object is also current.
   PPCContext nested = parent;
   nested.r3.u32 = 1;
-  __imp__sub_821B42B8(nested, base);
+  __imp__sub_8219F8D8(nested, base);
   return nested.r3.u32;
 }
 
@@ -1321,7 +1321,7 @@ void InjectFrontendScroll(const PPCContext& parent, uint8_t* base,
     nested.r3.u64 = (static_cast<uint64_t>(LoadU32(base, address)) << 32) |
                     LoadU32(base, address + 4);
     nested.r4.u64 = static_cast<uint64_t>(LoadU32(base, address + 8)) << 32;
-    __imp__sub_822B7958(nested, base);
+    __imp__sub_821EE5C8(nested, base);
     StoreU32(base, control + kFrontendScrollPreviousOffset, nested.r3.u32);
   }
   const KeyboardActionBytes prepared =
@@ -1553,7 +1553,7 @@ InputEpoch CaptureEpoch(const PPCContext& entry_context, uint8_t* base,
   // The phone can stay visible during gameplay and photography. Let the
   // admitted retail camera handle look input; opening it only clears toggle aim.
   const bool mouse_gameplay = native_valid && !frontend_active &&
-      !GTA4_TouchTitleInputOwned() && LoadU32(base, 0x82BA1D40) == 0 && vehicle.ped;
+      !GTA4_TouchTitleInputOwned() && LoadU32(base, 0x82B806EC) == 0 && vehicle.ped;
   const bool physical_rmb = state.keys[static_cast<size_t>(VirtualKey::kRButton)] != 0;
   // Match sub_82299AD0's bounded weapon-info lookup. Never use the broad
   // IS_CHAR_ARMED predicate here: it includes melee weapons.
@@ -1564,7 +1564,7 @@ InputEpoch CaptureEpoch(const PPCContext& entry_context, uint8_t* base,
       const uint32_t type = LoadU32(base, manager + 36 + slot * 8);
       if (type < 60 && type != 0 && type != 46) {
         g_epoch.mouse_free_aim = MouseFreeAimWeapon(
-            LoadU32(base, 0x82CB8AB0 + type * 272 + 12));
+            LoadU32(base, 0x82EE5000 + type * 272 + 12));
       }
     }
   }
@@ -1588,7 +1588,7 @@ InputEpoch CaptureEpoch(const PPCContext& entry_context, uint8_t* base,
       (gamepad_valid && gamepad_state.gamepad.left_trigger > 30);
   const bool gyro_allowed = REXCVAR_GET(gta4_motion_aim) && aiming && !frontend_active &&
       !phone.visible && !vehicle.vehicle && !GTA4_TouchTitleInputOwned() &&
-      LoadU32(base, 0x82BA1D40) == 0;
+      LoadU32(base, 0x82B806EC) == 0;
   if (gyro_allowed) {
     const auto motion = gta4::GTA4MotionBridge::Get().Read(input_user);
     const auto gyro = BuildGyroAimActions(motion.controls_enabled && motion.fresh,
@@ -1613,10 +1613,10 @@ void InjectEpoch(uint8_t* base, uint32_t control, uint32_t active_gameplay_contr
   }
   const uint32_t control_user = LoadU32(base, control + kControlUserIndexOffset);
   const bool user_matches = control_user == epoch.state.user_index;
-  // sub_822B7DD0 is GTA's per-device replay boundary. The object passed here
+  // sub_821EEA40 is GTA's per-device replay boundary. The object passed here
   // is the object the retail input update has just reset and populated. GTA
   // may subsequently transfer that state into the object returned by
-  // sub_821B41E8; that downstream consumer selector is not an injection-owner
+  // sub_8219F808; that downstream consumer selector is not an injection-owner
   // test. Requiring pointer equality with it drops keyboard gameplay actions
   // whenever the replay and consumer objects differ (the live vehicle trace
   // shows exactly that split).
@@ -1649,10 +1649,10 @@ void InjectEpoch(uint8_t* base, uint32_t control, uint32_t active_gameplay_contr
   for (const ButtonBinding& binding : kButtonBindings) {
     const KeyboardActionRoute route =
         ClassifyKeyboardActionRoute(static_cast<uint32_t>(binding.action));
-    // sub_822B7DD0 has just reset and populated this object. Merge frontend
-    // records here so a nested replay in sub_8224FFC8 cannot erase them before
+    // sub_821EEA40 has just reset and populated this object. Merge frontend
+    // records here so a nested replay in sub_8224CCB8 cannot erase them before
     // the generated consumer reads them. Phone records are handled above on
-    // the exact active gameplay control selected by sub_821B41E8.
+    // the exact active gameplay control selected by sub_8219F808.
     if (IsContextAction(route)) {
       if (UsesActiveGameplayControl(route)) {
         continue;
@@ -1677,8 +1677,8 @@ void InjectEpoch(uint8_t* base, uint32_t control, uint32_t active_gameplay_contr
     if (binding.action == Action::kAim && owns_gameplay && !epoch.frontend_active) {
       if (epoch.mouse_aim) {
         gameplay_activity |= MergeButton(base, control, binding.action,
-            MouseAimPressure(epoch.mouse_free_aim, LoadU8(base, 0x82FD1E3C) != 0,
-                             LoadU8(base, 0x82AA1B0F)));
+            MouseAimPressure(epoch.mouse_free_aim, LoadU8(base, 0x82F0C9D4) != 0,
+                             LoadU8(base, 0x82A318DF)));
       }
       // Touch RMB retains the full trigger used by the console controls.
       if (GTA4_TouchVirtualKeyDown(static_cast<size_t>(binding.key))) {
@@ -1765,7 +1765,7 @@ void InjectEpoch(uint8_t* base, uint32_t control, uint32_t active_gameplay_contr
   gameplay_activity |=
       MergeAxis(base, control, Action::kVehicleMoveUp, Action::kVehicleMoveDown, vehicle_pitch);
 
-  // sub_825ED3C8 reads signed action 24 (26 for alternate pad controls).
+  // sub_824F8D10 reads signed action 24 (26 for alternate pad controls).
   // Negative input reduces the scope FOV; positive input increases it. The
   // paired records are centered axes, so treating zoom-out as button 25
   // leaves the actual consumer neutral and reverses zoom-in's direction.
@@ -1942,7 +1942,7 @@ void ApplyMapEpoch(const PPCContext& entry_context, uint8_t* base) {
 
   PPCContext nested = entry_context;
   nested.r3.u32 = 1;
-  __imp__sub_821B42B8(nested, base);
+  __imp__sub_8219F8D8(nested, base);
   const uint32_t control = nested.r3.u32;
   if (!control ||
       LoadU32(base, control + kControlUserIndexOffset) != epoch.state.user_index ||
@@ -2017,7 +2017,7 @@ uint32_t AvailableDirectWeaponSlot(const PPCContext& parent, uint8_t* base,
   PPCContext nested = parent;
   nested.r3.u32 = manager;
   nested.r4.u32 = requested_slot - 1;
-  __imp__sub_823D52D0(nested, base);
+  __imp__sub_823C3040(nested, base);
   return nested.r3.u32 == requested_slot ? requested_slot : original_slot;
 }
 
@@ -2094,6 +2094,7 @@ void MaybeForceDirectWeaponAction(PPCContext& ctx, uint8_t* base,
 
 }  // namespace gta4::input
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_828CCD60(PPCContext& ctx, uint8_t* base) {
   const uint32_t caller = ctx.lr;
   // Select bindings before retail polls XInput, and use that same selection
@@ -2213,16 +2214,18 @@ extern "C" void sub_828CCD60(PPCContext& ctx, uint8_t* base) {
         epoch.state.mouse_reset_generation, static_cast<uint32_t>(epoch.state.mouse_source));
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_828CCD60
 
-extern "C" void sub_822B7DD0(PPCContext& ctx, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_821EEA40(PPCContext& ctx, uint8_t* base) {
   const uint32_t control = ctx.r3.u32;
   const uint32_t caller = ctx.lr;
-  __imp__sub_822B7DD0(ctx, base);
+  __imp__sub_821EEA40(ctx, base);
   // Ask GTA which control object its current player/camera/vehicle consumers
   // use. Calling the generated implementation directly avoids recursively
   // entering a hook and preserves the authoritative retail selection logic.
   PPCContext active_control_context{};
-  __imp__sub_821B41E8(active_control_context, base);
+  __imp__sub_8219F808(active_control_context, base);
   const uint32_t active_gameplay_control = active_control_context.r3.u32;
   const gta4::input::InputEpoch epoch = gta4::input::ReadEpoch();
   const bool native_user_control =
@@ -2275,8 +2278,10 @@ extern "C" void sub_822B7DD0(PPCContext& ctx, uint8_t* base) {
       base, epoch, control, active_gameplay_control,
       native_user_control ? "gta-route-final" : "gta-route-non-owner");
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_822B7DD0
 
-extern "C" void sub_8224FFC8(PPCContext& ctx, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_8224CCB8(PPCContext& ctx, uint8_t* base) {
   // Shared native frontend event query (including callers outside the list
   // poll). Keep keyboard/controller navigation behind the explicit editor's
   // pointer ownership, through its closing fade. Ordinary menus retain the
@@ -2291,11 +2296,11 @@ extern "C" void sub_8224FFC8(PPCContext& ctx, uint8_t* base) {
       gta4::input::LoadU8(base, gta4::input::kFrontendOneShotFlagAddress) != 0;
   const gta4::input::InputEpoch epoch = gta4::input::ReadEpoch();
   // The generated frontend consumer obtains its action records through
-  // sub_821B42B8(1). Normally the post-sub_822B7DD0 replay hook has already
+  // sub_8219F8D8(1). Normally the post-sub_821EEA40 replay hook has already
   // merged keyboard state into this object. Keep this idempotent fallback for
   // event paths that consume an object without replaying it in the current
   // epoch. Phone actions are intentionally excluded: generated phone gameplay
-  // code reads the sub_821B41E8 control family instead.
+  // code reads the sub_8219F808 control family instead.
   const uint32_t interface_control =
       epoch.valid ? gta4::input::SelectInterfaceControl(ctx, base) : 0;
   const bool interface_user_matches =
@@ -2321,7 +2326,7 @@ extern "C" void sub_8224FFC8(PPCContext& ctx, uint8_t* base) {
         gta4::input::g_interface_after_trace);
   }
 
-  __imp__sub_8224FFC8(ctx, base);
+  __imp__sub_8224CCB8(ctx, base);
 
   gta4::input::GtaActionTraceSnapshot frontend_after{};
   if (interface_user_matches) {
@@ -2388,7 +2393,9 @@ extern "C" void sub_8224FFC8(PPCContext& ctx, uint8_t* base) {
         gta4::input::IsDown(epoch.state, rex::ui::VirtualKey::kF));
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_8224FFC8
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_823CF9C0(PPCContext& ctx, uint8_t* base) {
   const uint32_t phone_object = ctx.r3.u32;
   const uint32_t caller = ctx.lr;
@@ -2480,15 +2487,19 @@ extern "C" void sub_823CF9C0(PPCContext& ctx, uint8_t* base) {
         before.phone_put_away, after.phone_put_away);
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_823CF9C0
 
-extern "C" void sub_82252488(PPCContext& ctx, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_8224EB88(PPCContext& ctx, uint8_t* base) {
   const PPCContext entry_context = ctx;
   if (ctx.r3.u32) {
     gta4::input::ApplyMapEpoch(entry_context, base);
   }
-  __imp__sub_82252488(ctx, base);
+  __imp__sub_8224EB88(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82252488
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_823D5800(PPCContext& ctx, uint8_t* base) {
   const uint32_t ped_weapon_manager = ctx.r3.u32;
   gta4::input::DirectWeaponRequest request;
@@ -2521,14 +2532,16 @@ extern "C" void sub_823D5800(PPCContext& ctx, uint8_t* base) {
         ped_weapon_manager, operation, slot, ctx.r3.u32);
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_823D5800
 
-extern "C" void sub_823D5358(PPCContext& ctx, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_823C30C8(PPCContext& ctx, uint8_t* base) {
   auto& policy = gta4::input::g_vehicle_weapon_candidates;
   switch (policy.Route(ctx.r3.u32, ctx.lr)) {
     case gta4::input::VehicleWeaponCandidateRoute::kAscending:
       // Reverse the vehicle's descending search; its generated caller still
       // checks the returned candidate against the current vehicle's rules.
-      __imp__sub_823D52D0(ctx, base);
+      __imp__sub_823C3040(ctx, base);
       return;
     case gta4::input::VehicleWeaponCandidateRoute::kRequestedSlot:
       ctx.r3.u64 = gta4::input::AvailableDirectWeaponSlot(
@@ -2539,27 +2552,33 @@ extern "C" void sub_823D5358(PPCContext& ctx, uint8_t* base) {
       ctx.r3.u64 = policy.original_slot;
       return;
     case gta4::input::VehicleWeaponCandidateRoute::kRetail:
-      __imp__sub_823D5358(ctx, base);
+      __imp__sub_823C30C8(ctx, base);
       return;
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_823D5358
 
-extern "C" void sub_822D3230(PPCContext& ctx, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_8225A568(PPCContext& ctx, uint8_t* base) {
   const uint32_t action_record = ctx.r3.u32;
   const uint32_t caller = ctx.lr;
-  __imp__sub_822D3230(ctx, base);
+  __imp__sub_8225A568(ctx, base);
   gta4::input::MaybeForceDirectWeaponAction(ctx, base, action_record, caller);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_822D3230
 
-extern "C" void sub_822D4158(PPCContext& ctx, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_8225B5F0(PPCContext& ctx, uint8_t* base) {
   const uint32_t action_record = ctx.r3.u32;
   const uint32_t caller = ctx.lr;
   const uint32_t radio_entity = ctx.r31.u32;
-  __imp__sub_822D4158(ctx, base);
+  __imp__sub_8225B5F0(ctx, base);
   gta4::input::MaybeForceRadioOffPredicate(ctx, base, action_record, caller,
                                            radio_entity);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_822D4158
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_825D1AF8(PPCContext& ctx, uint8_t* base) {
   const uint32_t call_context = ctx.r3.u32;
   const uint32_t touch_thread = gta4::input::ReadTouchScriptThread(base);
@@ -2580,7 +2599,9 @@ extern "C" void sub_825D1AF8(PPCContext& ctx, uint8_t* base) {
     REXLOG_INFO("gta4-input: parachute smoke button forced");
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_825D1AF8
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_825D1B40(PPCContext& ctx, uint8_t* base) {
   const uint32_t call_context = ctx.r3.u32;
   const uint32_t touch_thread = gta4::input::ReadTouchScriptThread(base);
@@ -2593,7 +2614,9 @@ extern "C" void sub_825D1B40(PPCContext& ctx, uint8_t* base) {
       base, call_context, gta4::input::TouchScriptQueryKind::kRawButtonPressed,
       touch_context.epoch, touch_thread, touch_context.generation);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_825D1B40
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_825D1B88(PPCContext& ctx, uint8_t* base) {
   const uint32_t call_context = ctx.r3.u32;
   const uint32_t touch_thread = gta4::input::ReadTouchScriptThread(base);
@@ -2614,7 +2637,9 @@ extern "C" void sub_825D1B88(PPCContext& ctx, uint8_t* base) {
     REXLOG_INFO("gta4-input: parachute held control forced");
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_825D1B88
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_825D1BD0(PPCContext& ctx, uint8_t* base) {
   const uint32_t call_context = ctx.r3.u32;
   const uint32_t touch_thread = gta4::input::ReadTouchScriptThread(base);
@@ -2636,12 +2661,14 @@ extern "C" void sub_825D1BD0(PPCContext& ctx, uint8_t* base) {
     REXLOG_INFO("gta4-input: parachute edge control forced");
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_825D1BD0
 
-extern "C" void sub_825D1C18(PPCContext& ctx, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_82593200(PPCContext& ctx, uint8_t* base) {
   const uint32_t call_context = ctx.r3.u32;
   const uint32_t touch_thread = gta4::input::ReadTouchScriptThread(base);
   const auto touch_context = gta4::input::GetTouchContextSnapshot();
-  __imp__sub_825D1C18(ctx, base);
+  __imp__sub_82593200(ctx, base);
   const uint64_t epoch = gta4::input::ReadEpoch().sequence;
   const gta4::input::ParachuteScriptContext parachute =
       gta4::input::ReadParachuteScriptContext(base);
@@ -2658,12 +2685,14 @@ extern "C" void sub_825D1C18(PPCContext& ctx, uint8_t* base) {
     REXLOG_INFO("gta4-input: parachute analogue brake forced");
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_825D1C18
 
-extern "C" void sub_825D20A0(PPCContext& ctx, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_82593618(PPCContext& ctx, uint8_t* base) {
   const uint32_t call_context = ctx.r3.u32;
   const uint32_t touch_thread = gta4::input::ReadTouchScriptThread(base);
   const auto touch_context = gta4::input::GetTouchContextSnapshot();
-  __imp__sub_825D20A0(ctx, base);
+  __imp__sub_82593618(ctx, base);
   const uint64_t epoch = gta4::input::ReadEpoch().sequence;
   const gta4::input::ParachuteScriptContext parachute =
       gta4::input::ReadParachuteScriptContext(base);
@@ -2678,6 +2707,7 @@ extern "C" void sub_825D20A0(PPCContext& ctx, uint8_t* base) {
     REXLOG_INFO("gta4-input: parachute keyboard stick forced");
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_825D20A0
 
 namespace gta4::input {
 namespace {
@@ -2724,14 +2754,14 @@ void TraceUpScriptInputQuery(uint8_t* base, ScriptInputQueryTraceKind kind,
   }
   traced_queries[traced_count++] = {kind, group, index};
 
-  // sub_825D1308/sub_825D1468 select these raw pad objects; button 8
-  // reads Up at +60/+140. sub_828CC9D0 maps XInput D-pad Up to internal
-  // device bit 0x1000 before sub_82208F50 builds these raw button records.
-  // sub_822094F8 maintains their current/history
+  // sub_825928F0/sub_82592A50 select these raw pad objects; button 8
+  // reads Up at +60/+140. sub_82869078 maps XInput D-pad Up to internal
+  // device bit 0x1000 before sub_8230D168 builds these raw button records.
+  // sub_8230D710 maintains their current/history
   // arrays independently of the semantic actions used by control queries.
-  const uint32_t selected_pad = LoadU32(base, 0x82A9172C);
-  const uint32_t raw_pad = group >= 4 ? 0x82B2A208
-                           : selected_pad < 4 ? 0x82B29F18 + selected_pad * 188
+  const uint32_t selected_pad = LoadU32(base, 0x82A22D04);
+  const uint32_t raw_pad = group >= 4 ? 0x82ACC050
+                           : selected_pad < 4 ? 0x82ACBD60 + selected_pad * 188
                                               : 0;
   const char* query = "control-pressed";
   switch (kind) {
@@ -2780,7 +2810,7 @@ void MergeKeyboardScriptContextButton(PPCContext& ctx, uint8_t* base,
     return;
   }
   PPCContext active = ctx;
-  sub_821B41E8(active, base);
+  sub_8219F808(active, base);
   const uint32_t control = active.r3.u32;
   if (!control || LoadU32(base, control + kControlUserIndexOffset) != epoch.state.user_index ||
       (just_pressed && LoadU8(base, control + kRawContextButtonDisabledOffset))) {
@@ -2793,46 +2823,54 @@ void MergeKeyboardScriptContextButton(PPCContext& ctx, uint8_t* base,
 }
 }  // namespace gta4::input
 
-extern "C" void sub_825D1308(PPCContext& ctx, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_825928F0(PPCContext& ctx, uint8_t* base) {
   const uint32_t group = ctx.r3.u32;
   const uint32_t button = ctx.r4.u32;
   const uint32_t caller = ctx.lr;
-  __imp__sub_825D1308(ctx, base);
+  __imp__sub_825928F0(ctx, base);
   gta4::input::MergeKeyboardScriptContextButton(ctx, base, group, button, false);
   gta4::input::TraceUpScriptInputQuery(
       base, gta4::input::ScriptInputQueryTraceKind::kRawHeld, group, button,
       caller, ctx.r3.u32);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_825D1308
 
-extern "C" void sub_825D1468(PPCContext& ctx, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_82592A50(PPCContext& ctx, uint8_t* base) {
   const uint32_t group = ctx.r3.u32;
   const uint32_t button = ctx.r4.u32;
   const uint32_t caller = ctx.lr;
-  __imp__sub_825D1468(ctx, base);
+  __imp__sub_82592A50(ctx, base);
   gta4::input::MergeKeyboardScriptContextButton(ctx, base, group, button, true);
   gta4::input::TraceUpScriptInputQuery(
       base, gta4::input::ScriptInputQueryTraceKind::kRawPressed, group, button,
       caller, ctx.r3.u32);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_825D1468
 
-extern "C" void sub_825D1908(PPCContext& ctx, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_82592EF0(PPCContext& ctx, uint8_t* base) {
   const uint32_t group = ctx.r3.u32;
   const uint32_t action = ctx.r4.u32;
   const uint32_t caller = ctx.lr;
-  __imp__sub_825D1908(ctx, base);
+  __imp__sub_82592EF0(ctx, base);
   gta4::input::TraceUpScriptInputQuery(
       base, gta4::input::ScriptInputQueryTraceKind::kControlHeld, group, action,
       caller, ctx.r3.u32);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_825D1908
 
-extern "C" void sub_825D1980(PPCContext& ctx, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_82592F68(PPCContext& ctx, uint8_t* base) {
   const uint32_t group = ctx.r3.u32;
   const uint32_t action = ctx.r4.u32;
   const uint32_t caller = ctx.lr;
-  __imp__sub_825D1980(ctx, base);
+  __imp__sub_82592F68(ctx, base);
   gta4::input::TraceUpScriptInputQuery(
       base, gta4::input::ScriptInputQueryTraceKind::kControlPressed, group, action,
       caller, ctx.r3.u32);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_825D1980
 
 #include "gta4_mouse_camera_hooks.inc"

@@ -240,6 +240,7 @@ void GTA4_FontSelectionTraceText(const PPCContext& ctx, uint8_t* base) {
       Owner(base, state.font), Episode(base), hash, raw.size(), terminated, preview);
 }
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_821F2ED0(PPCContext& ctx, uint8_t* base) {
   if (!Enabled()) {
     __imp__sub_821F2ED0(ctx, base);
@@ -260,7 +261,9 @@ extern "C" void sub_821F2ED0(PPCContext& ctx, uint8_t* base) {
       caller, requested, state.font, policy::LogicalAtlas(state.font), policy::Bank(state.bank),
       state.font == expected.font && state.bank == expected.bank);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_821F2ED0
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_821F1EE0(PPCContext& ctx, uint8_t* base) {
   if (!Enabled() || !Readable(base, kGlyphState, 48)) {
     __imp__sub_821F1EE0(ctx, base);
@@ -308,6 +311,7 @@ extern "C" void sub_821F1EE0(PPCContext& ctx, uint8_t* base) {
   }
   __imp__sub_821F1EE0(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_821F1EE0
 
 void GTA4_FontSelectionTraceBinding(uint32_t logical, uint32_t owner, uint32_t texture,
                                     uint32_t stage) {

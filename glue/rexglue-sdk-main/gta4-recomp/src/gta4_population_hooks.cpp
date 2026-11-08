@@ -31,11 +31,11 @@ namespace {
 
 // These are the canonical population multiplier globals written by the
 // generated setters and consumed by GTA IV's ambient vehicle/ped generators.
-constexpr uint32_t kRandomCarDensity = 0x82AA1888;
-constexpr uint32_t kParkedCarDensity = 0x82AA188C;
-constexpr uint32_t kPedDensity = 0x82AA2940;
-constexpr uint32_t kScenarioPedDensityCurrent = 0x82AA2944;
-constexpr uint32_t kScenarioPedDensityNext = 0x82AA2948;
+constexpr uint32_t kRandomCarDensity = 0x82A2FC30;
+constexpr uint32_t kParkedCarDensity = 0x82A2FC34;
+constexpr uint32_t kPedDensity = 0x82A30E74;
+constexpr uint32_t kScenarioPedDensityCurrent = 0x82A30E78;
+constexpr uint32_t kScenarioPedDensityNext = 0x82A30E7C;
 
 float LoadGuestFloat(uint8_t* base, uint32_t address) {
   return std::bit_cast<float>(REX_LOAD_U32(address));
@@ -94,46 +94,60 @@ void ScaleScenarioPeds(uint8_t* base, std::string_view source) {
 }  // namespace
 
 // Script/native handler: set both random and parked vehicle multipliers.
-extern "C" void sub_82598EB0(PPCContext& ctx, uint8_t* base) {
-  __imp__sub_82598EB0(ctx, base);
-  ScaleTraffic(base, "sub_82598EB0");
-  ScaleParkedCars(base, "sub_82598EB0");
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_8255E240(PPCContext& ctx, uint8_t* base) {
+  __imp__sub_8255E240(ctx, base);
+  ScaleTraffic(base, "sub_8255E240");
+  ScaleParkedCars(base, "sub_8255E240");
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82598EB0
 
 // Script/native handler: set the random vehicle multiplier.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82598ED0(PPCContext& ctx, uint8_t* base) {
   __imp__sub_82598ED0(ctx, base);
   ScaleTraffic(base, "sub_82598ED0");
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82598ED0
 
 // Script/native handler: set the parked vehicle multiplier.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82598EE8(PPCContext& ctx, uint8_t* base) {
   __imp__sub_82598EE8(ctx, base);
   ScaleParkedCars(base, "sub_82598EE8");
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82598EE8
 
 // Canonical lower-level ambient pedestrian multiplier setter.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_823F2AB0(PPCContext& ctx, uint8_t* base) {
   __imp__sub_823F2AB0(ctx, base);
   ScalePeds(base, "sub_823F2AB0");
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_823F2AB0
 
 // Canonical lower-level current/next scenario pedestrian multiplier setter.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_823F2AC0(PPCContext& ctx, uint8_t* base) {
   __imp__sub_823F2AC0(ctx, base);
   ScaleScenarioPeds(base, "sub_823F2AC0");
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_823F2AC0
 
 // Vehicle population startup reset writes the globals directly.
-extern "C" void sub_823A5330(PPCContext& ctx, uint8_t* base) {
-  __imp__sub_823A5330(ctx, base);
-  ScaleTraffic(base, "sub_823A5330");
-  ScaleParkedCars(base, "sub_823A5330");
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_8232A278(PPCContext& ctx, uint8_t* base) {
+  __imp__sub_8232A278(ctx, base);
+  ScaleTraffic(base, "sub_8232A278");
+  ScaleParkedCars(base, "sub_8232A278");
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_823A5330
 
 // Pedestrian population startup reset writes all three globals directly.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_823F4860(PPCContext& ctx, uint8_t* base) {
   __imp__sub_823F4860(ctx, base);
   ScalePeds(base, "sub_823F4860");
   ScaleScenarioPeds(base, "sub_823F4860");
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_823F4860

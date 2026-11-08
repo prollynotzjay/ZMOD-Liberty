@@ -111,10 +111,10 @@ std::once_flag g_player_info_table_warning;
 std::once_flag g_ownership_warning;
 
 constexpr uint8_t kTemporaryAliasPeerId = 0;
-constexpr uint32_t kVoiceEnumerationReturnAddress = 0x82700668;
-constexpr uint32_t kReassignmentNegotiationReturnAddress = 0x82786EC8;
-constexpr uint32_t kReassignmentResetNegotiationReturnAddress = 0x827870FC;
-constexpr uint32_t kReassignmentConfirmationReturnAddress = 0x82787204;
+constexpr uint32_t kVoiceEnumerationReturnAddress = 0x826A9358;
+constexpr uint32_t kReassignmentNegotiationReturnAddress = 0x8271CF50;
+constexpr uint32_t kReassignmentResetNegotiationReturnAddress = 0x8271D184;
+constexpr uint32_t kReassignmentConfirmationReturnAddress = 0x8271D28C;
 
 struct ExtendedAddContext {
   bool active = false;
@@ -3216,9 +3216,11 @@ GTA4_PRIMARY_PLAYER_INFO_ALIAS_HOOK(sub_821B42B8)
 GTA4_PRIMARY_PLAYER_INFO_ALIAS_HOOK(sub_821B4380)
 GTA4_PRIMARY_PLAYER_INFO_ALIAS_HOOK(sub_821B4768)
 GTA4_PRIMARY_PLAYER_INFO_ALIAS_HOOK(sub_824C85B0)
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_824DC670(PPCContext& ctx, uint8_t* base) {
   RunPrimaryPlayerInfoAlias(ctx, base, GTA4_SonyObserveDamage);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_824DC670
 GTA4_PRIMARY_PLAYER_INFO_ALIAS_HOOK(sub_824FF330)
 GTA4_PRIMARY_PLAYER_INFO_ALIAS_HOOK(sub_82500C08)
 GTA4_PRIMARY_PLAYER_INFO_ALIAS_HOOK(sub_82500F10)
@@ -3324,6 +3326,7 @@ GTA4_PRIMARY_PLAYER_INFO_ALIAS_HOOK(sub_8225FBD0)
 // retail player-info table directly. Observe the exact call sites while the
 // original runs, then replay only those loop bodies for high player IDs. This
 // avoids rerunning any of the function's unrelated world-transition work.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_822D7188(PPCContext& ctx, uint8_t* base) {
   const PlayerTransitionLoopContext saved_transition = g_player_transition_loop;
   g_player_transition_loop = {.active = true};
@@ -3391,10 +3394,12 @@ extern "C" void sub_822D7188(PPCContext& ctx, uint8_t* base) {
   }
   ctx = result_ctx;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_822D7188
 
 // STARTING_GAME owns a sixteen-pointer stack window. Retail handles that
 // bounded low-peer batch; dispatch the identical notification and action to
 // every high peer exactly once before the transition completes.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826C7E98(PPCContext& ctx, uint8_t* base) {
   RunPrimaryPlayerInfoAlias(ctx, base, __imp__sub_826C7E98);
   const PPCContext result_ctx = ctx;
@@ -3429,7 +3434,9 @@ extern "C" void sub_826C7E98(PPCContext& ctx, uint8_t* base) {
       });
   ctx = result_ctx;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826C7E98
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_825B2D70(PPCContext& ctx, uint8_t* base) {
   const int32_t requested_value = ctx.r3.s32;
   uint32_t count = 0;
@@ -3445,7 +3452,9 @@ extern "C" void sub_825B2D70(PPCContext& ctx, uint8_t* base) {
   }
   ctx.r3.u64 = count;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_825B2D70
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_8216D490(PPCContext& ctx, uint8_t* base) {
   const ThresholdPlayerLoopContext saved_threshold = g_threshold_player_loop;
   g_threshold_player_loop = {.active = true};
@@ -3519,7 +3528,9 @@ extern "C" void sub_8216D490(PPCContext& ctx, uint8_t* base) {
   }
   ctx = result_ctx;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_8216D490
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826DE548(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_manager = ctx.r3.u32;
   const auto initial_session_address =
@@ -3676,7 +3687,9 @@ extern "C" void sub_826DE548(PPCContext& ctx, uint8_t* base) {
   }
   ctx = result_ctx;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826DE548
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82718AE8(PPCContext& ctx, uint8_t* base) {
   const PPCContext input_ctx = ctx;
   __imp__sub_82718AE8(ctx, base);
@@ -3698,7 +3711,9 @@ extern "C" void sub_82718AE8(PPCContext& ctx, uint8_t* base) {
     return;
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82718AE8
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_825755A0(PPCContext& ctx, uint8_t* base) {
   const PPCContext input_ctx = ctx;
   __imp__sub_825755A0(ctx, base);
@@ -3718,7 +3733,9 @@ extern "C" void sub_825755A0(PPCContext& ctx, uint8_t* base) {
     return;
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_825755A0
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_821F89C0(PPCContext& ctx, uint8_t* base) {
   const PPCContext input_ctx = ctx;
   __imp__sub_821F89C0(ctx, base);
@@ -3736,7 +3753,9 @@ extern "C" void sub_821F89C0(PPCContext& ctx, uint8_t* base) {
     }
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_821F89C0
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_8222A030(PPCContext& ctx, uint8_t* base) {
   const PPCContext input_ctx = ctx;
   __imp__sub_8222A030(ctx, base);
@@ -3754,7 +3773,9 @@ extern "C" void sub_8222A030(PPCContext& ctx, uint8_t* base) {
     }
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_8222A030
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_821F8A78(PPCContext& ctx, uint8_t* base) {
   const PPCContext input_ctx = ctx;
   __imp__sub_821F8A78(ctx, base);
@@ -3772,7 +3793,9 @@ extern "C" void sub_821F8A78(PPCContext& ctx, uint8_t* base) {
     }
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_821F8A78
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_823A3DD0(PPCContext& ctx, uint8_t* base) {
   const PPCContext input_ctx = ctx;
   __imp__sub_823A3DD0(ctx, base);
@@ -3790,7 +3813,9 @@ extern "C" void sub_823A3DD0(PPCContext& ctx, uint8_t* base) {
     }
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_823A3DD0
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82502B88(PPCContext& ctx, uint8_t* base) {
   const PPCContext input_ctx = ctx;
   RunPrimaryPlayerInfoAlias(ctx, base, __imp__sub_82502B88);
@@ -3808,6 +3833,7 @@ extern "C" void sub_82502B88(PPCContext& ctx, uint8_t* base) {
     }
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82502B88
 
 template <GuestFunction* Original>
 void RunPlayerInfoFloatMinimum(PPCContext& ctx, uint8_t* base) {
@@ -3825,18 +3851,25 @@ void RunPlayerInfoFloatMinimum(PPCContext& ctx, uint8_t* base) {
   ctx.f1.f64 = best;
 }
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_822705A0(PPCContext& ctx, uint8_t* base) {
   RunPlayerInfoFloatMinimum<__imp__sub_822705A0>(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_822705A0
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826E5D50(PPCContext& ctx, uint8_t* base) {
   RunPlayerInfoFloatMinimum<__imp__sub_826E5D50>(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826E5D50
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826E5E18(PPCContext& ctx, uint8_t* base) {
   RunPlayerInfoFloatMinimum<__imp__sub_826E5E18>(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826E5E18
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_821C1460(PPCContext& ctx, uint8_t* base) {
   const PPCContext input_ctx = ctx;
   __imp__sub_821C1460(ctx, base);
@@ -3849,6 +3882,7 @@ extern "C" void sub_821C1460(PPCContext& ctx, uint8_t* base) {
   }
   ctx = result_ctx;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_821C1460
 
 uint32_t ReadProximityStatusDword(
     const std::array<uint8_t, mp64::kProximityStatusRecordSize>& record, uint32_t offset) {
@@ -3912,6 +3946,7 @@ void RestoreLegacyProximityStatusTable(uint8_t* base) {
   }
 }
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826E0A90(PPCContext& ctx, uint8_t* base) {
   if (!g_nearest_network_decision.active) {
     __imp__sub_826E0A90(ctx, base);
@@ -3924,7 +3959,9 @@ extern "C" void sub_826E0A90(PPCContext& ctx, uint8_t* base) {
     g_nearest_network_decision.call_ctx = ctx;
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826E0A90
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826E6E48(PPCContext& ctx, uint8_t* base) {
   const PPCContext input_ctx = ctx;
   const auto timestamp_address =
@@ -3955,7 +3992,9 @@ extern "C" void sub_826E6E48(PPCContext& ctx, uint8_t* base) {
   }
   ctx = result_ctx;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826E6E48
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_823193D8(PPCContext& ctx, uint8_t* base) {
   if (!g_population_dispatch_capture.active) {
     __imp__sub_823193D8(ctx, base);
@@ -3973,7 +4012,9 @@ extern "C" void sub_823193D8(PPCContext& ctx, uint8_t* base) {
   }
   ctx.r3.u64 = 0;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_823193D8
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_823BC0B8(PPCContext& ctx, uint8_t* base) {
   if (g_player_info_batch_projection.active) {
     __imp__sub_823BC0B8(ctx, base);
@@ -4020,7 +4061,9 @@ extern "C" void sub_823BC0B8(PPCContext& ctx, uint8_t* base) {
   REX_STORE_U32(mp64::kSampleCountAddress, static_cast<uint32_t>(merged_records.size()));
   ctx = result_ctx;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_823BC0B8
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_823F70E8(PPCContext& ctx, uint8_t* base) {
   if (g_population_dispatch_capture.active) {
     __imp__sub_823F70E8(ctx, base);
@@ -4046,7 +4089,9 @@ extern "C" void sub_823F70E8(PPCContext& ctx, uint8_t* base) {
   }
   ctx.r3.u64 = dispatched;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_823F70E8
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_8278D0C8(PPCContext& ctx, uint8_t* base) {
   if (g_player_info_batch_projection.active || g_proximity_status_driver_active) {
     __imp__sub_8278D0C8(ctx, base);
@@ -4095,7 +4140,9 @@ extern "C" void sub_8278D0C8(PPCContext& ctx, uint8_t* base) {
   g_proximity_status_capture = saved_capture;
   ctx = result_ctx;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_8278D0C8
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_8278D608(PPCContext& ctx, uint8_t* base) {
   if (g_player_info_batch_projection.active) {
     __imp__sub_8278D608(ctx, base);
@@ -4152,9 +4199,11 @@ extern "C" void sub_8278D608(PPCContext& ctx, uint8_t* base) {
   g_proximity_status_capture = saved_capture;
   ctx = result_ctx;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_8278D608
 
 // Retail peer-manager constructor. Register its guest address after all
 // embedded records and pointer slots have been initialized.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82700AA0(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_manager = ctx.r3.u32;
   RunPrimaryPlayerInfoAlias(ctx, base, __imp__sub_82700AA0);
@@ -4162,9 +4211,11 @@ extern "C" void sub_82700AA0(PPCContext& ctx, uint8_t* base) {
     PopulateLegacySidecar(base, guest_manager);
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82700AA0
 
 // Retail peer-manager destructor. Keep the sidecar alive during the original
 // teardown because removal callbacks re-enter the hooked lookup path.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_827013F8(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_manager = ctx.r3.u32;
   std::vector<uint8_t> extended_peer_ids;
@@ -4196,6 +4247,7 @@ extern "C" void sub_827013F8(PPCContext& ctx, uint8_t* base) {
   std::scoped_lock cursor_lock(g_voice_cursor_mutex);
   g_voice_cursors.erase(guest_manager);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_827013F8
 
 // Peer lookup by signed byte ID. The original implementation may index the
 // embedded pointer table only for IDs 0..15. Extended IDs use the sidecar and
@@ -4224,6 +4276,7 @@ bool CanBroadcastConnectionData(PPCContext& ctx, uint8_t* base) {
   return nested_ctx.r3.u8 != 0;
 }
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826DDA10(PPCContext& ctx, uint8_t* base) {
   __imp__sub_826DDA10(ctx, base);
   if (!CanBroadcastConnectionData(ctx, base)) {
@@ -4289,7 +4342,9 @@ extern "C" void sub_826DDA10(PPCContext& ctx, uint8_t* base) {
   }
   runtime->memory()->SystemHeapFree(guest_payload);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826DDA10
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826DDB48(PPCContext& ctx, uint8_t* base) {
   const int32_t first_value = ctx.r3.s32;
   const uint32_t second_value = ctx.r4.u32;
@@ -4351,7 +4406,9 @@ extern "C" void sub_826DDB48(PPCContext& ctx, uint8_t* base) {
   }
   runtime->memory()->SystemHeapFree(guest_payload);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826DDB48
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826DDD90(PPCContext& ctx, uint8_t* base) {
   const uint32_t first_argument = ctx.r3.u32;
   const uint32_t second_argument = ctx.r4.u32;
@@ -4396,7 +4453,9 @@ extern "C" void sub_826DDD90(PPCContext& ctx, uint8_t* base) {
     ClearAliasOverride(mp64::kGlobalPeerManagerAddress, kTemporaryAliasPeerId);
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826DDD90
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826DFA28(PPCContext& ctx, uint8_t* base) {
   std::scoped_lock event_lock(g_event_peer_alias_mutex);
   const uint32_t guest_event_manager = ctx.r3.u32;
@@ -4452,7 +4511,9 @@ extern "C" void sub_826DFA28(PPCContext& ctx, uint8_t* base) {
     g_event_scopes.Set(guest_event, scope);
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826DFA28
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826E3150(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_event_manager = ctx.r3.u32;
   const uint32_t guest_event = ctx.r4.u32;
@@ -4522,14 +4583,18 @@ extern "C" void sub_826E3150(PPCContext& ctx, uint8_t* base) {
     }
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826E3150
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826DF530(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_event_manager = ctx.r3.u32;
   ReleaseEventPeerBuffers(ctx, base, guest_event_manager);
   ctx.r3.u64 = guest_event_manager;
   __imp__sub_826DF530(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826DF530
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826DF640(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_event_manager = ctx.r3.u32;
   const uint32_t guest_peer = ctx.r4.u32;
@@ -4546,7 +4611,9 @@ extern "C" void sub_826DF640(PPCContext& ctx, uint8_t* base) {
   ReleaseEventPeerBuffers(ctx, base, guest_event_manager, *peer_id);
   ctx.r3.u64 = *peer_id;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826DF640
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826DEE10(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_event_manager = ctx.r3.u32;
   const uint32_t guest_peer = ctx.r4.u32;
@@ -4563,7 +4630,9 @@ extern "C" void sub_826DEE10(PPCContext& ctx, uint8_t* base) {
   ReleaseEventPeerBuffers(ctx, base, guest_event_manager, *peer_id);
   ctx.r3.u64 = *peer_id;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826DEE10
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826E2CC8(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_event_manager = ctx.r3.u32;
   RemoveEventScopesForManager(base, guest_event_manager);
@@ -4571,7 +4640,9 @@ extern "C" void sub_826E2CC8(PPCContext& ctx, uint8_t* base) {
   ctx.r3.u64 = guest_event_manager;
   __imp__sub_826E2CC8(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826E2CC8
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826E2738(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_event_manager = ctx.r3.u32;
   const uint8_t peer_id = GuestPeerId(ctx.r4.u64);
@@ -4590,7 +4661,9 @@ extern "C" void sub_826E2738(PPCContext& ctx, uint8_t* base) {
     __imp__sub_826E2738(ctx, base);
   });
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826E2738
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826E2918(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_event_manager = ctx.r3.u32;
   const uint8_t peer_id = GuestPeerId(ctx.r4.u64);
@@ -4609,7 +4682,9 @@ extern "C" void sub_826E2918(PPCContext& ctx, uint8_t* base) {
     __imp__sub_826E2918(ctx, base);
   });
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826E2918
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826E2F50(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_event_manager = ctx.r3.u32;
   const uint8_t peer_id = GuestPeerId(ctx.r4.u64);
@@ -4640,7 +4715,9 @@ extern "C" void sub_826E2F50(PPCContext& ctx, uint8_t* base) {
     __imp__sub_826E2F50(ctx, base);
   });
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826E2F50
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826E3020(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_event_manager = ctx.r3.u32;
   const uint8_t peer_id = GuestPeerId(ctx.r4.u64);
@@ -4664,7 +4741,9 @@ extern "C" void sub_826E3020(PPCContext& ctx, uint8_t* base) {
       validation::MultiplayerValidationStage::kFirstExtendedEventReceive, peer_id,
       static_cast<uint32_t>(event));
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826E3020
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826E30A8(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_event_manager = ctx.r3.u32;
   const uint8_t peer_id = GuestPeerId(ctx.r4.u64);
@@ -4689,7 +4768,9 @@ extern "C" void sub_826E30A8(PPCContext& ctx, uint8_t* base) {
     __imp__sub_826E30A8(ctx, base);
   });
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826E30A8
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826E3740(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_event_manager = ctx.r3.u32;
   const bool saved_tick = g_event_manager_tick_active;
@@ -4727,7 +4808,9 @@ extern "C" void sub_826E3740(PPCContext& ctx, uint8_t* base) {
   }
   ctx.r3.u64 = original_result;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826E3740
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826E7B50(PPCContext& ctx, uint8_t* base) {
   const PPCContext input_ctx = ctx;
   const uint32_t guest_object_manager = ctx.r3.u32;
@@ -4756,7 +4839,9 @@ extern "C" void sub_826E7B50(PPCContext& ctx, uint8_t* base) {
     }
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826E7B50
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826E7CC8(PPCContext& ctx, uint8_t* base) {
   const PPCContext input_ctx = ctx;
   const uint32_t guest_object_manager = ctx.r3.u32;
@@ -4803,7 +4888,9 @@ extern "C" void sub_826E7CC8(PPCContext& ctx, uint8_t* base) {
   REX_STORE_U32(guest_output, best_peer);
   ctx.r3.u64 = best_peer != 0 ? 1 : 0;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826E7CC8
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826E7F48(PPCContext& ctx, uint8_t* base) {
   const PPCContext input_ctx = ctx;
   const uint32_t guest_object_manager = ctx.r3.u32;
@@ -4880,7 +4967,9 @@ extern "C" void sub_826E7F48(PPCContext& ctx, uint8_t* base) {
   runtime->memory()->SystemHeapFree(guest_scratch);
   ctx.r3.u64 = output_count;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826E7F48
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826E85B0(PPCContext& ctx, uint8_t* base) {
   const PPCContext input_ctx = ctx;
   const uint32_t guest_object_manager = ctx.r3.u32;
@@ -4909,7 +4998,9 @@ extern "C" void sub_826E85B0(PPCContext& ctx, uint8_t* base) {
     }
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826E85B0
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826E90C0(PPCContext& ctx, uint8_t* base) {
   const PPCContext input_ctx = ctx;
   const uint32_t guest_object_manager = ctx.r3.u32;
@@ -4938,7 +5029,9 @@ extern "C" void sub_826E90C0(PPCContext& ctx, uint8_t* base) {
     }
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826E90C0
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826E81E0(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_object_manager = ctx.r3.u32;
   const uint32_t guest_object = ctx.r4.u32;
@@ -4960,7 +5053,9 @@ extern "C" void sub_826E81E0(PPCContext& ctx, uint8_t* base) {
                    ? 1
                    : 0;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826E81E0
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826E8EA8(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_object_manager = ctx.r3.u32;
   const int16_t requested_object_id = ctx.r4.s16;
@@ -4983,7 +5078,9 @@ extern "C" void sub_826E8EA8(PPCContext& ctx, uint8_t* base) {
       });
   ctx.r3.u64 = matching_object;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826E8EA8
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826E8F10(PPCContext& ctx, uint8_t* base) {
   const PPCContext input_ctx = ctx;
   const uint32_t guest_object_manager = ctx.r3.u32;
@@ -5008,7 +5105,9 @@ extern "C" void sub_826E8F10(PPCContext& ctx, uint8_t* base) {
                              });
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826E8F10
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826E8FF0(PPCContext& ctx, uint8_t* base) {
   const PPCContext input_ctx = ctx;
   const uint32_t guest_object_manager = ctx.r3.u32;
@@ -5055,7 +5154,9 @@ extern "C" void sub_826E8FF0(PPCContext& ctx, uint8_t* base) {
                              });
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826E8FF0
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826E95B8(PPCContext& ctx, uint8_t* base) {
   const PPCContext input_ctx = ctx;
   const uint32_t guest_object_manager = ctx.r3.u32;
@@ -5110,7 +5211,9 @@ extern "C" void sub_826E95B8(PPCContext& ctx, uint8_t* base) {
       });
   ctx.r3.u64 = count;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826E95B8
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826E9E60(PPCContext& ctx, uint8_t* base) {
   const PPCContext input_ctx = ctx;
   const uint32_t guest_manager = ctx.r3.u32;
@@ -5128,7 +5231,9 @@ extern "C" void sub_826E9E60(PPCContext& ctx, uint8_t* base) {
     ctx.r3.u64 = 0;
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826E9E60
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826EAA68(PPCContext& ctx, uint8_t* base) {
   const PPCContext input_ctx = ctx;
   const uint32_t guest_manager = ctx.r3.u32;
@@ -5210,7 +5315,9 @@ extern "C" void sub_826EAA68(PPCContext& ctx, uint8_t* base) {
     }
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826EAA68
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826F7050(PPCContext& ctx, uint8_t* base) {
   const ProximityWeightContext saved_context = g_proximity_weight;
   g_proximity_weight = {
@@ -5220,7 +5327,9 @@ extern "C" void sub_826F7050(PPCContext& ctx, uint8_t* base) {
   __imp__sub_826F7050(ctx, base);
   g_proximity_weight = saved_context;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826F7050
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826E9688(PPCContext& ctx, uint8_t* base) {
   const PPCContext input_ctx = ctx;
   const uint32_t guest_object_manager = ctx.r3.u32;
@@ -5231,7 +5340,9 @@ extern "C" void sub_826E9688(PPCContext& ctx, uint8_t* base) {
     ctx.r3.u64 = 0;
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826E9688
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826E9738(PPCContext& ctx, uint8_t* base) {
   const PPCContext input_ctx = ctx;
   const uint32_t guest_object_manager = ctx.r3.u32;
@@ -5248,7 +5359,9 @@ extern "C" void sub_826E9738(PPCContext& ctx, uint8_t* base) {
     ctx.r3.u64 = 0;
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826E9738
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826E99A8(PPCContext& ctx, uint8_t* base) {
   const PPCContext input_ctx = ctx;
   const uint32_t guest_object_manager = ctx.r3.u32;
@@ -5259,7 +5372,9 @@ extern "C" void sub_826E99A8(PPCContext& ctx, uint8_t* base) {
     ctx.r3.u64 = 0;
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826E99A8
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826E9BA8(PPCContext& ctx, uint8_t* base) {
   const PPCContext input_ctx = ctx;
   const uint32_t guest_object_manager = ctx.r3.u32;
@@ -5270,7 +5385,9 @@ extern "C" void sub_826E9BA8(PPCContext& ctx, uint8_t* base) {
     ctx.r3.u64 = 0;
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826E9BA8
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826E9C78(PPCContext& ctx, uint8_t* base) {
   const PPCContext input_ctx = ctx;
   const uint32_t guest_object_manager = ctx.r3.u32;
@@ -5295,7 +5412,9 @@ extern "C" void sub_826E9C78(PPCContext& ctx, uint8_t* base) {
   }
   ctx.r3.u64 = count;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826E9C78
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826E9D18(PPCContext& ctx, uint8_t* base) {
   const PPCContext input_ctx = ctx;
   const uint32_t guest_object_manager = ctx.r3.u32;
@@ -5387,7 +5506,9 @@ extern "C" void sub_826E9D18(PPCContext& ctx, uint8_t* base) {
       });
   ctx.r3.u64 = success ? 1 : 0;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826E9D18
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826EB5D8(PPCContext& ctx, uint8_t* base) {
   const PPCContext input_ctx = ctx;
   const uint32_t guest_object_manager = ctx.r3.u32;
@@ -5398,7 +5519,9 @@ extern "C" void sub_826EB5D8(PPCContext& ctx, uint8_t* base) {
     ctx.r3.u64 = 0;
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826EB5D8
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826EB048(PPCContext& ctx, uint8_t* base) {
   const PPCContext input_ctx = ctx;
   const uint32_t guest_object_manager = ctx.r3.u32;
@@ -5409,7 +5532,9 @@ extern "C" void sub_826EB048(PPCContext& ctx, uint8_t* base) {
     ctx.r3.u64 = 0;
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826EB048
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826EB9F8(PPCContext& ctx, uint8_t* base) {
   const PPCContext input_ctx = ctx;
   const uint32_t guest_object_manager = ctx.r3.u32;
@@ -5420,7 +5545,9 @@ extern "C" void sub_826EB9F8(PPCContext& ctx, uint8_t* base) {
     ctx.r3.u64 = 0;
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826EB9F8
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826EBAA0(PPCContext& ctx, uint8_t* base) {
   const PPCContext input_ctx = ctx;
   const uint32_t guest_object_manager = ctx.r3.u32;
@@ -5431,7 +5558,9 @@ extern "C" void sub_826EBAA0(PPCContext& ctx, uint8_t* base) {
     ctx.r3.u64 = 0;
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826EBAA0
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826EC048(PPCContext& ctx, uint8_t* base) {
   const PPCContext input_ctx = ctx;
   const uint32_t guest_object_manager = ctx.r3.u32;
@@ -5442,7 +5571,9 @@ extern "C" void sub_826EC048(PPCContext& ctx, uint8_t* base) {
     ctx.r3.u64 = 0;
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826EC048
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826ED600(PPCContext& ctx, uint8_t* base) {
   const PPCContext input_ctx = ctx;
   const uint32_t guest_object_manager = ctx.r3.u32;
@@ -5476,7 +5607,9 @@ extern "C" void sub_826ED600(PPCContext& ctx, uint8_t* base) {
     return;
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826ED600
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826EDF48(PPCContext& ctx, uint8_t* base) {
   const PPCContext input_ctx = ctx;
   const uint32_t guest_object_manager = ctx.r3.u32;
@@ -5519,7 +5652,9 @@ extern "C" void sub_826EDF48(PPCContext& ctx, uint8_t* base) {
   }
   ctx.r3.u64 = missing_count;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826EDF48
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826EDFE0(PPCContext& ctx, uint8_t* base) {
   const PPCContext input_ctx = ctx;
   const uint32_t guest_object_manager = ctx.r3.u32;
@@ -5596,7 +5731,9 @@ extern "C" void sub_826EDFE0(PPCContext& ctx, uint8_t* base) {
   }
   g_object_recovery_peer_alias = saved_context;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826EDFE0
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826EE9A8(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_object_manager = ctx.r3.u32;
   const uint32_t guest_object = ctx.r4.u32;
@@ -5613,7 +5750,9 @@ extern "C" void sub_826EE9A8(PPCContext& ctx, uint8_t* base) {
     ctx.r3.u64 = 0;
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826EE9A8
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826EEC10(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_object_manager = ctx.r3.u32;
   const uint32_t guest_object = ctx.r4.u32;
@@ -5635,7 +5774,9 @@ extern "C" void sub_826EEC10(PPCContext& ctx, uint8_t* base) {
     g_object_peer_matrix.ClearObject(guest_object_manager, object_id);
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826EEC10
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826EEFD0(PPCContext& ctx, uint8_t* base) {
   const PPCContext input_ctx = ctx;
   const uint32_t guest_object_manager = ctx.r3.u32;
@@ -5668,7 +5809,9 @@ extern "C" void sub_826EEFD0(PPCContext& ctx, uint8_t* base) {
     sub_826EEC10(remove_ctx, base);
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826EEFD0
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826F2358(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_object_manager = ctx.r3.u32;
   const uint32_t guest_object = ctx.r4.u32;
@@ -5692,7 +5835,9 @@ extern "C" void sub_826F2358(PPCContext& ctx, uint8_t* base) {
     ctx.r3.u64 = 0;
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826F2358
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826F2870(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_object_manager = ctx.r3.u32;
   const uint32_t guest_object = ctx.r4.u32;
@@ -5716,7 +5861,9 @@ extern "C" void sub_826F2870(PPCContext& ctx, uint8_t* base) {
     ctx.r3.u64 = 0;
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826F2870
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826F3668(PPCContext& ctx, uint8_t* base) {
   const PPCContext input_ctx = ctx;
   const uint32_t guest_object_manager = ctx.r3.u32;
@@ -5728,7 +5875,9 @@ extern "C" void sub_826F3668(PPCContext& ctx, uint8_t* base) {
     g_object_peer_matrix.ClearObject(guest_object_manager, object_id);
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826F3668
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826EFE08(PPCContext& ctx, uint8_t* base) {
   const PPCContext input_ctx = ctx;
   const uint32_t guest_object_manager = ctx.r3.u32;
@@ -5758,7 +5907,9 @@ extern "C" void sub_826EFE08(PPCContext& ctx, uint8_t* base) {
     ctx.r3.u64 = 0;
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826EFE08
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826F3DD0(PPCContext& ctx, uint8_t* base) {
   const PPCContext input_ctx = ctx;
   const uint32_t guest_object_manager = ctx.r3.u32;
@@ -5852,7 +6003,9 @@ extern "C" void sub_826F3DD0(PPCContext& ctx, uint8_t* base) {
     sub_826EFE08(update_ctx, base);
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826F3DD0
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826F0B38(PPCContext& ctx, uint8_t* base) {
   const PPCContext input_ctx = ctx;
   const uint32_t guest_object_manager = ctx.r3.u32;
@@ -5892,7 +6045,9 @@ extern "C" void sub_826F0B38(PPCContext& ctx, uint8_t* base) {
   ctx = input_ctx;
   __imp__sub_826F0B38(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826F0B38
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826E8278(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_object_manager = ctx.r3.u32;
   const uint8_t requested_peer_id = GuestPeerId(ctx.r4.u64);
@@ -5907,7 +6062,9 @@ extern "C" void sub_826E8278(PPCContext& ctx, uint8_t* base) {
   }
   ctx.r3.u64 = guest_object_manager;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826E8278
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826E82A8(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_object_manager = ctx.r3.u32;
   const uint8_t requested_peer_id = GuestPeerId(ctx.r4.u64);
@@ -5930,7 +6087,9 @@ extern "C" void sub_826E82A8(PPCContext& ctx, uint8_t* base) {
   }
   ctx.r3.u64 = guest_object_manager;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826E82A8
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826E8308(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_object_manager = ctx.r3.u32;
   const uint8_t requested_peer_id = GuestPeerId(ctx.r4.u64);
@@ -5951,7 +6110,9 @@ extern "C" void sub_826E8308(PPCContext& ctx, uint8_t* base) {
   const auto threshold_address = mp64::CheckedGuestAddress(guest_object_manager, threshold_offset);
   ctx.r3.u64 = threshold_address && elapsed > REX_LOAD_U32(*threshold_address) ? 1 : 0;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826E8308
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826E8380(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_object_manager = ctx.r3.u32;
   const uint8_t requested_peer_id = GuestPeerId(ctx.r4.u64);
@@ -5977,7 +6138,9 @@ extern "C" void sub_826E8380(PPCContext& ctx, uint8_t* base) {
   const uint32_t now = REX_LOAD_U32(mp64::kNetworkClockAddress);
   ctx.r3.u64 = now > last && now - last > mp64::kObjectManagerChannelTimeout ? 1 : 0;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826E8380
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826F0390(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_manager = ctx.r3.u32;
   const uint8_t peer_id = GuestPeerId(ctx.r4.u64);
@@ -5991,7 +6154,9 @@ extern "C" void sub_826F0390(PPCContext& ctx, uint8_t* base) {
     __imp__sub_826F0390(ctx, base);
   });
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826F0390
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826F0520(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_manager = ctx.r3.u32;
   const uint8_t peer_id = GuestPeerId(ctx.r4.u64);
@@ -6005,7 +6170,9 @@ extern "C" void sub_826F0520(PPCContext& ctx, uint8_t* base) {
     __imp__sub_826F0520(ctx, base);
   });
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826F0520
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826F0840(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_manager = ctx.r3.u32;
   const uint8_t peer_id = GuestPeerId(ctx.r4.u64);
@@ -6025,18 +6192,22 @@ extern "C" void sub_826F0840(PPCContext& ctx, uint8_t* base) {
     __imp__sub_826F0840(ctx, base);
   });
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826F0840
 
 // The packet builder resolves a connection key to a peer ID before directly
 // indexing its 1,032-byte message and 16-bit sequence tables. During a scoped
 // high-peer projection, return the physical alias ID to that generated index;
 // all peer identity and accounting hooks continue to expose the actual ID.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826FF108(PPCContext& ctx, uint8_t* base) {
   __imp__sub_826FF108(ctx, base);
   if (g_object_peer_alias.active && ctx.r3.u8 == g_object_peer_alias.actual_peer_id) {
     ctx.r3.u64 = g_object_peer_alias.alias_peer_id;
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826FF108
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826F1158(PPCContext& ctx, uint8_t* base) {
   const PPCContext input_ctx = ctx;
   const uint32_t guest_object_manager = ctx.r3.u32;
@@ -6066,7 +6237,9 @@ extern "C" void sub_826F1158(PPCContext& ctx, uint8_t* base) {
     ctx.r3.u64 = 0;
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826F1158
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826F13C0(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_manager = ctx.r3.u32;
   const uint8_t peer_id = GuestPeerId(ctx.r4.u64);
@@ -6087,7 +6260,9 @@ extern "C" void sub_826F13C0(PPCContext& ctx, uint8_t* base) {
     __imp__sub_826F13C0(ctx, base);
   });
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826F13C0
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826F1468(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_manager = ctx.r3.u32;
   const uint8_t peer_id = GuestPeerId(ctx.r4.u64);
@@ -6105,7 +6280,9 @@ extern "C" void sub_826F1468(PPCContext& ctx, uint8_t* base) {
     __imp__sub_826F1468(ctx, base);
   });
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826F1468
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826F14E8(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_manager = ctx.r3.u32;
   const uint8_t peer_id = GuestPeerId(ctx.r4.u64);
@@ -6125,7 +6302,9 @@ extern "C" void sub_826F14E8(PPCContext& ctx, uint8_t* base) {
     __imp__sub_826F14E8(ctx, base);
   });
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826F14E8
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826F1570(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_manager = ctx.r3.u32;
   const uint8_t peer_id = GuestPeerId(ctx.r4.u64);
@@ -6143,7 +6322,9 @@ extern "C" void sub_826F1570(PPCContext& ctx, uint8_t* base) {
     __imp__sub_826F1570(ctx, base);
   });
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826F1570
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826F15F0(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_manager = ctx.r3.u32;
   const uint8_t peer_id = GuestPeerId(ctx.r4.u64);
@@ -6161,7 +6342,9 @@ extern "C" void sub_826F15F0(PPCContext& ctx, uint8_t* base) {
     __imp__sub_826F15F0(ctx, base);
   });
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826F15F0
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826F4448(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_object_manager = ctx.r3.u32;
   ReleaseObjectPeerBuffers(ctx, base, guest_object_manager);
@@ -6172,10 +6355,12 @@ extern "C" void sub_826F4448(PPCContext& ctx, uint8_t* base) {
   ctx.r3.u64 = guest_object_manager;
   __imp__sub_826F4448(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826F4448
 
 // The one-time object-manager initializer constructs only its sixteen inline
 // buffers and tables. Extended storage is lazy, but must start from a clean
 // lifecycle state if the guest address is reused after teardown.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826ED450(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_object_manager = ctx.r3.u32;
   const auto initialized =
@@ -6190,7 +6375,9 @@ extern "C" void sub_826ED450(PPCContext& ctx, uint8_t* base) {
   ctx.r3.u64 = guest_object_manager;
   __imp__sub_826ED450(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826ED450
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826F2040(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_object_manager = ctx.r3.u32;
   ctx.r3.u64 = guest_object_manager;
@@ -6201,7 +6388,9 @@ extern "C" void sub_826F2040(PPCContext& ctx, uint8_t* base) {
   g_object_owner_lists.RemoveManager(guest_object_manager);
   g_object_peer_matrix.RemoveManager(guest_object_manager);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826F2040
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826EF9F8(PPCContext& ctx, uint8_t* base) {
   const PPCContext input_ctx = ctx;
   const uint32_t guest_object_manager = ctx.r3.u32;
@@ -6280,7 +6469,9 @@ extern "C" void sub_826EF9F8(PPCContext& ctx, uint8_t* base) {
   }
   ctx.r3.u64 = peer_id.value_or(mp64::kInvalidPeerId);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826EF9F8
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826FE880(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_manager = ctx.r3.u32;
   const uint8_t peer_id = GuestPeerId(ctx.r4.u64);
@@ -6335,10 +6526,12 @@ extern "C" void sub_826FE880(PPCContext& ctx, uint8_t* base) {
       return;
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826FE880
 
 // Peer lookup by the record's title-owned numeric connection key. Retail
 // scans only the embedded sixteen-pointer table. Preserve its ordering, then
 // inspect extended records through the same record accessor.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826FE808(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_manager = ctx.r3.u32;
   const int32_t connection_key = ctx.r4.s32;
@@ -6360,11 +6553,13 @@ extern "C" void sub_826FE808(PPCContext& ctx, uint8_t* base) {
   });
   ctx.r3.u64 = match;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826FE808
 
 // These identity lookups scan the inline pointer table directly after their
 // local-peer fast path. Let retail resolve the local/low population first,
 // then continue through the canonical sidecar without ever indexing manager
 // memory with a high ID.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826FE908(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_manager = ctx.r3.u32;
   const uint32_t guest_identity = ctx.r4.u32;
@@ -6398,7 +6593,9 @@ extern "C" void sub_826FE908(PPCContext& ctx, uint8_t* base) {
   });
   ctx.r3.u64 = match;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826FE908
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826FE9C8(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_manager = ctx.r3.u32;
   const uint32_t guest_identity = ctx.r4.u32;
@@ -6425,16 +6622,19 @@ extern "C" void sub_826FE9C8(PPCContext& ctx, uint8_t* base) {
   });
   ctx.r3.u64 = match;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826FE9C8
 
 // Clone construction contains two direct sixteen-peer loops. Keep the retail
 // object creation and command path intact while marking its exact endpoint
 // build/type-query seams for the extended work performed below.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826EFF58(PPCContext& ctx, uint8_t* base) {
   const ClonePeerExpansionContext saved_context = g_clone_peer_expansion;
   g_clone_peer_expansion.active = true;
   __imp__sub_826EFF58(ctx, base);
   g_clone_peer_expansion = saved_context;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826EFF58
 
 // Include sidecar peers in the title's identity/value uniqueness assignment.
 // The retail function owns substantial unrelated command-building logic, so
@@ -6442,6 +6642,7 @@ extern "C" void sub_826EFF58(PPCContext& ctx, uint8_t* base) {
 // its two direct sixteen-peer scans. If the retail table contains no peer
 // other than the target, one saved pointer slot is mirrored for the duration
 // of the call so the original loop still reaches an accessor seam.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826FFCB0(PPCContext& ctx, uint8_t* base) {
   const PPCContext input_ctx = ctx;
   const uint32_t guest_manager = ctx.r3.u32;
@@ -6541,7 +6742,9 @@ extern "C" void sub_826FFCB0(PPCContext& ctx, uint8_t* base) {
     REX_STORE_U32(*saved_pointer_address, saved_pointer);
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826FFCB0
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_827087E8(PPCContext& ctx, uint8_t* base) {
   const uint32_t caller_return_address = ctx.lr;
   __imp__sub_827087E8(ctx, base);
@@ -6557,7 +6760,9 @@ extern "C" void sub_827087E8(PPCContext& ctx, uint8_t* base) {
     g_peer_uniqueness.force_identity_player_info = true;
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_827087E8
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_827087D8(PPCContext& ctx, uint8_t* base) {
   const uint32_t caller_return_address = ctx.lr;
   __imp__sub_827087D8(ctx, base);
@@ -6581,6 +6786,7 @@ extern "C" void sub_827087D8(PPCContext& ctx, uint8_t* base) {
     }
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_827087D8
 
 // Enumerate embedded and sidecar peers without exceeding the caller-owned
 // guest buffer. The retail voice update owns a sixteen-pointer stack window,
@@ -6588,6 +6794,7 @@ extern "C" void sub_827087D8(PPCContext& ctx, uint8_t* base) {
 // entries across the complete 64-peer population. Every connected peer is
 // serviced over successive voice ticks without writing beyond that stack
 // window; callers with a 64-entry buffer receive the full population at once.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826FEBE8(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_manager = ctx.r3.u32;
   const uint32_t guest_output = ctx.r4.u32;
@@ -6669,9 +6876,11 @@ extern "C" void sub_826FEBE8(PPCContext& ctx, uint8_t* base) {
   }
   ctx.r3.u64 = written;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826FEBE8
 
 // Report the real sidecar-aware count while leaving the embedded free-list
 // bookkeeping untouched.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826FEAE0(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_manager = ctx.r3.u32;
   __imp__sub_826FEAE0(ctx, base);
@@ -6680,6 +6889,7 @@ extern "C" void sub_826FEAE0(PPCContext& ctx, uint8_t* base) {
       mp64::kExtendedPeerCapacity);
   ctx.r3.u64 = total;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826FEAE0
 
 // ADDING_PEER. Extended records live in guest system-heap memory. Temporarily
 // place the new record at the head of the retail free list and substitute peer
@@ -6687,6 +6897,7 @@ extern "C" void sub_826FEAE0(PPCContext& ctx, uint8_t* base) {
 // notification hooks restore the actual ID before any later callbacks, and the
 // saved legacy slot is restored before returning. Thus the original add logic
 // runs in full without ever indexing manager memory with 16..63.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82700108(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_manager = ctx.r3.u32;
   const uint32_t guest_add_record = ctx.r6.u32;
@@ -6778,11 +6989,13 @@ extern "C" void sub_82700108(PPCContext& ctx, uint8_t* base) {
     ctx.r3.u64 = 0;
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82700108
 
 // REMOVING_PEER uses the same saved table alias. The original function runs
 // every callback and resets the peer record, while the free-list insertion
 // hook suppresses returning a heap-backed record to the embedded 16-record
 // pool. The allocation is released after the original teardown completes.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82700E30(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_manager = ctx.r3.u32;
   const uint8_t peer_id = GuestPeerId(ctx.r4.u64);
@@ -6834,10 +7047,12 @@ extern "C" void sub_82700E30(PPCContext& ctx, uint8_t* base) {
     runtime->memory()->SystemHeapFree(guest_peer);
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82700E30
 
 // Extended ADDING_PEER calls the original 64-byte record constructor with the
 // temporary alias. Restore the real ID immediately after construction and
 // publish the record to sidecar lookups before subsequent callbacks run.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_827088F0(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_peer = ctx.r3.u32;
   __imp__sub_827088F0(ctx, base);
@@ -6857,11 +7072,13 @@ extern "C" void sub_827088F0(PPCContext& ctx, uint8_t* base) {
         g_extended_add.actual_peer_id, guest_peer);
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_827088F0
 
 // Player-info creation. Legacy IDs retain the retail global-table path.
 // Extended IDs receive the same 1456-byte guest allocation and field layout,
 // while their pointer and generation live in a host sidecar instead of writing
 // beyond the adjacent sixteen-entry globals.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_8225CD80(PPCContext& ctx, uint8_t* base) {
   static_cast<void>(base);
   auto alias_gate = g_player_info_alias_gate.EnterRead();
@@ -6877,7 +7094,9 @@ extern "C" void sub_8225CD80(PPCContext& ctx, uint8_t* base) {
   }
   ctx.r3.s64 = -1;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_8225CD80
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_8225CE98(PPCContext& ctx, uint8_t* base) {
   static_cast<void>(base);
   auto alias_gate = g_player_info_alias_gate.EnterRead();
@@ -6893,7 +7112,9 @@ extern "C" void sub_8225CE98(PPCContext& ctx, uint8_t* base) {
   }
   ctx.r3.u64 = count;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_8225CE98
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82260D20(PPCContext& ctx, uint8_t* base) {
   auto alias_gate = g_player_info_alias_gate.EnterOpaque();
   std::scoped_lock alias_lock(g_player_info_alias_mutex);
@@ -6918,7 +7139,9 @@ extern "C" void sub_82260D20(PPCContext& ctx, uint8_t* base) {
   }
   ctx = result_ctx;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82260D20
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82261E48(PPCContext& ctx, uint8_t* base) {
   auto alias_gate = g_player_info_alias_gate.EnterOpaque();
   std::scoped_lock alias_lock(g_player_info_alias_mutex);
@@ -6938,7 +7161,9 @@ extern "C" void sub_82261E48(PPCContext& ctx, uint8_t* base) {
   }
   SyncPlayerInfoShadow(base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82261E48
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82261EA8(PPCContext& ctx, uint8_t* base) {
   const uint8_t source_id = GuestPeerId(ctx.r3.u64);
   const uint8_t destination_id = GuestPeerId(ctx.r4.u64);
@@ -7004,7 +7229,9 @@ extern "C" void sub_82261EA8(PPCContext& ctx, uint8_t* base) {
   }
   SyncPlayerInfoShadow(base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82261EA8
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_822619E8(PPCContext& ctx, uint8_t* base) {
   const uint8_t player_id = GuestPeerId(ctx.r4.u64);
   if (mp64::IsLegacyPeerId(player_id)) {
@@ -7041,7 +7268,9 @@ extern "C" void sub_822619E8(PPCContext& ctx, uint8_t* base) {
   ctx.r4.u64 = kTemporaryAliasPeerId;
   __imp__sub_822619E8(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_822619E8
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82263000(PPCContext& ctx, uint8_t* base) {
   const uint8_t player_id = GuestPeerId(ctx.r4.u64);
   if (mp64::IsLegacyPeerId(player_id)) {
@@ -7102,7 +7331,9 @@ extern "C" void sub_82263000(PPCContext& ctx, uint8_t* base) {
   }
   SyncPlayerInfoShadow(base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82263000
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_822636F0(PPCContext& ctx, uint8_t* base) {
   RunPrimaryPlayerInfoAlias(ctx, base, __imp__sub_822636F0);
   auto player_info_read = g_player_info_alias_gate.EnterRead();
@@ -7127,7 +7358,9 @@ extern "C" void sub_822636F0(PPCContext& ctx, uint8_t* base) {
     ctx.r3.u64 = best_player;
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_822636F0
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826DAD70(PPCContext& ctx, uint8_t* base) {
   if (ctx.lr == mp64::kPlayerInfoNetworkArrayRegisterReturnAddress &&
       ctx.r4.u32 == mp64::kLegacyPlayerInfoPointerTableAddress &&
@@ -7149,7 +7382,9 @@ extern "C" void sub_826DAD70(PPCContext& ctx, uint8_t* base) {
   }
   __imp__sub_826DAD70(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826DAD70
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82263200(PPCContext& ctx, uint8_t* base) {
   auto alias_gate = g_player_info_alias_gate.EnterOpaque();
   std::scoped_lock alias_lock(g_player_info_alias_mutex);
@@ -7237,10 +7472,12 @@ extern "C" void sub_82263200(PPCContext& ctx, uint8_t* base) {
   }
   SyncPlayerInfoShadow(base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82263200
 
 // This is the canonical player-info-by-ID accessor. It has no retail bounds
 // check, so a remote/sparse peer ID must never reach its base + id * 4 load.
 // Extended records resolve their heap-backed player-info through the sidecar.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_8225CF68(PPCContext& ctx, uint8_t* base) {
   auto alias_gate = g_player_info_alias_gate.EnterRead();
   const uint8_t peer_id = GuestPeerId(ctx.r3.u64);
@@ -7294,10 +7531,12 @@ extern "C" void sub_8225CF68(PPCContext& ctx, uint8_t* base) {
       return;
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_8225CF68
 
 // Player-info destruction. The retail destructor contains substantial logic
 // beyond freeing memory. Run it against a serialized slot-zero alias, preserve
 // every slot-zero/global-ID value it may touch, then discard the sidecar entry.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82261CA8(PPCContext& ctx, uint8_t* base) {
   const uint8_t peer_id = GuestPeerId(ctx.r3.u64);
   const mp64::PeerIdClass peer_class = mp64::ClassifyPeerId(peer_id);
@@ -7346,11 +7585,13 @@ extern "C" void sub_82261CA8(PPCContext& ctx, uint8_t* base) {
   g_peer_teams.Clear(peer_id);
   SyncPlayerInfoShadow(base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82261CA8
 
 // All six record-to-player-info convenience routines call sub_8225CF68 rather
 // than indexing the fixed table themselves. Their downstream helper is only
 // valid after the peer's player-info lifecycle has constructed its sidecar,
 // so a missing object retains the retail null-result semantics.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82708978(PPCContext& ctx, uint8_t* base) {
   const auto peer_id = PeerRecordId(base, ctx.r3.u32);
   if (!peer_id || !mp64::IsValidPeerId(*peer_id) ||
@@ -7361,7 +7602,9 @@ extern "C" void sub_82708978(PPCContext& ctx, uint8_t* base) {
   }
   __imp__sub_82708978(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82708978
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_827089C8(PPCContext& ctx, uint8_t* base) {
   const auto peer_id = PeerRecordId(base, ctx.r3.u32);
   if (!peer_id || !mp64::IsValidPeerId(*peer_id) ||
@@ -7372,7 +7615,9 @@ extern "C" void sub_827089C8(PPCContext& ctx, uint8_t* base) {
   }
   __imp__sub_827089C8(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_827089C8
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82708A18(PPCContext& ctx, uint8_t* base) {
   const auto peer_id = PeerRecordId(base, ctx.r3.u32);
   if (!peer_id || !mp64::IsValidPeerId(*peer_id) ||
@@ -7383,7 +7628,9 @@ extern "C" void sub_82708A18(PPCContext& ctx, uint8_t* base) {
   }
   __imp__sub_82708A18(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82708A18
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82708A48(PPCContext& ctx, uint8_t* base) {
   const auto peer_id = PeerRecordId(base, ctx.r3.u32);
   if (!peer_id || !mp64::IsValidPeerId(*peer_id) ||
@@ -7394,7 +7641,9 @@ extern "C" void sub_82708A48(PPCContext& ctx, uint8_t* base) {
   }
   __imp__sub_82708A48(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82708A48
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82708A78(PPCContext& ctx, uint8_t* base) {
   const auto peer_id = PeerRecordId(base, ctx.r3.u32);
   if (!peer_id || !mp64::IsValidPeerId(*peer_id) ||
@@ -7405,7 +7654,9 @@ extern "C" void sub_82708A78(PPCContext& ctx, uint8_t* base) {
   }
   __imp__sub_82708A78(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82708A78
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82708B18(PPCContext& ctx, uint8_t* base) {
   const auto peer_id = PeerRecordId(base, ctx.r3.u32);
   if (!peer_id || !mp64::IsValidPeerId(*peer_id) ||
@@ -7416,10 +7667,12 @@ extern "C" void sub_82708B18(PPCContext& ctx, uint8_t* base) {
   }
   __imp__sub_82708B18(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82708B18
 
 // Extended REMOVING_PEER resets its record through the original function, but
 // heap-owned records must not be inserted into the manager's embedded free
 // list. Preserve the temporary insertion-result ABI without mutating the list.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826FF070(PPCContext& ctx, uint8_t* base) {
   if (g_extended_remove.active && ctx.r6.u32 == g_extended_remove.guest_record) {
     const auto expected_list =
@@ -7436,10 +7689,12 @@ extern "C" void sub_826FF070(PPCContext& ctx, uint8_t* base) {
   }
   __imp__sub_826FF070(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826FF070
 
 // Construct the per-recipient sync endpoint for every canonical peer slot.
 // The original covers 0..15; the hooked class factories route 16..63 into the
 // endpoint sidecar and preserve the exact endpoint type for each object class.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82702190(PPCContext& ctx, uint8_t* base) {
   const uint32_t caller_return_address = ctx.lr;
   const uint32_t guest_source_object = ctx.r31.u32;
@@ -7506,10 +7761,12 @@ extern "C" void sub_82702190(PPCContext& ctx, uint8_t* base) {
   }
   ctx.r3.u64 = result;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82702190
 
 // sub_826EFF58 queries the clone type immediately after constructing all
 // recipient endpoints. Extend its type-one endpoint flag update to sidecar
 // recipients at that exact return address.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_821778A0(PPCContext& ctx, uint8_t* base) {
   const uint32_t caller_return_address = ctx.lr;
   const uint32_t guest_object = ctx.r30.u32;
@@ -7552,7 +7809,9 @@ extern "C" void sub_821778A0(PPCContext& ctx, uint8_t* base) {
     sub_82703160(endpoint_ctx, base);
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_821778A0
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82702CA0(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_object = ctx.r3.u32;
   __imp__sub_82702CA0(ctx, base);
@@ -7567,7 +7826,9 @@ extern "C" void sub_82702CA0(PPCContext& ctx, uint8_t* base) {
     }
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82702CA0
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82702CD8(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_object = ctx.r3.u32;
   const uint8_t peer_id = GuestPeerId(ctx.r4.u64);
@@ -7579,7 +7840,9 @@ extern "C" void sub_82702CD8(PPCContext& ctx, uint8_t* base) {
                    ? g_network_peer_flags.Get(guest_object, peer_id)[0]
                    : 0;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82702CD8
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82702CF0(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_object = ctx.r3.u32;
   const uint8_t peer_id = GuestPeerId(ctx.r4.u64);
@@ -7591,7 +7854,9 @@ extern "C" void sub_82702CF0(PPCContext& ctx, uint8_t* base) {
     g_network_peer_flags.SetFlag(guest_object, peer_id, 0, ctx.r5.u8 != 0);
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82702CF0
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82702D08(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_object = ctx.r3.u32;
   __imp__sub_82702D08(ctx, base);
@@ -7606,7 +7871,9 @@ extern "C" void sub_82702D08(PPCContext& ctx, uint8_t* base) {
     }
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82702D08
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82702D48(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_object = ctx.r3.u32;
   const uint8_t peer_id = GuestPeerId(ctx.r4.u64);
@@ -7618,7 +7885,9 @@ extern "C" void sub_82702D48(PPCContext& ctx, uint8_t* base) {
                    ? g_network_peer_flags.Get(guest_object, peer_id)[1]
                    : 0;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82702D48
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82702D60(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_object = ctx.r3.u32;
   const uint8_t peer_id = GuestPeerId(ctx.r4.u64);
@@ -7630,7 +7899,9 @@ extern "C" void sub_82702D60(PPCContext& ctx, uint8_t* base) {
     g_network_peer_flags.SetFlag(guest_object, peer_id, 1, ctx.r5.u8 != 0);
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82702D60
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82702D78(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_object = ctx.r3.u32;
   __imp__sub_82702D78(ctx, base);
@@ -7645,7 +7916,9 @@ extern "C" void sub_82702D78(PPCContext& ctx, uint8_t* base) {
     }
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82702D78
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82702DB8(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_object = ctx.r3.u32;
   const uint8_t peer_id = GuestPeerId(ctx.r4.u64);
@@ -7657,7 +7930,9 @@ extern "C" void sub_82702DB8(PPCContext& ctx, uint8_t* base) {
                    ? g_network_peer_flags.Get(guest_object, peer_id)[2]
                    : 0;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82702DB8
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82702DD0(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_object = ctx.r3.u32;
   const uint8_t peer_id = GuestPeerId(ctx.r4.u64);
@@ -7669,10 +7944,12 @@ extern "C" void sub_82702DD0(PPCContext& ctx, uint8_t* base) {
     g_network_peer_flags.SetFlag(guest_object, peer_id, 2, ctx.r5.u8 != 0);
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82702DD0
 
 // Capture the complete 64-peer form whenever the title materializes its three
 // legacy masks from an object's current per-peer state. The matching setter
 // consumes this snapshot, preserving high bits across retail-only call frames.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82703F80(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_object = ctx.r3.u32;
   const uint32_t guest_first = ctx.r4.u32;
@@ -7705,12 +7982,14 @@ extern "C" void sub_82703F80(PPCContext& ctx, uint8_t* base) {
   }
   g_network_peer_mask_snapshot = snapshot;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82703F80
 
 // The retail clone-state packet reserves bit 16 in its 17-bit recipient word.
 // Keep the retail packet byte-for-byte identical while only low peers are
 // present. When a high recipient is present, bit 16 marks three following
 // 16-bit chunks that carry peers 16..63. Both ends use the same bit-buffer
 // primitives, so subsequent fields retain their normal ordering.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82707968(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_stream = ctx.r3.u32;
   const uint32_t low_union =
@@ -7761,7 +8040,9 @@ extern "C" void sub_82707968(PPCContext& ctx, uint8_t* base) {
   }
   ctx.r3.u64 = success ? 1 : 0;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82707968
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82707D78(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_stream = ctx.r3.u32;
   const uint32_t guest_first = ctx.r4.u32;
@@ -7820,12 +8101,14 @@ extern "C" void sub_82707D78(PPCContext& ctx, uint8_t* base) {
   }
   ctx.r3.u64 = success ? 1 : 0;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82707D78
 
 // CNetworkObject embeds three per-peer bytes for only sixteen recipients.
 // Refresh the low table with the original and mirror every representable mask
 // bit into the extended sidecar. Extended clone packets supply the complete
 // high mask through the snapshot set by sub_82707D78; local legacy callers
 // continue to drive representable bits through the transition hooks.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82704070(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_object = ctx.r3.u32;
   const uint32_t first_mask = ctx.r4.u32;
@@ -7871,7 +8154,9 @@ extern "C" void sub_82704070(PPCContext& ctx, uint8_t* base) {
     g_network_peer_flags.Set(guest_object, peer_id, flags);
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82704070
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82703DC0(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_result = ctx.r3.u32;
   const uint32_t guest_object = ctx.r4.u32;
@@ -7896,10 +8181,12 @@ extern "C" void sub_82703DC0(PPCContext& ctx, uint8_t* base) {
                             __imp__sub_82703DC0(ctx, base);
                           });
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82703DC0
 
 // The sync serializer indexes both the endpoint table and per-peer flags with
 // its recipient argument. Project a high recipient into one safe retail slot;
 // the nested mask writer replaces that alias with the canonical peer ID.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_827045B8(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_object = ctx.r3.u32;
   const uint32_t guest_stream = ctx.r4.u32;
@@ -7926,7 +8213,9 @@ extern "C" void sub_827045B8(PPCContext& ctx, uint8_t* base) {
       validation::MultiplayerValidationStage::kFirstExtendedObjectSync, peer_id,
       guest_object);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_827045B8
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_827038B0(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_object = ctx.r3.u32;
   const uint32_t guest_peer = ctx.r4.u32;
@@ -7946,7 +8235,9 @@ extern "C" void sub_827038B0(PPCContext& ctx, uint8_t* base) {
   });
   ctx.r3.u64 = *peer_id;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_827038B0
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82703BC0(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_object = ctx.r3.u32;
   const uint8_t peer_id = GuestPeerId(ctx.r4.u64);
@@ -7966,7 +8257,9 @@ extern "C" void sub_82703BC0(PPCContext& ctx, uint8_t* base) {
                             RunPrimaryPlayerInfoAlias(ctx, base, __imp__sub_82703BC0);
                           });
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82703BC0
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_827041A8(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_object = ctx.r3.u32;
   const uint8_t peer_id = GuestPeerId(ctx.r4.u64);
@@ -7988,7 +8281,9 @@ extern "C" void sub_827041A8(PPCContext& ctx, uint8_t* base) {
                             __imp__sub_827041A8(ctx, base);
                           });
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_827041A8
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82704390(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_object = ctx.r3.u32;
   const uint32_t guest_peer = ctx.r4.u32;
@@ -8052,11 +8347,13 @@ extern "C" void sub_82704390(PPCContext& ctx, uint8_t* base) {
     }
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82704390
 
 // Extend CNetworkObject's per-frame endpoint update beyond its hard-coded
 // sixteen-recipient loop. Isolating one high peer in a retail slot lets the
 // original update endpoint construction, destruction, retransmit mode, and
 // timers without replaying any low-peer work.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_827047B8(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_object = ctx.r3.u32;
   __imp__sub_827047B8(ctx, base);
@@ -8082,7 +8379,9 @@ extern "C" void sub_827047B8(PPCContext& ctx, uint8_t* base) {
   }
   ctx.r3.u64 = 0;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_827047B8
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82704180(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_object = ctx.r3.u32;
   const uint8_t peer_id = GuestPeerId(ctx.r4.u64);
@@ -8101,7 +8400,9 @@ extern "C" void sub_82704180(PPCContext& ctx, uint8_t* base) {
   ctx.r4.u64 = REX_LOAD_U8(*mode_address);
   CallNetworkObjectVirtual(ctx, base, guest_endpoint, 16);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82704180
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82703938(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_result = ctx.r3.u32;
   const uint32_t guest_object = ctx.r4.u32;
@@ -8130,7 +8431,9 @@ extern "C" void sub_82703938(PPCContext& ctx, uint8_t* base) {
                             __imp__sub_82703938(ctx, base);
                           });
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82703938
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82703200(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_result = ctx.r3.u32;
   const uint32_t guest_object = ctx.r4.u32;
@@ -8155,7 +8458,9 @@ extern "C" void sub_82703200(PPCContext& ctx, uint8_t* base) {
                             __imp__sub_82703200(ctx, base);
                           });
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82703200
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82703050(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_result = ctx.r3.u32;
   const uint32_t guest_object = ctx.r4.u32;
@@ -8182,7 +8487,9 @@ extern "C" void sub_82703050(PPCContext& ctx, uint8_t* base) {
                             __imp__sub_82703050(ctx, base);
                           });
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82703050
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82703350(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_object = ctx.r3.u32;
   const uint8_t peer_id = GuestPeerId(ctx.r4.u64);
@@ -8206,7 +8513,9 @@ extern "C" void sub_82703350(PPCContext& ctx, uint8_t* base) {
                             __imp__sub_82703350(ctx, base);
                           });
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82703350
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82704288(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_result = ctx.r3.u32;
   const uint32_t guest_object = ctx.r4.u32;
@@ -8231,7 +8540,9 @@ extern "C" void sub_82704288(PPCContext& ctx, uint8_t* base) {
                             __imp__sub_82704288(ctx, base);
                           });
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82704288
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82703D08(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_object = ctx.r3.u32;
   const uint8_t peer_id = GuestPeerId(ctx.r4.u64);
@@ -8253,7 +8564,9 @@ extern "C" void sub_82703D08(PPCContext& ctx, uint8_t* base) {
                             __imp__sub_82703D08(ctx, base);
                           });
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82703D08
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82702C58(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_object = ctx.r3.u32;
   std::vector<uint32_t> extended_endpoints;
@@ -8269,10 +8582,12 @@ extern "C" void sub_82702C58(PPCContext& ctx, uint8_t* base) {
   g_network_peer_flags.RemoveObject(guest_object);
   g_ped_network_peer_states.RemoveObject(guest_object);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82702C58
 
 // CNetworkObject owns only sixteen inline per-recipient endpoint pointers at
 // object+92. IDs 16..63 use a sidecar; these canonical endpoint accessors and
 // forwarding helpers must never evaluate object + (peer+23)*4 for those IDs.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82702DE8(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_object = ctx.r3.u32;
   const uint8_t peer_id =
@@ -8287,7 +8602,9 @@ extern "C" void sub_82702DE8(PPCContext& ctx, uint8_t* base) {
   }
   __imp__sub_82702DE8(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82702DE8
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82702E00(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_object = ctx.r3.u32;
   const uint8_t peer_id =
@@ -8310,7 +8627,9 @@ extern "C" void sub_82702E00(PPCContext& ctx, uint8_t* base) {
   }
   DestroyNetworkEndpoint(ctx, base, guest_endpoint);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82702E00
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82702E98(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_object = ctx.r3.u32;
   __imp__sub_82702E98(ctx, base);
@@ -8329,7 +8648,9 @@ extern "C" void sub_82702E98(PPCContext& ctx, uint8_t* base) {
   g_network_peer_flags.RemoveObject(guest_object);
   g_ped_network_peer_states.RemoveObject(guest_object);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82702E98
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82702EF0(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_object = ctx.r3.u32;
   const uint8_t peer_id = GuestPeerId(ctx.r4.u64);
@@ -8347,7 +8668,9 @@ extern "C" void sub_82702EF0(PPCContext& ctx, uint8_t* base) {
   ctx.r4.u64 = argument;
   CallNetworkObjectVirtual(ctx, base, guest_endpoint, 20);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82702EF0
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82702F18(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_object = ctx.r3.u32;
   const uint8_t peer_id = GuestPeerId(ctx.r4.u64);
@@ -8367,7 +8690,9 @@ extern "C" void sub_82702F18(PPCContext& ctx, uint8_t* base) {
   ctx.r5.u64 = second_argument;
   CallNetworkObjectVirtual(ctx, base, guest_endpoint, 24);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82702F18
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82702F48(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_object = ctx.r3.u32;
   const uint8_t peer_id = GuestPeerId(ctx.r4.u64);
@@ -8384,7 +8709,9 @@ extern "C" void sub_82702F48(PPCContext& ctx, uint8_t* base) {
     REX_STORE_U32(*endpoint_mask, REX_LOAD_U32(*endpoint_mask) | REX_LOAD_U32(ctx.r5.u32));
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82702F48
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82702F70(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_object = ctx.r3.u32;
   const uint8_t peer_id = GuestPeerId(ctx.r4.u64);
@@ -8398,7 +8725,9 @@ extern "C" void sub_82702F70(PPCContext& ctx, uint8_t* base) {
     REX_STORE_U32(*endpoint_mask, REX_LOAD_U32(*endpoint_mask) & ~ctx.r5.u32);
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82702F70
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82702F90(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_object = ctx.r3.u32;
   __imp__sub_82702F90(ctx, base);
@@ -8409,7 +8738,9 @@ extern "C" void sub_82702F90(PPCContext& ctx, uint8_t* base) {
     return true;
   });
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82702F90
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82703008(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_object = ctx.r3.u32;
   const uint8_t peer_id = GuestPeerId(ctx.r4.u64);
@@ -8425,7 +8756,9 @@ extern "C" void sub_82703008(PPCContext& ctx, uint8_t* base) {
   ctx.r3.u64 = guest_endpoint;
   CallNetworkObjectVirtual(ctx, base, guest_endpoint, 36);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82703008
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82703038(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_object = ctx.r3.u32;
   const uint8_t peer_id = GuestPeerId(ctx.r4.u64);
@@ -8436,6 +8769,7 @@ extern "C" void sub_82703038(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_endpoint = g_network_endpoints.Get(guest_object, peer_id);
   ctx.r3.u64 = mp64::CheckedGuestAddress(guest_endpoint, 8).value_or(0);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82703038
 
 void DispatchExtendedEndpointComponents(PPCContext& ctx, uint8_t* base, uint32_t guest_object,
                                         uint8_t peer_id, uint32_t component_mask, uint32_t value) {
@@ -8465,6 +8799,7 @@ void DispatchExtendedEndpointComponents(PPCContext& ctx, uint8_t* base, uint32_t
   }
 }
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82703160(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_object = ctx.r3.u32;
   const uint8_t peer_id = GuestPeerId(ctx.r4.u64);
@@ -8478,7 +8813,9 @@ extern "C" void sub_82703160(PPCContext& ctx, uint8_t* base) {
   }
   DispatchExtendedEndpointComponents(ctx, base, guest_object, peer_id, ctx.r5.u32, ctx.r6.u32);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82703160
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_827032B8(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_object = ctx.r3.u32;
   const uint8_t peer_id = GuestPeerId(ctx.r4.u64);
@@ -8492,10 +8829,12 @@ extern "C" void sub_827032B8(PPCContext& ctx, uint8_t* base) {
   }
   DispatchExtendedEndpointComponents(ctx, base, guest_object, peer_id, ctx.r5.u32, 0);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_827032B8
 
 // The reassignment entry builder asks the object for its current owner and
 // immediately uses that byte in the fixed owner-list table. Return the active
 // physical slot only inside the serialized extended-owner window.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82701F58(PPCContext& ctx, uint8_t* base) {
   __imp__sub_82701F58(ctx, base);
   if (g_object_owner_list_alias.active && ctx.r3.u8 == g_object_owner_list_alias.actual_owner_id) {
@@ -8511,14 +8850,18 @@ extern "C" void sub_82701F58(PPCContext& ctx, uint8_t* base) {
     ctx.r3.u64 = g_reassignment_call.owner_alias;
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82701F58
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826FDDC0(PPCContext& ctx, uint8_t* base) {
   __imp__sub_826FDDC0(ctx, base);
   if (g_object_owner_list_alias.active && ctx.r3.u8 == g_object_owner_list_alias.actual_owner_id) {
     ctx.r3.u64 = g_object_owner_list_alias.alias_owner_id;
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826FDDC0
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82701F88(PPCContext& ctx, uint8_t* base) {
   __imp__sub_82701F88(ctx, base);
   const uint8_t actual_id = ctx.r3.u8;
@@ -8559,11 +8902,13 @@ extern "C" void sub_82701F88(PPCContext& ctx, uint8_t* base) {
     ctx.r3.u64 = g_reassignment_call.owner_alias;
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82701F88
 
 // Per-class vtable slot 17 (byte offset 68) endpoint factories. Their guest
 // endpoint types have no embedded peer ID. Extended recipients use the exact
 // retail constructor over system-heap storage and keep ownership in the
 // sidecar; an active projected alias is only a temporary view of that pointer.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82729AC0(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_object = ctx.r3.u32;
   const uint8_t peer_id =
@@ -8582,7 +8927,9 @@ extern "C" void sub_82729AC0(PPCContext& ctx, uint8_t* base) {
                               __imp__sub_82726AA8);
   FinishExtendedEndpointCreation(ctx, base, guest_object, peer_id, endpoint, create_argument);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82729AC0
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_827788E0(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_object = ctx.r3.u32;
   const uint8_t peer_id =
@@ -8601,7 +8948,9 @@ extern "C" void sub_827788E0(PPCContext& ctx, uint8_t* base) {
                               __imp__sub_82778050);
   FinishExtendedEndpointCreation(ctx, base, guest_object, peer_id, endpoint, create_argument);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_827788E0
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82789678(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_object = ctx.r3.u32;
   const uint8_t peer_id =
@@ -8620,7 +8969,9 @@ extern "C" void sub_82789678(PPCContext& ctx, uint8_t* base) {
                               __imp__sub_82789010);
   FinishExtendedEndpointCreation(ctx, base, guest_object, peer_id, endpoint, create_argument);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82789678
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82711A28(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_object = ctx.r3.u32;
   const uint8_t peer_id =
@@ -8649,7 +9000,9 @@ extern "C" void sub_82711A28(PPCContext& ctx, uint8_t* base) {
                               __imp__sub_8270C9A8);
   FinishExtendedEndpointCreation(ctx, base, guest_object, peer_id, endpoint, create_argument);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82711A28
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_8272E098(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_object = ctx.r3.u32;
   const uint8_t peer_id =
@@ -8668,11 +9021,13 @@ extern "C" void sub_8272E098(PPCContext& ctx, uint8_t* base) {
                               __imp__sub_8272C3A0);
   FinishExtendedEndpointCreation(ctx, base, guest_object, peer_id, endpoint, create_argument);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_8272E098
 
 // CNetworkObject::CHANGE_OWNER stores owner IDs as bytes and resolves the old
 // and new records through the hooked peer manager. After the unchanged retail
 // low-ID transition, mirror endpoint creation and ownership-command fan-out to
 // every extended recipient held by the endpoint sidecar.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82703590(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_object = ctx.r3.u32;
   const uint8_t new_owner = GuestPeerId(ctx.r4.u64);
@@ -8780,30 +9135,38 @@ extern "C" void sub_82703590(PPCContext& ctx, uint8_t* base) {
   runtime->memory()->SystemHeapFree(guest_command_mask);
   ctx.r3.u64 = original_result;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82703590
 
 // Packet constructors store the owner ID as a byte. During an extended-owner
 // window the physical retail slot must never leak onto the wire.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82795588(PPCContext& ctx, uint8_t* base) {
   if (g_reassignment_call.active && ctx.r4.u8 == g_reassignment_call.owner_alias) {
     ctx.r4.u64 = g_reassignment_call.actual_owner;
   }
   __imp__sub_82795588(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82795588
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_827955D0(PPCContext& ctx, uint8_t* base) {
   if (g_reassignment_call.active && ctx.r4.u8 == g_reassignment_call.owner_alias) {
     ctx.r4.u64 = g_reassignment_call.actual_owner;
   }
   __imp__sub_827955D0(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_827955D0
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82795608(PPCContext& ctx, uint8_t* base) {
   if (g_reassignment_call.active && ctx.r4.u8 == g_reassignment_call.owner_alias) {
     ctx.r4.u64 = g_reassignment_call.actual_owner;
   }
   __imp__sub_82795608(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82795608
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82783F98(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_message = ctx.r3.u32;
   __imp__sub_82783F98(ctx, base);
@@ -8812,7 +9175,9 @@ extern "C" void sub_82783F98(PPCContext& ctx, uint8_t* base) {
     REX_STORE_U8(guest_message, g_reassignment_call.owner_alias);
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82783F98
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_827842D8(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_message = ctx.r3.u32;
   __imp__sub_827842D8(ctx, base);
@@ -8821,24 +9186,30 @@ extern "C" void sub_827842D8(PPCContext& ctx, uint8_t* base) {
     REX_STORE_U8(guest_message, g_reassignment_call.owner_alias);
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_827842D8
 
 // The retail sender derives a pointer into its 16x16 transport matrix before
 // entering these helpers. Replace that pointer with the constructed sidecar
 // state for projected recipients.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82785940(PPCContext& ctx, uint8_t* base) {
   if (g_reassignment_call.active && g_reassignment_call.guest_transport_state != 0) {
     ctx.r7.u64 = g_reassignment_call.guest_transport_state;
   }
   __imp__sub_82785940(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82785940
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_827859C8(PPCContext& ctx, uint8_t* base) {
   if (g_reassignment_call.active && g_reassignment_call.guest_transport_state != 0) {
     ctx.r7.u64 = g_reassignment_call.guest_transport_state;
   }
   __imp__sub_827859C8(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_827859C8
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82783960(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_manager = ctx.r3.u32;
   const auto stale_states = g_reassignments.RemoveManager(guest_manager);
@@ -8857,12 +9228,14 @@ extern "C" void sub_82783960(PPCContext& ctx, uint8_t* base) {
   ctx.r3.u64 = guest_manager;
   __imp__sub_82783960(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82783960
 
 // The retail activation constructor initializes its embedded 16-owner command
 // records and 16x16 transport matrix. Those remain the serialized low-ID
 // window; the complete 64-owner command records and transports are held by the
 // sidecar. Capture the newly initialized low masks at this exact lifecycle seam
 // so later mixed low/high fan-out starts from one canonical registry state.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_827869B0(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_manager = ctx.r3.u32;
   __imp__sub_827869B0(ctx, base);
@@ -8870,14 +9243,18 @@ extern "C" void sub_827869B0(PPCContext& ctx, uint8_t* base) {
     LoadReassignmentState(base, guest_manager, owner_id);
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_827869B0
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_827845E0(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_manager = ctx.r3.u32;
   DestroyReassignmentSidecars(ctx, base, guest_manager);
   ctx.r3.u64 = guest_manager;
   __imp__sub_827845E0(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_827845E0
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82783140(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_manager = ctx.r3.u32;
   const uint32_t guest_peer = ctx.r4.u32;
@@ -8905,7 +9282,9 @@ extern "C" void sub_82783140(PPCContext& ctx, uint8_t* base) {
     });
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82783140
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82783208(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_manager = ctx.r3.u32;
   __imp__sub_82783208(ctx, base);
@@ -8929,7 +9308,9 @@ extern "C" void sub_82783208(PPCContext& ctx, uint8_t* base) {
   }
   ctx.r3.u64 = 0;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82783208
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82783248(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_manager = ctx.r3.u32;
   const int32_t object_key = ctx.r4.s32;
@@ -8964,7 +9345,9 @@ extern "C" void sub_82783248(PPCContext& ctx, uint8_t* base) {
   }
   ctx.r3.u64 = count;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82783248
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_827832E8(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_manager = ctx.r3.u32;
   const uint32_t guest_object = ctx.r4.u32;
@@ -8993,7 +9376,9 @@ extern "C" void sub_827832E8(PPCContext& ctx, uint8_t* base) {
     });
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_827832E8
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82782FC8(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_manager = ctx.r3.u32;
   const uint32_t object_id = ctx.r4.u32;
@@ -9027,7 +9412,9 @@ extern "C" void sub_82782FC8(PPCContext& ctx, uint8_t* base) {
   }
   ctx.r3.u64 = 0;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82782FC8
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_827830C0(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_manager = ctx.r3.u32;
   __imp__sub_827830C0(ctx, base);
@@ -9054,7 +9441,9 @@ extern "C" void sub_827830C0(PPCContext& ctx, uint8_t* base) {
   }
   ctx.r3.u64 = vacant;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_827830C0
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_827847F0(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_manager = ctx.r3.u32;
   const uint32_t guest_object = ctx.r4.u32;
@@ -9087,7 +9476,9 @@ extern "C" void sub_827847F0(PPCContext& ctx, uint8_t* base) {
   }
   invoke_original(owner_id);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_827847F0
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82784960(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_manager = ctx.r3.u32;
   const uint32_t guest_entry = ctx.r4.u32;
@@ -9126,7 +9517,9 @@ extern "C" void sub_82784960(PPCContext& ctx, uint8_t* base) {
   }
   invoke_original(owner_id);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82784960
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82785008(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_manager = ctx.r3.u32;
   const uint32_t guest_message = ctx.r4.u32;
@@ -9148,7 +9541,9 @@ extern "C" void sub_82785008(PPCContext& ctx, uint8_t* base) {
   }
   __imp__sub_82785008(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82785008
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82783380(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_manager = ctx.r3.u32;
   const uint32_t guest_message = ctx.r4.u32;
@@ -9170,7 +9565,9 @@ extern "C" void sub_82783380(PPCContext& ctx, uint8_t* base) {
   }
   __imp__sub_82783380(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82783380
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82786088(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_manager = ctx.r3.u32;
   const auto owner_id = ParseReassignmentConfirmationOwner(ctx, base, guest_manager, ctx.r6.u32);
@@ -9184,7 +9581,9 @@ extern "C" void sub_82786088(PPCContext& ctx, uint8_t* base) {
   }
   __imp__sub_82786088(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82786088
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82786628(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_manager = ctx.r3.u32;
   const auto owner_id = ParseReassignmentStatusOwner(ctx, base, ctx.r6.u32);
@@ -9198,7 +9597,9 @@ extern "C" void sub_82786628(PPCContext& ctx, uint8_t* base) {
   }
   __imp__sub_82786628(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82786628
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82785AE0(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_manager = ctx.r3.u32;
   const uint8_t requested_owner = GuestPeerId(ctx.r4.u64);
@@ -9237,7 +9638,9 @@ extern "C" void sub_82785AE0(PPCContext& ctx, uint8_t* base) {
   RunReassignmentSender(ctx, base, __imp__sub_82785AE0, guest_manager, requested_owner,
                         requested_owner, requested_recipient);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82785AE0
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82785D30(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_manager = ctx.r3.u32;
   const uint8_t requested_owner = GuestPeerId(ctx.r4.u64);
@@ -9276,11 +9679,13 @@ extern "C" void sub_82785D30(PPCContext& ctx, uint8_t* base) {
   RunReassignmentSender(ctx, base, __imp__sub_82785D30, guest_manager, requested_owner,
                         requested_owner, requested_recipient);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82785D30
 
 // The reassignment state machine places a 24-byte live command record every
 // 20 bytes and separately indexes owner lists through (owner+42)*8. Extended
 // owners therefore execute through a serialized retail-slot window whose
 // record, list header and masks are copied to/from the 64-owner sidecar.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82784C48(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_manager = ctx.r3.u32;
   const uint8_t peer_id = GuestPeerId(ctx.r4.u64);
@@ -9310,7 +9715,9 @@ extern "C" void sub_82784C48(PPCContext& ctx, uint8_t* base) {
   state.sent.Clear();
   g_reassignments.Set(guest_manager, logical_peer_id, state);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82784C48
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82786B18(PPCContext& ctx, uint8_t* base) {
   const uint8_t peer_id = GuestPeerId(ctx.r4.u64);
   if (!mp64::IsValidPeerId(peer_id)) {
@@ -9325,7 +9732,9 @@ extern "C" void sub_82786B18(PPCContext& ctx, uint8_t* base) {
   }
   __imp__sub_82786B18(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82786B18
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82786ED0(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_manager = ctx.r3.u32;
   const uint8_t peer_id = GuestPeerId(ctx.r4.u64);
@@ -9346,7 +9755,9 @@ extern "C" void sub_82786ED0(PPCContext& ctx, uint8_t* base) {
   }
   __imp__sub_82786ED0(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82786ED0
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82787108(PPCContext& ctx, uint8_t* base) {
   const uint8_t peer_id = GuestPeerId(ctx.r4.u64);
   if (!mp64::IsValidPeerId(peer_id)) {
@@ -9361,7 +9772,9 @@ extern "C" void sub_82787108(PPCContext& ctx, uint8_t* base) {
   }
   __imp__sub_82787108(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82787108
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82787210(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_manager = ctx.r3.u32;
   __imp__sub_82787210(ctx, base);
@@ -9384,7 +9797,9 @@ extern "C" void sub_82787210(PPCContext& ctx, uint8_t* base) {
     });
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82787210
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82787340(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_manager = ctx.r3.u32;
   const uint32_t changed_peer = ctx.r4.u32;
@@ -9519,10 +9934,12 @@ extern "C" void sub_82787340(PPCContext& ctx, uint8_t* base) {
     sub_82786B18(cleanup_ctx, base);
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82787340
 
 // Network-array traffic accounting has a retail 16-entry global table. Keep
 // high-peer accounting in host storage so serialization never aliases peer
 // zero's counters.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_8278CCE8(PPCContext& ctx, uint8_t* base) {
   uint8_t peer_id = GuestPeerId(ctx.r3.u64);
   if (g_event_peer_alias.active && peer_id == g_event_peer_alias.alias_peer_id) {
@@ -9542,11 +9959,13 @@ extern "C" void sub_8278CCE8(PPCContext& ctx, uint8_t* base) {
   }
   __imp__sub_8278CCE8(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_8278CCE8
 
 // The normal outbound-flush helper derives its 1 KiB message buffer by
 // indexing an embedded sixteen-record array. During an extended dispatch call
 // the exact selected sidecar buffer is already known, so execute the same send,
 // accounting, and queue-reset sequence directly against that buffer.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826DAC48(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_network_manager = ctx.r3.u32;
   const uint8_t requested_peer_id = GuestPeerId(ctx.r4.u64);
@@ -9610,10 +10029,12 @@ extern "C" void sub_826DAC48(PPCContext& ctx, uint8_t* base) {
   ctx.r5.u64 = mp64::kDispatchMessagePayloadCapacity;
   sub_82853400(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826DAC48
 
 // The retail network-array tick explicitly enumerates peer IDs 0..15. Retain
 // that path, then perform the identical host-side eligibility checks for every
 // live sidecar peer and feed it through the widened serializer.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826D9E10(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_network_manager = ctx.r3.u32;
   __imp__sub_826D9E10(ctx, base);
@@ -9723,9 +10144,11 @@ extern "C" void sub_826D9E10(PPCContext& ctx, uint8_t* base) {
     sub_82705300(nested_ctx, base);
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826D9E10
 
 // Joining/leaving peers may reuse a sparse ID. Reinitialize that peer's
 // sidecar message queue at the same lifecycle points used by all handlers.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826DA050(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_network_manager = ctx.r3.u32;
   const auto peer_id = PeerRecordId(base, ctx.r4.u32);
@@ -9734,7 +10157,9 @@ extern "C" void sub_826DA050(PPCContext& ctx, uint8_t* base) {
   }
   __imp__sub_826DA050(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826DA050
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826DA0E0(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_network_manager = ctx.r3.u32;
   const auto peer_id = PeerRecordId(base, ctx.r4.u32);
@@ -9743,24 +10168,30 @@ extern "C" void sub_826DA0E0(PPCContext& ctx, uint8_t* base) {
     ResetDispatchMessage(ctx, base, guest_network_manager, *peer_id);
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826DA0E0
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_826DAD00(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_network_manager = ctx.r3.u32;
   __imp__sub_826DAD00(ctx, base);
   DestroyDispatchMessages(guest_network_manager);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_826DAD00
 
 // Reset the extended per-element sequence/acknowledgement state alongside the
 // retail sixteen-entry arrays.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82704D40(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_dispatch = ctx.r3.u32;
   __imp__sub_82704D40(ctx, base);
   g_dispatch_peer_states.Reset(guest_dispatch);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82704D40
 
 // Rebuild CDispatchOrderArrayHandler's "eligible peer" mask for sidecar peers.
 // The original continues to own all embedded dispatch state and low 32 bits;
 // the same two record predicates are evaluated for IDs 16..63.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82704FE8(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_dispatch = ctx.r3.u32;
   __imp__sub_82704FE8(ctx, base);
@@ -9805,9 +10236,11 @@ extern "C" void sub_82704FE8(PPCContext& ctx, uint8_t* base) {
     }
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82704FE8
 
 // Peer removal clears both dispatch masks. Capture the ID before the original
 // record teardown, then mirror its low-word mutation and clear the high bit.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82705190(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_dispatch = ctx.r3.u32;
   const auto peer_id = PeerRecordId(base, ctx.r4.u32);
@@ -9862,10 +10295,12 @@ extern "C" void sub_82705190(PPCContext& ctx, uint8_t* base) {
   g_dispatch_peer_states.RemovePeer(guest_dispatch, *peer_id);
   ctx.r3.u64 = *peer_id;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82705190
 
 // Acknowledgements directly index the retail sixteen-entry state arrays. A
 // high peer is projected through slot zero, then every mutation is captured
 // back into its canonical sidecar record.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82705390(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_dispatch = ctx.r3.u32;
   const uint8_t peer_id = GuestPeerId(ctx.r4.u64);
@@ -9891,9 +10326,11 @@ extern "C" void sub_82705390(PPCContext& ctx, uint8_t* base) {
                            });
   ctx.r3.u64 = guest_dispatch;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82705390
 
 // Changing an element's authority clears the retail state/ack slot for every
 // peer. Mirror that broadcast reset across all extended peer records.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82705488(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_dispatch = ctx.r3.u32;
   const size_t element = ctx.r4.u32;
@@ -9914,11 +10351,13 @@ extern "C" void sub_82705488(PPCContext& ctx, uint8_t* base) {
     g_dispatch_peer_states.ResetElement(guest_dispatch, element);
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82705488
 
 // The outbound serializer uses four independent fixed-width peer fields: a
 // four-byte state record per element, an acknowledgement bit per element, and
 // two handler-wide masks. Projecting them as one serialized transaction keeps
 // its exact retail retry/sequence behavior for peers 16..63.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82705BD0(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_dispatch = ctx.r3.u32;
   const uint32_t guest_peer = ctx.r4.u32;
@@ -9958,19 +10397,23 @@ extern "C" void sub_82705BD0(PPCContext& ctx, uint8_t* base) {
                            });
   ctx.r3.u64 = *peer_id;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82705BD0
 
 // Dispatch reset/initialization zeroes both embedded masks and invalidates the
 // matching sidecar lifetime.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82706CA8(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_dispatch = ctx.r3.u32;
   __imp__sub_82706CA8(ctx, base);
   g_dispatch_masks.Remove(guest_dispatch);
   g_dispatch_peer_states.Reset(guest_dispatch);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82706CA8
 
 // CDispatchOrderArrayHandler clears two 32-bit masks using peer->id. Mirror
 // low words after the retail path and handle IDs 32..63 exclusively in the
 // sidecar, avoiding the PowerPC shift-to-zero behavior.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82704AF8(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_dispatch = ctx.r3.u32;
   const uint32_t guest_peer = ctx.r4.u32;
@@ -9987,19 +10430,23 @@ extern "C" void sub_82704AF8(PPCContext& ctx, uint8_t* base) {
   g_dispatch_masks.Reset(guest_dispatch, *peer_id, true, true);
   g_dispatch_peer_states.RemovePeer(guest_dispatch, *peer_id);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82704AF8
 
 // The deleting destructor is reachable without the reset virtual on several
 // handler subclasses. Retire both sidecars at that unconditional seam.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82718420(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_dispatch = ctx.r3.u32;
   __imp__sub_82718420(ctx, base);
   g_dispatch_masks.Remove(guest_dispatch);
   g_dispatch_peer_states.Reset(guest_dispatch);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82718420
 
 // rlSession construction relocates the participant table before participant
 // 32 would collide with the retail count field at +1544. Low records are
 // mirrored into the embedded table for unchanged retail consumers.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_829F9810(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_session = ctx.r3.u32;
   __imp__sub_829F9810(ctx, base);
@@ -10028,30 +10475,36 @@ extern "C" void sub_829F9810(PPCContext& ctx, uint8_t* base) {
     InitializeSessionParticipantRecord(base, *record);
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_829F9810
 
 // Command objects can be destroyed by queue cancellation and session teardown
 // without reaching their normal completion consumers. Release relocated
 // CmdJoin/CmdLeave payloads at the common command-deallocation seam.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_829F58B8(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_command = ctx.r3.u32;
   ReleaseParticipantCommandSidecar(guest_command);
   ctx.r3.u64 = guest_command;
   __imp__sub_829F58B8(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_829F58B8
 
 // rlSession's non-deleting destructor is reached by both direct destruction
 // and the deleting vfunc. Keep the relocated participant table alive through
 // retail teardown, then release it exactly once.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_829F9E58(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_session = ctx.r3.u32;
   __imp__sub_829F9E58(ctx, base);
   ReleaseSessionParticipantSidecar(guest_session);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_829F9E58
 
 // Add a participant while preserving the title's lock/state behavior. IDs
 // 32..63 use embedded record 31 only as a serialized constructor scratch;
 // the old bytes and all overlapping session fields are restored before the
 // original routine returns.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_829F5628(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_session = ctx.r3.u32;
   const uint32_t guest_participant = ctx.r4.u32;
@@ -10129,7 +10582,9 @@ extern "C" void sub_829F5628(PPCContext& ctx, uint8_t* base) {
     REX_STORE_U32(*count_address, mp64::kLegacyCommandParticipantCapacity);
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_829F5628
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_829F56E8(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_session = ctx.r3.u32;
   const uint32_t guest_identity = ctx.r4.u32;
@@ -10141,9 +10596,11 @@ extern "C" void sub_829F56E8(PPCContext& ctx, uint8_t* base) {
   std::scoped_lock mutation_lock(g_session_participant_mutation_mutex);
   ctx.r3.s64 = FindSessionParticipant(ctx, base, state, guest_identity);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_829F56E8
 
 // Invite duplicate filtering must inspect the relocated half of the roster as
 // well as the mirrored first 32 records.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_829F6630(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_session = ctx.r3.u32;
   const uint32_t guest_identities = ctx.r4.u32;
@@ -10208,7 +10665,9 @@ extern "C" void sub_829F6630(PPCContext& ctx, uint8_t* base) {
   __imp__sub_829F6630(ctx, base);
   runtime->memory()->SystemHeapFree(guest_filtered);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_829F6630
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_829F7C38(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_session = ctx.r3.u32;
   const uint32_t guest_identity = ctx.r4.u32;
@@ -10245,7 +10704,9 @@ extern "C" void sub_829F7C38(PPCContext& ctx, uint8_t* base) {
   SyncLegacySessionParticipantMirror(base, guest_session, state);
   ctx.r3.u64 = guest_session;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_829F7C38
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_829F8C80(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_session = ctx.r3.u32;
   __imp__sub_829F8C80(ctx, base);
@@ -10261,7 +10722,9 @@ extern "C" void sub_829F8C80(PPCContext& ctx, uint8_t* base) {
     }
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_829F8C80
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_829F7428(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_session = ctx.r3.u32;
   const uint32_t guest_command = ctx.r4.u32;
@@ -10307,9 +10770,11 @@ extern "C" void sub_829F7428(PPCContext& ctx, uint8_t* base) {
   }
   ctx.r3.u64 = 1;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_829F7428
 
 // Consume relocated CmdLeave payloads without entering the retail loops that
 // assume both command records and the session participant table stop at 32.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_829F9118(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_session = ctx.r3.u32;
   const uint32_t guest_command = ctx.r4.u32;
@@ -10374,10 +10839,12 @@ extern "C" void sub_829F9118(PPCContext& ctx, uint8_t* base) {
   ReleaseParticipantCommandSidecar(guest_command);
   ctx.r3.u64 = 1;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_829F9118
 
 // SetMaxSlots completion reclassifies public/private records. The original
 // mutates only its 32 inline records, so re-run the same ordered conversion on
 // the canonical table and then refresh the mirror.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_829F9418(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_session = ctx.r3.u32;
   const mp64::SessionParticipantState before = g_session_participants.Get(guest_session);
@@ -10433,11 +10900,13 @@ extern "C" void sub_829F9418(PPCContext& ctx, uint8_t* base) {
                                        g_session_participants.Get(guest_session));
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_829F9418
 
 // Session command queue seam. SetMaxSlots has a fixed 36-byte command, so its
 // schema already carries 32-bit public/private counts and needs no larger
 // allocation. The original routine performs all state/lock/callback work with
 // a <=32 proxy; patch the command before the queue sees it.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_829F52E8(PPCContext& ctx, uint8_t* base) {
   if (g_extended_slot_command.active && ctx.r3.u32 == g_extended_slot_command.guest_session &&
       ctx.r4.u32 != 0) {
@@ -10457,7 +10926,9 @@ extern "C" void sub_829F52E8(PPCContext& ctx, uint8_t* base) {
   }
   __imp__sub_829F52E8(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_829F52E8
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_829F6080(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_session = ctx.r3.u32;
   const uint32_t guest_inputs = ctx.r4.u32;
@@ -10610,7 +11081,9 @@ extern "C" void sub_829F6080(PPCContext& ctx, uint8_t* base) {
   sub_829F52E8(queue_ctx, base);
   ctx.r3.u64 = 1;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_829F6080
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_829F6AA8(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_session = ctx.r3.u32;
   const uint32_t public_slots = ctx.r4.u32;
@@ -10682,10 +11155,12 @@ extern "C" void sub_829F6AA8(PPCContext& ctx, uint8_t* base) {
         guest_session);
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_829F6AA8
 
 // The retail SetMaxSlots task stores its desired counts at +36/+40. Expanding
 // the verified Free Mode value here keeps the task's persistent desired state
 // and the queued session command consistent; other modes retain retail caps.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82802150(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_task = ctx.r3.u32;
   if (guest_task != 0 && REX_LOAD_U8(mp64::kNetworkPreferencesReadyAddress) != 0 &&
@@ -10709,7 +11184,9 @@ extern "C" void sub_82802150(PPCContext& ctx, uint8_t* base) {
   }
   __imp__sub_82802150(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82802150
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_829F8710(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_session = ctx.r3.u32;
   const uint32_t guest_participants = ctx.r4.u32;
@@ -10883,7 +11360,9 @@ extern "C" void sub_829F8710(PPCContext& ctx, uint8_t* base) {
   sub_829F52E8(queue_ctx, base);
   ctx.r3.u64 = 1;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_829F8710
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_829F7208(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_session = ctx.r3.u32;
   const uint32_t guest_command = ctx.r4.u32;
@@ -10927,7 +11406,9 @@ extern "C" void sub_829F7208(PPCContext& ctx, uint8_t* base) {
   }
   ctx.r3.u64 = success ? 1 : 0;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_829F7208
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_829F8F40(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_session = ctx.r3.u32;
   const uint32_t guest_command = ctx.r4.u32;
@@ -11020,7 +11501,9 @@ extern "C" void sub_829F8F40(PPCContext& ctx, uint8_t* base) {
   ReleaseParticipantCommandSidecar(guest_command);
   ctx.r3.u64 = success ? 1 : 0;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_829F8F40
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82801730(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_task = ctx.r3.u32;
   const uint32_t guest_owner = ctx.r4.u32;
@@ -11086,7 +11569,9 @@ extern "C" void sub_82801730(PPCContext& ctx, uint8_t* base) {
   }
   PrepareMigrationTaskAlias(base, guest_task, g_migration_tasks.Get(guest_task));
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82801730
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_828019F8(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_task = ctx.r3.u32;
   mp64::MigrationTaskState state = g_migration_tasks.Get(guest_task);
@@ -11149,11 +11634,13 @@ extern "C" void sub_828019F8(PPCContext& ctx, uint8_t* base) {
   g_migration_tasks.SetCurrent(guest_task, static_cast<int32_t>(state.count));
   PrepareMigrationTaskAlias(base, guest_task, g_migration_tasks.Get(guest_task));
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_828019F8
 
 // This completion/event path derives a record address directly from
 // task->current before it calls any of the task helpers. Refresh the rolling
 // alias here as well so current values 31..63 never reach the inline-table
 // expression.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_828076C8(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_task = ctx.r3.u32;
   const mp64::MigrationTaskState state = g_migration_tasks.Get(guest_task);
@@ -11162,7 +11649,9 @@ extern "C" void sub_828076C8(PPCContext& ctx, uint8_t* base) {
   }
   __imp__sub_828076C8(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_828076C8
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82808720(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_task = ctx.r3.u32;
   const mp64::MigrationTaskState state = g_migration_tasks.Get(guest_task);
@@ -11171,7 +11660,9 @@ extern "C" void sub_82808720(PPCContext& ctx, uint8_t* base) {
   }
   __imp__sub_82808720(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82808720
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82807308(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_task = ctx.r3.u32;
   const mp64::MigrationTaskState state = g_migration_tasks.Get(guest_task);
@@ -11181,17 +11672,21 @@ extern "C" void sub_82807308(PPCContext& ctx, uint8_t* base) {
   __imp__sub_82807308(ctx, base);
   ReleaseMigrationTaskSidecar(guest_task);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82807308
 
 // snMigrateSessionTask's deleting destructor is the unconditional lifetime
 // endpoint. vfunc[4] normally releases the relocated table first, while this
 // hook covers cancellation, construction rollback and owner teardown paths.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_828086B8(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_task = ctx.r3.u32;
   ReleaseMigrationTaskSidecar(guest_task);
   ctx.r3.u64 = guest_task;
   __imp__sub_828086B8(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_828086B8
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_827CD7B0(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_owner = ctx.r3.u32;
   const uint32_t guest_input = ctx.r4.u32;
@@ -11268,7 +11763,9 @@ extern "C" void sub_827CD7B0(PPCContext& ctx, uint8_t* base) {
   g_migration_snapshot_override = {};
   runtime->memory()->SystemHeapFree(guest_records);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_827CD7B0
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_827CFD20(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_owner = ctx.r3.u32;
   if (!g_migration_snapshot_override.active ||
@@ -11311,7 +11808,9 @@ extern "C" void sub_827CFD20(PPCContext& ctx, uint8_t* base) {
   g_migration_snapshot_override.count = count;
   ctx.r3.u64 = count;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_827CFD20
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_827CFE18(PPCContext& ctx, uint8_t* base) {
   const uint32_t guest_owner = ctx.r3.u32;
   if (g_migration_snapshot_override.active) {
@@ -11339,7 +11838,9 @@ extern "C" void sub_827CFE18(PPCContext& ctx, uint8_t* base) {
   g_migration_snapshot_override = {};
   runtime->memory()->SystemHeapFree(guest_records);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_827CFE18
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_827D0D00(PPCContext& ctx, uint8_t* base) {
   const int32_t input_count = ctx.r5.s32;
   if (input_count <= static_cast<int32_t>(mp64::kLegacyCommandParticipantCapacity)) {
@@ -11418,7 +11919,9 @@ extern "C" void sub_827D0D00(PPCContext& ctx, uint8_t* base) {
   runtime->memory()->SystemHeapFree(guest_snapshot);
   ctx.r3.u64 = remove_ctx.r3.u64;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_827D0D00
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_827D04D8(PPCContext& ctx, uint8_t* base) {
   const int32_t record_count = ctx.r6.s32;
   if (record_count <= static_cast<int32_t>(mp64::kLegacyCommandParticipantCapacity)) {
@@ -11468,11 +11971,13 @@ extern "C" void sub_827D04D8(PPCContext& ctx, uint8_t* base) {
   }
   ctx.r3.u64 = success ? 1 : 0;
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_827D04D8
 
 // GTA's script natives resolve a player ID to CPlayerInfo and read/write the
 // authoritative team at +1384. Mirror that value into a host-side atomic
 // cache so the UI thread can route Y/team chat without reading mutable guest
 // memory concurrently with the PPC thread.
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_825B4510(PPCContext& ctx, uint8_t* base) {
   __imp__sub_825B4510(ctx, base);
   const uint32_t guest_player_info = ctx.r3.u32;
@@ -11483,7 +11988,9 @@ extern "C" void sub_825B4510(PPCContext& ctx, uint8_t* base) {
       peer_id,
       static_cast<int32_t>(REX_LOAD_U32(guest_player_info + 1384)));
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_825B4510
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_825B4560(PPCContext& ctx, uint8_t* base) {
   __imp__sub_825B4560(ctx, base);
   const uint32_t guest_player_info = ctx.r3.u32;
@@ -11494,3 +12001,4 @@ extern "C" void sub_825B4560(PPCContext& ctx, uint8_t* base) {
       peer_id,
       static_cast<int32_t>(REX_LOAD_U32(guest_player_info + 1384)));
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_825B4560

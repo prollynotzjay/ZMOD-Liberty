@@ -97,11 +97,14 @@ void GTA4_SonyObserveDamage(PPCContext& ctx, uint8_t* base) {
 // Consumer builds compose the observer inside gta4_multiplayer_64_hooks.cpp's
 // primary-player alias wrapper. Legacy desktop adapters have no such module.
 #if !defined(GTA4_SONY_PRIMARY_PLAYER_ALIAS)
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_824DC670(PPCContext& ctx, uint8_t* base) {
   GTA4_SonyObserveDamage(ctx, base);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_824DC670
 #endif
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_8226F428(PPCContext& ctx, uint8_t* base) {
   const uint32_t weapon = ctx.r3.u32;
   const uint32_t owner = ctx.r4.u32;
@@ -117,7 +120,9 @@ extern "C" void sub_8226F428(PPCContext& ctx, uint8_t* base) {
     GTA4_SonyEmit(player, Event::kShot, 1.0f);
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_8226F428
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_822343C0(PPCContext& ctx, uint8_t* base) {
   const uint32_t position_address = ctx.r7.u32;
   GTA4SonyLocalPlayer player{};
@@ -135,3 +140,4 @@ extern "C" void sub_822343C0(PPCContext& ctx, uint8_t* base) {
     GTA4_SonyEmit(player, Event::kExplosion, strength);
   }
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_822343C0

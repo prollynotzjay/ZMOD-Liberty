@@ -26,6 +26,7 @@ constexpr uint32_t kDiskCacheWorker = 0x831AB5D8;
 
 }  // namespace
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_821CFD10(PPCContext& ctx, uint8_t* base) {
   gta4::streaming::Initialize(base);
   __imp__sub_821CFD10(ctx, base);
@@ -33,9 +34,12 @@ extern "C" void sub_821CFD10(PPCContext& ctx, uint8_t* base) {
       "gta4-streaming: configured limits virtual={} physical={} source=platform:/stream.ini",
       REX_LOAD_U32(kStreamingVirtualLimit), REX_LOAD_U32(kStreamingPhysicalLimit));
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_821CFD10
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_8284DAD8(PPCContext& ctx, uint8_t* base) {
   __imp__sub_8284DAD8(ctx, base);
   REXLOG_INFO("gta4-streaming: disk-cache init result={} worker={:08X} active={}", ctx.r3.u32,
               REX_LOAD_U32(kDiskCacheWorker), REX_LOAD_U32(kDiskCacheWorker) != 0);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_8284DAD8

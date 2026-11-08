@@ -76,6 +76,7 @@ uint32_t CurrentFrame(uint8_t* base, uint32_t device) {
 
 }  // namespace
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_82144800(PPCContext& ctx, uint8_t* base) {
   const gta4::aspect::Scope artwork_scope(gta4::aspect::UiRole::kFixed);
   if (!rex::diagnostics::IsEnabled(rex::diagnostics::Category::kLegal) ||
@@ -111,7 +112,9 @@ extern "C" void sub_82144800(PPCContext& ctx, uint8_t* base) {
       call, frame, frame_after, kLegalTextBuffer, text.length, text.hash,
       g_legal_text_submits);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82144800
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 extern "C" void sub_821F6E38(PPCContext& ctx, uint8_t* base) {
   const gta4::aspect::Scope layout_scope(gta4::aspect::TextUi(ctx, base));
   GTA4_TouchObserveHudSubmit(ctx, base);
@@ -130,3 +133,4 @@ extern "C" void sub_821F6E38(PPCContext& ctx, uint8_t* base) {
   }
   GTA4_HelpTraceTextSubmit(ctx, base, __imp__sub_821F6E38);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_821F6E38

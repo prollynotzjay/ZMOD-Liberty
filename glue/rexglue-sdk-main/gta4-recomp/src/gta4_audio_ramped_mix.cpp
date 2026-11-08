@@ -2,6 +2,7 @@
 #include "gta4_init.h"
 #include "gta4_audio_ramped_mix.h"
 
+#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
 REX_HOOK_RAW(sub_82199BC8) {
   const uint64_t destination_register = ctx.r3.u64;
   const uint64_t source_register = ctx.r4.u64;
@@ -43,3 +44,4 @@ REX_HOOK_RAW(sub_82199BC8) {
   ctx.cr6.compare<uint32_t>(0,0,ctx.xer);
   ctx.r31.u64 = REX_LOAD_U64(ctx.r1.u32 - 8);
 }
+#endif  // GTA4_PAL_SAFE_MODE sub_82199BC8
