@@ -28,7 +28,7 @@ inline float ResolveEngineScale(double configured_scale) noexcept {
   return static_cast<float>(configured_scale);
 }
 
-// Only the local 300-unit operands in sub_821D6260 and sub_821D8CD8 use
+// Only the local 300-unit operands in sub_821D6260 and sub_82223F50 use
 // this limit. The scale is the input already published for the current view,
 // so a live menu change cannot mix an old view threshold with a new limit.
 inline float ResolveRemapLimit(double published_input_scale) noexcept {

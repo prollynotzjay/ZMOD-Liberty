@@ -102,6 +102,13 @@ android {
         }
     }
 
+    // Mali builds leave out the bundled Turnip driver: it only runs on Adreno.
+    if (libertyGpu == "mali") {
+        androidResources {
+            ignoreAssetsPatterns += "turnip-r6.zip"
+        }
+    }
+
     lint {
         checkReleaseBuilds = false
         abortOnError = false

@@ -57,7 +57,7 @@ uint32_t RadarRead(uint8_t* base, uint32_t address) {
 void ObserveTouchPresentationBlock(uint8_t* base) {
   // sub_821DD3D8 runs before normal frames, loading slides, and the loading
   // callback draw path. Publish host state here even if input polling stops.
-  // State/preparation match sub_821E3788 / sub_821EC8C8; loading matches
+  // State/preparation match sub_822D4CB0 / sub_821EC8C8; loading matches
   // sub_82144188. A false sample cannot revive the previous gameplay poll.
   if (!RadarSpan(base, kTouchLoadingActive, sizeof(uint8_t)) ||
       !RadarSpan(base, kTouchCutsceneState, sizeof(uint32_t)) ||
@@ -517,11 +517,11 @@ extern "C" void sub_821EE870(PPCContext& context, uint8_t* base) {
 // The desktop legacy app has a single Sony poll/replay owner. Embedded
 // legacy apps use the identical touch boundaries without that owner.
 #if defined(GTA4_TOUCH_STANDALONE_POLL_OWNER)
-#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
-extern "C" void sub_828CCD60(PPCContext& context, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_82869408(PPCContext& context, uint8_t* base) {
   const uint64_t epoch = GTA4_TouchCurrentEpoch() + 1;
   GTA4_TouchConsumePoll(context, base, epoch);
-  __imp__sub_828CCD60(context, base);
+  __imp__sub_82869408(context, base);
 }
 #endif  // GTA4_PAL_SAFE_MODE sub_828CCD60
 
@@ -576,28 +576,28 @@ void ScriptQuery(PPCContext& context, uint8_t* base,
 }
 }
 
-#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
-extern "C" void sub_825D1AF8(PPCContext& context, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_825930E0(PPCContext& context, uint8_t* base) {
   ScriptQuery(context, base, gta4::input::TouchScriptQueryKind::kRawButton,
-               __imp__sub_825D1AF8);
+               __imp__sub_825930E0);
 }
 #endif  // GTA4_PAL_SAFE_MODE sub_825D1AF8
-#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
-extern "C" void sub_825D1B40(PPCContext& context, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_82593128(PPCContext& context, uint8_t* base) {
   ScriptQuery(context, base, gta4::input::TouchScriptQueryKind::kRawButtonPressed,
-               __imp__sub_825D1B40);
+               __imp__sub_82593128);
 }
 #endif  // GTA4_PAL_SAFE_MODE sub_825D1B40
-#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
-extern "C" void sub_825D1B88(PPCContext& context, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_82593170(PPCContext& context, uint8_t* base) {
   ScriptQuery(context, base, gta4::input::TouchScriptQueryKind::kControlHeld,
-               __imp__sub_825D1B88);
+               __imp__sub_82593170);
 }
 #endif  // GTA4_PAL_SAFE_MODE sub_825D1B88
-#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
-extern "C" void sub_825D1BD0(PPCContext& context, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_825931B8(PPCContext& context, uint8_t* base) {
   ScriptQuery(context, base, gta4::input::TouchScriptQueryKind::kControlPressed,
-               __imp__sub_825D1BD0);
+               __imp__sub_825931B8);
 }
 #endif  // GTA4_PAL_SAFE_MODE sub_825D1BD0
 #ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py

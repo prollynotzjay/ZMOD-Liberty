@@ -103,18 +103,18 @@ extern "C" void sub_8255E240(PPCContext& ctx, uint8_t* base) {
 #endif  // GTA4_PAL_SAFE_MODE sub_82598EB0
 
 // Script/native handler: set the random vehicle multiplier.
-#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
-extern "C" void sub_82598ED0(PPCContext& ctx, uint8_t* base) {
-  __imp__sub_82598ED0(ctx, base);
-  ScaleTraffic(base, "sub_82598ED0");
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_8255E260(PPCContext& ctx, uint8_t* base) {
+  __imp__sub_8255E260(ctx, base);
+  ScaleTraffic(base, "sub_8255E260");
 }
 #endif  // GTA4_PAL_SAFE_MODE sub_82598ED0
 
 // Script/native handler: set the parked vehicle multiplier.
-#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
-extern "C" void sub_82598EE8(PPCContext& ctx, uint8_t* base) {
-  __imp__sub_82598EE8(ctx, base);
-  ScaleParkedCars(base, "sub_82598EE8");
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_8255E278(PPCContext& ctx, uint8_t* base) {
+  __imp__sub_8255E278(ctx, base);
+  ScaleParkedCars(base, "sub_8255E278");
 }
 #endif  // GTA4_PAL_SAFE_MODE sub_82598EE8
 

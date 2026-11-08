@@ -187,13 +187,13 @@ inline double ExpandVerticalFov(double authored_degrees, double aspect) noexcept
 // Verified CViewport owners. Its grcViewport member begins at owner + 16.
 // Deliberately exclude the generic 3D scene, radar, HTML, reflection and shadow views.
 constexpr bool ScreenCameraOwner(uint32_t vtable) noexcept {
-  return vtable == 0x820B9284 || vtable == 0x820212F4 || vtable == 0x820BCB40;
+  return vtable == 0x820A90B4 || vtable == 0x820200A4 || vtable == 0x820BCB40;
 }
 constexpr bool PhoneCameraOwner(uint32_t vtable) noexcept {
   return vtable == 0x820B95F0;
 }
 constexpr bool PrimaryUiOwner(uint32_t vtable) noexcept {
-  return vtable == 0x820B92C4;
+  return vtable == 0x820A90F4;
 }
 inline double EdgeAnchor(double position) noexcept {
   return position < 1.0 / 3.0 ? 0.0 : position > 2.0 / 3.0 ? 1.0 : 0.5;
@@ -235,7 +235,7 @@ inline double FontScale(uint32_t offset, Transform t) noexcept {
 }
 // Constructors publish an instance sequence in the high bits. Both the common
 // Append helper and the frontend's inline Append subsequently change only the
-// command-size bits 0x0003FF80 (generated sub_8229D8A8 / sub_82146790).
+// command-size bits 0x0003FF80 (generated sub_8229D8A8 / sub_821251A0).
 constexpr uint32_t StableDcToken(uint32_t token) noexcept {
   return token & 0xFFFC007Fu;
 }
@@ -245,16 +245,16 @@ struct DcIdentity {
 };
 constexpr bool HasUiDrawExecutor(uint32_t vtable) noexcept {
   switch (vtable) {
-    case 0x820013A8:
-    case 0x820013C4:
+    case 0x82000EB0:
+    case 0x82000ECC:
     case 0x820013E0:
-    case 0x820013FC:
+    case 0x82000F04:
     case 0x82001434:
-    case 0x82001450:
-    case 0x8200146C:
-    case 0x820014A4:
-    case 0x820014C0:
-    case 0x820014DC:
+    case 0x82000F58:
+    case 0x82000F74:
+    case 0x82000FAC:
+    case 0x82000FC8:
+    case 0x82000FE4:
       return true;
     default:
       return false;

@@ -28,12 +28,12 @@ REXCVAR_DEFINE_BOOL(gta4_trace_font_selection, false, "GTA IV/Diagnostics",
 
 namespace {
 namespace policy = gta4::font_selection;
-constexpr uint32_t kStateIndex = 0x82A935A4;
-constexpr uint32_t kStates = 0x82B9A118;
-constexpr uint32_t kGlyphState = 0x82A94478;
-constexpr uint32_t kLookup = 0x82B990C0;
-constexpr uint32_t kDescriptors = 0x82B999C0;
-constexpr uint32_t kEpisode = 0x82B39504;
+constexpr uint32_t kStateIndex = 0x82A23394;
+constexpr uint32_t kStates = 0x82B8E5A8;
+constexpr uint32_t kGlyphState = 0x82A24268;
+constexpr uint32_t kLookup = 0x82B8D578;
+constexpr uint32_t kDescriptors = 0x82B8DE78;
+constexpr uint32_t kEpisode = 0x82B11174;
 std::atomic<uint64_t> next_event{1};
 thread_local uint64_t active_glyph = 0;
 
@@ -73,7 +73,7 @@ uint32_t Owner(uint8_t* base, uint32_t font) {
   return Readable(base, address, 4) ? Read32(base, address) : 0;
 }
 uint32_t Frame(uint8_t* base) {
-  constexpr uint32_t device_slot = 0x831C22A4;
+  constexpr uint32_t device_slot = 0x83124AF4;
   if (!Readable(base, device_slot, 4))
     return 0;
   const uint32_t device = Read32(base, device_slot);
@@ -240,15 +240,15 @@ void GTA4_FontSelectionTraceText(const PPCContext& ctx, uint8_t* base) {
       Owner(base, state.font), Episode(base), hash, raw.size(), terminated, preview);
 }
 
-#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
-extern "C" void sub_821F2ED0(PPCContext& ctx, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_821DCD38(PPCContext& ctx, uint8_t* base) {
   if (!Enabled()) {
-    __imp__sub_821F2ED0(ctx, base);
+    __imp__sub_821DCD38(ctx, base);
     return;
   }
   const int32_t requested = ctx.r3.s32;
   const uint32_t caller = ctx.lr;
-  __imp__sub_821F2ED0(ctx, base);
+  __imp__sub_821DCD38(ctx, base);
   const auto state = SubmissionState(ctx, base);
   if (!state.valid ||
       !selections.Take(fmt::format("{:08X}:{}:{}:{}", caller, requested, state.font, state.bank),

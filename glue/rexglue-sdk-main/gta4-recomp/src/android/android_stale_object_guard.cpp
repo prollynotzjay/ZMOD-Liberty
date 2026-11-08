@@ -1,4 +1,4 @@
-// sub_8296E480(owner r3, out r4) copies the world matrix of the object at
+// sub_828FD378(owner r3, out r4) copies the world matrix of the object at
 // owner+56 into out, following object->[4]->[12] to a type check and a
 // skeleton query; with no object it writes an identity matrix instead. The
 // title frees such objects on another thread while this one still holds the
@@ -18,7 +18,7 @@
 
 REXCVAR_DEFINE_BOOL(gta4_stale_object_guard, true, "GTA IV/Stability",
                     "Treat an object whose pointers lead to unmapped memory as absent in "
-                    "sub_8296E480, sub_8296E310, sub_8297CE78 and sub_82477E30 instead of crashing");
+                    "sub_828FD378, sub_828FD208, sub_8297CE78 and sub_8242FFC0 instead of crashing");
 
 namespace {
 
@@ -123,36 +123,36 @@ extern "C" bool GTA4_StaleChildGuard(uint32_t child) {
   return false;
 }
 
-#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
-extern "C" void sub_8296E480(PPCContext& ctx, uint8_t* base) {
-  if (GuardedMatrixCopy(ctx, base, 56, 112, "sub_8296E480")) __imp__sub_8296E480(ctx, base);
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_828FD378(PPCContext& ctx, uint8_t* base) {
+  if (GuardedMatrixCopy(ctx, base, 56, 112, "sub_828FD378")) __imp__sub_828FD378(ctx, base);
 }
 #endif  // GTA4_PAL_SAFE_MODE sub_8296E480
 
 // Same routine for the object at owner+52 (table at owner+104).
-#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
-extern "C" void sub_8296E310(PPCContext& ctx, uint8_t* base) {
-  if (GuardedMatrixCopy(ctx, base, 52, 104, "sub_8296E310")) __imp__sub_8296E310(ctx, base);
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_828FD208(PPCContext& ctx, uint8_t* base) {
+  if (GuardedMatrixCopy(ctx, base, 52, 104, "sub_828FD208")) __imp__sub_828FD208(ctx, base);
 }
 #endif  // GTA4_PAL_SAFE_MODE sub_8296E310
 
-// sub_82477EF0 walks the title's global entity list every frame and calls
-// sub_82477E30 for each entity's children (entity+652+i*4), the table
+// sub_82430080 walks the title's global entity list every frame and calls
+// sub_8242FFC0 for each entity's children (entity+652+i*4), the table
 // sub_8297CE78 reads. A collision left small integers in it (child=00000B32,
 // then 00000002, 2026-10-10): sub_8297CE78's guard took its empty path, and
-// sub_82477E30 then faulted reading the child's +52. A child that does not
+// sub_8242FFC0 then faulted reading the child's +52. A child that does not
 // lead to mapped memory is skipped; the next frame walks the table again.
-#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
-extern "C" void sub_82477E30(PPCContext& ctx, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_8242FFC0(PPCContext& ctx, uint8_t* base) {
   const uint32_t child = ctx.r3.u32;
   if (!REXCVAR_GET(gta4_stale_object_guard) || Readable(child + 52, 8)) {
-    __imp__sub_82477E30(ctx, base);
+    __imp__sub_8242FFC0(ctx, base);
     return;
   }
   const uint64_t count = g_stale_objects.fetch_add(1, std::memory_order_relaxed) + 1;
   if (count <= 8 || !(count % 1024)) {
     __android_log_print(ANDROID_LOG_WARN, "LibertyRecomp",
-                        "stale-object-guard: #%llu sub_82477E30 child=%08X",
+                        "stale-object-guard: #%llu sub_8242FFC0 child=%08X",
                         static_cast<unsigned long long>(count), child);
   }
 }

@@ -304,7 +304,7 @@ Point NormalizedPoint(const AbsolutePointerEvent& event) noexcept {
 bool FrontendActive(PPCContext& context, uint8_t* base) {
   PPCContext nested = context;
   nested.r3.u32 = kFrontendChannel;
-  __imp__sub_8224EEF8(nested, base);
+  __imp__sub_8224B890(nested, base);
   return nested.r3.u8 != 0;
 }
 

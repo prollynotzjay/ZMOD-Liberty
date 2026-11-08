@@ -2,8 +2,8 @@
 #include "gta4_init.h"
 #include "gta4_audio_ramped_mix.h"
 
-#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
-REX_HOOK_RAW(sub_82199BC8) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+REX_HOOK_RAW(sub_8216DBB0) {
   const uint64_t destination_register = ctx.r3.u64;
   const uint64_t source_register = ctx.r4.u64;
   const uint32_t destination = ctx.r3.u32 & ~15u;
@@ -17,7 +17,7 @@ REX_HOOK_RAW(sub_82199BC8) {
   if (!contiguous(destination,1024) || !contiguous(source,1024) ||
       !contiguous(initial_gain,16) || !contiguous(gain_step,16)) {
     // Preserve the original address-wrap/alias behavior outside the fast domain.
-    __imp__sub_82199BC8(ctx, base);
+    __imp__sub_8216DBB0(ctx, base);
     return;
   }
   REX_STORE_U64(ctx.r1.u32 - 8, ctx.r31.u64);

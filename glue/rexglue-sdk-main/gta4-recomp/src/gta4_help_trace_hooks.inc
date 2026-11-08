@@ -1,6 +1,6 @@
 // Opt-in help-box observation. Sources are the compiled generated .7
-// sub_82223CF8, .6 sub_821F32B8/32F8/6E38, .4 DC constructors/executors,
-// and .0 sub_82146790. No game state, geometry, or command order is changed.
+// sub_82223CF8, .6 sub_821DD120/32F8/6E38, .4 DC constructors/executors,
+// and .0 sub_821251A0. No game state, geometry, or command order is changed.
 #include "input/context_touch_context.h"
 
 namespace {
@@ -67,14 +67,14 @@ struct HelpFontState {
 };
 HelpFontState ReadHelpFont(PPCContext& ctx, uint8_t* base) {
   HelpFontState state;
-  state.index = LoadU32(base, 0x82A935A4);
+  state.index = LoadU32(base, 0x82A23394);
   if (state.index == UINT32_MAX) {
     const uint32_t tls = ctx.r13.u32 ? LoadU32(base, ctx.r13.u32) : 0;
     if (!tls) return state;
     state.index = (LoadU32(base, tls + 8) >> 2) & 1u;
   }
   if (state.index > 1) return state;
-  state.address = 0x82B9A118 + state.index * 68;
+  state.address = 0x82B8E5A8 + state.index * 68;
   state.enabled = LoadU8(base, state.address + 20);
   state.mode = LoadU8(base, state.address + 21);
   state.color = LoadU32(base, state.address + 28);
@@ -176,7 +176,7 @@ void HelpExecute(PPCContext& ctx, uint8_t* base, uint32_t expected_vtable,
     else { bg = found->second; g_help_dcs.erase(found); }
   }
   if (!bg.id) { original(ctx, base); return; }
-  // .0 sub_82146790 changes length bits 0x0003FF80, not constructor identity.
+  // .0 sub_821251A0 changes length bits 0x0003FF80, not constructor identity.
   const bool identity = LoadU32(base, bg.dc) == expected_vtable && bg.vtable == expected_vtable &&
       ((LoadU32(base, bg.dc + 4) ^ bg.token) & 0xFFFC007F) == 0 &&
       XXH3_64bits(GuestPointer(base, bg.dc + 8), bg.bytes - 8) == bg.payload_hash;
@@ -349,10 +349,10 @@ extern "C" void sub_82223CF8(PPCContext& ctx, uint8_t* base) {
   g_help_call = previous;
 }
 #endif  // GTA4_PAL_SAFE_MODE sub_82223CF8
-#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
-extern "C" void sub_821F32B8(PPCContext& ctx, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_821DD120(PPCContext& ctx, uint8_t* base) {
   const uint32_t enabled = ctx.r3.u8, mode = ctx.r4.u8, caller = uint32_t(ctx.lr);
-  __imp__sub_821F32B8(ctx, base);
+  __imp__sub_821DD120(ctx, base);
   if (!g_help_call) return;
   ++g_help_call->choices;
   const auto font = ReadHelpFont(ctx, base);
@@ -363,79 +363,79 @@ extern "C" void sub_821F32B8(PPCContext& ctx, uint8_t* base) {
                 HelpChoiceSite(caller), enabled, mode, font.valid, font.enabled, font.mode);
 }
 #endif  // GTA4_PAL_SAFE_MODE sub_821F32B8
-#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
-extern "C" void sub_821F32F8(PPCContext& ctx, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_821DD160(PPCContext& ctx, uint8_t* base) {
   const uint32_t color = ctx.r3.u32, caller = uint32_t(ctx.lr);
-  __imp__sub_821F32F8(ctx, base);
+  __imp__sub_821DD160(ctx, base);
   if (g_help_call && g_help_call->sample)
     REXLOG_INFO("gta4-help-trace: point=background-color call={} frame={} "
                 "caller={:08X} color={:08X} alpha={}",
                 g_help_call->id, GetNativeLightSubmittedFrame(base), caller, color, color >> 24);
 }
 #endif  // GTA4_PAL_SAFE_MODE sub_821F32F8
-#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
-extern "C" void sub_821BF348(PPCContext& ctx, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_821908F8(PPCContext& ctx, uint8_t* base) {
   const uint32_t dc = ctx.r3.u32, caller = uint32_t(ctx.lr);
-  __imp__sub_821BF348(ctx, base);
+  __imp__sub_821908F8(ctx, base);
   HelpConstructed(base, dc, caller, "solid-quad", 48, 44, 40);
 }
 #endif  // GTA4_PAL_SAFE_MODE sub_821BF348
-#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
-extern "C" void sub_821BF490(PPCContext& ctx, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_82190A28(PPCContext& ctx, uint8_t* base) {
   const uint32_t dc = ctx.r3.u32, caller = uint32_t(ctx.lr);
-  __imp__sub_821BF490(ctx, base);
+  __imp__sub_82190A28(ctx, base);
   HelpConstructed(base, dc, caller, "textured-quad", 80, 76, 72);
 }
 #endif  // GTA4_PAL_SAFE_MODE sub_821BF490
-#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
-extern "C" void sub_821BF628(PPCContext& ctx, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_82190BB0(PPCContext& ctx, uint8_t* base) {
   const uint32_t dc = ctx.r3.u32, caller = uint32_t(ctx.lr);
-  __imp__sub_821BF628(ctx, base);
+  __imp__sub_82190BB0(ctx, base);
   HelpConstructed(base, dc, caller, "window", 28, 24, 0);
 }
 #endif  // GTA4_PAL_SAFE_MODE sub_821BF628
-#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
-extern "C" void sub_821BD2D8(PPCContext& ctx, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_8218E9A0(PPCContext& ctx, uint8_t* base) {
   const gta4::aspect::DcScope aspect_scope(ctx, base);
-  HelpExecute(ctx, base, 0x8200146C, __imp__sub_821BD2D8);
+  HelpExecute(ctx, base, 0x82000F74, __imp__sub_8218E9A0);
 }
 #endif  // GTA4_PAL_SAFE_MODE sub_821BD2D8
-#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
-extern "C" void sub_821BD4C8(PPCContext& ctx, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_8218EB38(PPCContext& ctx, uint8_t* base) {
   const gta4::aspect::DcScope aspect_scope(ctx, base);
-  HelpExecute(ctx, base, 0x820014A4, __imp__sub_821BD4C8);
+  HelpExecute(ctx, base, 0x82000FAC, __imp__sub_8218EB38);
 }
 #endif  // GTA4_PAL_SAFE_MODE sub_821BD4C8
-#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
-extern "C" void sub_821BD538(PPCContext& ctx, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_8218EBA8(PPCContext& ctx, uint8_t* base) {
   const gta4::aspect::DcScope aspect_scope(ctx, base);
-  HelpExecute(ctx, base, 0x820014DC, __imp__sub_821BD538);
+  HelpExecute(ctx, base, 0x82000FE4, __imp__sub_8218EBA8);
 }
 #endif  // GTA4_PAL_SAFE_MODE sub_821BD538
 static void AspectTraceSolidQuad(PPCContext& ctx, uint8_t* base) {
-  if (!g_help_call || g_help_execution) { __imp__sub_8227E948(ctx, base); return; }
-  HelpImmediate(ctx, base, "solid-quad", LoadU32(base, ctx.r7.u32), __imp__sub_8227E948);
+  if (!g_help_call || g_help_execution) { __imp__sub_821EB228(ctx, base); return; }
+  HelpImmediate(ctx, base, "solid-quad", LoadU32(base, ctx.r7.u32), __imp__sub_821EB228);
 }
-#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
-extern "C" void sub_8227E948(PPCContext& ctx, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_821EB228(PPCContext& ctx, uint8_t* base) {
   gta4::aspect::DrawQuad(ctx, base, AspectTraceSolidQuad, false);
 }
 #endif  // GTA4_PAL_SAFE_MODE sub_8227E948
 static void AspectTraceTexturedQuad(PPCContext& ctx, uint8_t* base) {
-  if (!g_help_call || g_help_execution) { __imp__sub_8227EA50(ctx, base); return; }
+  if (!g_help_call || g_help_execution) { __imp__sub_821EB330(ctx, base); return; }
   const uint32_t color_pointer = LoadU32(base, ctx.r1.u32 + 84);
-  HelpImmediate(ctx, base, "textured-quad", LoadU32(base, color_pointer), __imp__sub_8227EA50);
+  HelpImmediate(ctx, base, "textured-quad", LoadU32(base, color_pointer), __imp__sub_821EB330);
 }
-#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
-extern "C" void sub_8227EA50(PPCContext& ctx, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_821EB330(PPCContext& ctx, uint8_t* base) {
   gta4::aspect::DrawQuad(ctx, base, AspectTraceTexturedQuad, true);
 }
 #endif  // GTA4_PAL_SAFE_MODE sub_8227EA50
 static void AspectTraceWindow(PPCContext& ctx, uint8_t* base) {
-  HelpImmediate(ctx, base, "window", ctx.r7.u32, __imp__sub_8224D1E0);
+  HelpImmediate(ctx, base, "window", ctx.r7.u32, __imp__sub_821B31E8);
 }
-#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
-extern "C" void sub_8224D1E0(PPCContext& ctx, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_821B31E8(PPCContext& ctx, uint8_t* base) {
   gta4::aspect::DrawWindow(ctx, base, AspectTraceWindow);
 }
 #endif  // GTA4_PAL_SAFE_MODE sub_8224D1E0

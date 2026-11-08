@@ -492,26 +492,26 @@ extern "C" void sub_824DF2D8(PPCContext& ctx, uint8_t* base) {
 }
 #endif  // GTA4_PAL_SAFE_MODE sub_82511890
 
-#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
-extern "C" void sub_82511C50(PPCContext& ctx, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_824DF6A8(PPCContext& ctx, uint8_t* base) {
   const uint32_t manager = ctx.r3.u32, requested = ctx.r4.u32;
   if (config.modern && manager == kManager) {
     ctx.r4.u32 = RequestedBudget(requested, config.budget_scale);
   }
   const uint32_t target = ctx.r4.u32;
-  __imp__sub_82511C50(ctx, base);
+  __imp__sub_824DF6A8(ctx, base);
   if (manager == kManager) REXLOG_INFO("gta4-streaming: budget virtual original={} target={} effective={}",
                                      requested, target, REX_LOAD_U32(manager + 32));
 }
 #endif  // GTA4_PAL_SAFE_MODE sub_82511C50
-#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
-extern "C" void sub_82511CD8(PPCContext& ctx, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_824DF730(PPCContext& ctx, uint8_t* base) {
   const uint32_t manager = ctx.r3.u32, requested = ctx.r4.u32;
   if (config.modern && manager == kManager) {
     ctx.r4.u32 = RequestedBudget(requested, config.budget_scale);
   }
   const uint32_t target = ctx.r4.u32;
-  __imp__sub_82511CD8(ctx, base);
+  __imp__sub_824DF730(ctx, base);
   if (manager == kManager) {
     const uint32_t allocator_clamped = REX_LOAD_U32(manager + 44);
     const uint32_t effective = config.modern

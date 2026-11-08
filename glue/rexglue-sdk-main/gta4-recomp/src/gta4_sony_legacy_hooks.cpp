@@ -5,15 +5,15 @@
 // Legacy SDL consumers do not compile gta4_input_hooks.cpp. Keep their
 // adapter limited to the same two proven input boundaries.
 #if defined(GTA4_SONY_LEGACY_HOST)
-#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
-extern "C" void sub_828CCD60(PPCContext& context, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_82869408(PPCContext& context, uint8_t* base) {
 #if defined(GTA4_TOUCH_LEGACY_HOST)
   GTA4_TouchConsumePoll(context, base, GTA4_TouchCurrentEpoch() + 1);
 #endif
-  __imp__sub_828CCD60(context, base);
+  __imp__sub_82869408(context, base);
   GTA4_SonyEndPoll(context, base);
 }
-#endif  // GTA4_PAL_SAFE_MODE sub_828CCD60
+#endif  // GTA4_PAL_SAFE_MODE sub_82869408
 
 #ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
 extern "C" void sub_821EEA40(PPCContext& context, uint8_t* base) {

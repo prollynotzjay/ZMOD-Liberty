@@ -17,7 +17,7 @@ namespace gta4 {
 namespace {
 
 // GTA IV script-native context layout, verified against generated
-// sub_825936B0/sub_825DE6E8 and checked by verify_motion_context_layout.py.
+// sub_825936B0/sub_8259EF40 and checked by verify_motion_context_layout.py.
 constexpr uint32_t kReturnStorageOffset = 0;
 constexpr uint32_t kArgumentVectorOffset = 8;
 constexpr std::array<uint32_t, 3> kArgumentOffsets = {0, 4, 8};

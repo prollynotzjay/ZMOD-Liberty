@@ -6833,7 +6833,7 @@ extern "C" void sub_827A9A20(PPCContext& ctx, uint8_t* base) {
   const uint32_t caller = uint32_t(ctx.lr);
   __imp__sub_827A9A20(ctx, base);
   if (trace && !ctx.r3.u32) {
-    // 0x822EA464 stores the optional cookie in r18 and continues at 0x822B1058.
+    // 0x822B104C stores the optional cookie in r18 and continues at 0x822B1058.
     // This result does not reject the local-light record.
     const NativeLocalLightTechniqueSite site = ResolveNativeLocalLightBranchSite(base, ctx, caller);
     if (site.kind != NativeLocalLightLoopKind::kNone && site.instance) {

@@ -1,4 +1,4 @@
-// sub_82A46D70(device r3, out r4) writes {0, submitted frame, submitted -
+// sub_829D58D0(device r3, out r4) writes {0, submitted frame, submitted -
 // completed} for the device. Its only caller, sub_828BF420, polls it in a
 // loop without sleeping while two frames are pending, i.e. while the title
 // waits for the renderer to submit a frame: a busy-wait that held a big core
@@ -25,7 +25,7 @@
 // No frame rate change, but the spin held the main game thread at ~97% of a
 // big core while it waited (17% with the sleep): the whole process used 2.16
 // cores at the save point with the spin and 1.37 without (Retroid Pocket 5).
-// It was off for a while because the game-code crash in sub_8296E480 (stale
+// It was off for a while because the game-code crash in sub_828FD378 (stale
 // object pointer) first appeared in builds that had it; that crash has its
 // own guard now.
 REXCVAR_DEFINE_BOOL(gta4_frame_wait_sleep, true, "GTA IV/Performance",
@@ -38,10 +38,10 @@ REXCVAR_DEFINE_UINT32(gta4_extra_frames_in_flight, 0, "GTA IV/Performance",
 // Latest game update rate, shown by the in-game "Show FPS" overlay.
 std::atomic<float> g_liberty_title_fps{0.0f};
 
-#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
-extern "C" void sub_82A46D70(PPCContext& ctx, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_829D58D0(PPCContext& ctx, uint8_t* base) {
   const uint32_t out = ctx.r4.u32;
-  __imp__sub_82A46D70(ctx, base);
+  __imp__sub_829D58D0(ctx, base);
   uint32_t pending = REX_LOAD_U32(out + 8);
   if (pending >= 0x80000000u) return;
   // Title frame rate: how often the game submits a new frame (world update),

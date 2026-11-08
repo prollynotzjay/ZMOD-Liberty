@@ -26,6 +26,8 @@ void GTA4_RunWithPrimaryPlayerInfoAlias(PPCContext&, uint8_t*,
 namespace gta4::input {
 namespace {
 
+// PAL: CPlayerInfo/CPed field offsets differ from USA (1400->1384,
+// 1232->1216, 1200->1184, ped 2496->2464, 572->568, 2688->2656).
 // Generated PPC source: player/control facts match sub_825779F8,
 // sub_82579B50 and sub_8219F808. All address/size derivations checked in Python.
 constexpr uint32_t kPlayer = 0x82A2CFC8;
@@ -369,12 +371,12 @@ TouchContextSnapshot ReadTouchContextFacts(const TouchContextMemory& memory,
   const auto info = read.U32(kPlayerInfo, *index * 4);
   const auto generation = read.U32(kPlayerGeneration, *index * 4);
   if (!info || !*info || !generation) return out;
-  const auto ped = read.U32(*info, 1400);
+  const auto ped = read.U32(*info, 1384);
   if (!ped || !*ped) return out;
   const auto health = read.U32(*ped, 484), alive = read.U32(kAliveThreshold);
-  const auto state = read.U32(*info, 1232), flags = read.U32(*info, 1200);
-  const auto mode = read.U32(*ped, 2496), game_mode = read.U32(kGameMode);
-  const auto vehicle_flags = read.U32(*ped, 572);
+  const auto state = read.U32(*info, 1216), flags = read.U32(*info, 1184);
+  const auto mode = read.U32(*ped, 2464), game_mode = read.U32(kGameMode);
+  const auto vehicle_flags = read.U32(*ped, 568);
   if (!health || !alive || !state || !flags || !mode || !game_mode || !vehicle_flags) return out;
   out.valid = true;
   out.player_identity = *ped;
@@ -388,7 +390,7 @@ TouchContextSnapshot ReadTouchContextFacts(const TouchContextMemory& memory,
   out.native_input_allowed |= out.playing && !out.loading && !out.cutscene;
   out.base_mode = ContextTouchMode::kOnFoot;
   if (*vehicle_flags & 0x20000000u) {
-    const auto vehicle = read.U32(*ped, 2688);
+    const auto vehicle = read.U32(*ped, 2656);
     const auto driver = vehicle && *vehicle ? read.U32(*vehicle, 3904) : std::nullopt;
     const auto vtable = vehicle && *vehicle ? read.U32(*vehicle) : std::nullopt;
     if (!vehicle || !*vehicle || !driver || !vtable) {

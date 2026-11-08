@@ -23,10 +23,10 @@ namespace {
 //   sub_82144800 -> LEGAL_360 / LEGAL_360_US
 //   sub_82144800 -> sub_821F6E38 (HUD text submission)
 constexpr uint32_t kLegalTextBuffer = 0x831E4DE0;
-constexpr uint32_t kLegalSequenceGlobal = 0x831D5344;
+constexpr uint32_t kLegalSequenceGlobal = 0x83137BC4;
 constexpr uint32_t kLegalModeGlobal = 0x831D5349;
 constexpr uint32_t kLegalReadyGlobal = 0x831D534B;
-constexpr uint32_t kGlobalDevice = 0x831C22A4;
+constexpr uint32_t kGlobalDevice = 0x83124AF4;
 constexpr uint32_t kSubmittedFrameOffset = 16544;
 constexpr uint32_t kRenderTargetBase = 3108;
 constexpr size_t kMaximumLegalTextBytes = 4096;

@@ -1530,9 +1530,11 @@ public class LauncherActivity extends Activity {
         mDrivers.removeAllViews();
         mDriverModes.clear();
         boolean mali = DriverBridge.isMaliBuild();
-        addDriver(DriverBridge.TURNIP, "Turnip 26.3.0-R6 (bundled)",
-                mali ? "Adreno GPUs only; does not work on Mali"
-                     : "Recommended for Adreno 6xx/7xx");
+        // Mali builds do not bundle Turnip (Adreno only), so do not offer it.
+        if (!mali) {
+            addDriver(DriverBridge.TURNIP, "Turnip 26.3.0-R6 (bundled)",
+                    "Recommended for Adreno 6xx/7xx");
+        }
         addDriver(DriverBridge.SYSTEM, "System driver",
                 mali ? "Recommended for Mali / Immortalis (needs Vulkan 1.2)"
                      : "The device's own Vulkan driver (needs Vulkan 1.2)");

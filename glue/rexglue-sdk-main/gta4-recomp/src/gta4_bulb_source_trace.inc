@@ -60,16 +60,16 @@ std::string BulbSourceFloats(uint8_t* base, uint32_t address, uint32_t count) {
 }
 void TraceBulbCoronaBatch(uint8_t* base, std::string_view phase, uint64_t event) {
   if (!event) return;
-  // Generated sub_822072D0 selects one of the queued counts with this index.
-  const auto selector = LoadU32(base,0x82B307A4);
-  if (selector > 1 || !BulbSourceReadable(base,0x82BAFA80,20)) {
+  // Generated sub_82254C00 selects one of the queued counts with this index.
+  const auto selector = LoadU32(base,0x82AA4D9C);
+  if (selector > 1 || !BulbSourceReadable(base,0x82BED600,20)) {
     REXLOG_INFO("gta4-bulb-source: point=corona-batch event={} phase={} selector={} state=unsupported",event,phase,selector);
     return;
   }
   REXLOG_INFO("gta4-bulb-source: point=corona-batch event={} phase={} guest-frame={} selector={} selected-count={} count0={} count1={} producer-count={} "
               "physical-contribution-not-measured=true",
-              event,phase,BulbSourceGuestFrame(base),selector,LoadU32(base,0x82BAFA80+selector*4),
-              LoadU32(base,0x82BAFA80),LoadU32(base,0x82BAFA84),LoadU32(base,0x82BAFA8C));
+              event,phase,BulbSourceGuestFrame(base),selector,LoadU32(base,0x82BED600+selector*4),
+              LoadU32(base,0x82BED600),LoadU32(base,0x82BAFA84),LoadU32(base,0x82BED60C));
 }
 uint64_t BeginBulbCoronaBatch(uint8_t* base) {
   if (!BulbSourceObservationActive(base)) return 0;
@@ -79,8 +79,8 @@ uint64_t BeginBulbCoronaBatch(uint8_t* base) {
 }
 } // namespace
 
-#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
-extern "C" void sub_822077D8(PPCContext& ctx, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_82255108(PPCContext& ctx, uint8_t* base) {
   if (!BulbSourceObservationActive(base)) { CallBulbSourceOriginalWithProvenance(ctx,base); return; }
   const auto event=g_bulb_source_event.fetch_add(1,std::memory_order_relaxed)+1;
   if(event>4096){CallBulbSourceOriginalWithProvenance(ctx,base);return;}
@@ -96,28 +96,28 @@ extern "C" void sub_822077D8(PPCContext& ctx, uint8_t* base) {
   g_bulb_source_observer=previous;
 }
 #endif  // GTA4_PAL_SAFE_MODE sub_822077D8
-#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
-extern "C" void sub_82207118(PPCContext& ctx,uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_82254A48(PPCContext& ctx,uint8_t* base) {
   auto* source=g_bulb_source_observer;
-  if(!source){__imp__sub_82207118(ctx,base);return;}
+  if(!source){__imp__sub_82254A48(ctx,base);return;}
   const auto scale_output=ctx.r5.u32;
   const auto caller=ctx.lr;
-  __imp__sub_82207118(ctx,base);
+  __imp__sub_82254A48(ctx,base);
   REXLOG_INFO("gta4-bulb-source: point=source-selection event={} guest-frame={} caller={:08X} return={} output-scale={} "
               "boolean-meaning=raw-original-result",
               source->event,source->frame,caller,ctx.r3.u32,BulbSourceFloats(base,scale_output,1));
 }
 #endif  // GTA4_PAL_SAFE_MODE sub_82207118
-#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
-extern "C" void sub_82207008(PPCContext& ctx,uint8_t* base) {
-  if (!BulbSourceObservationActive(base)) { __imp__sub_82207008(ctx,base); return; }
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_82254938(PPCContext& ctx,uint8_t* base) {
+  if (!BulbSourceObservationActive(base)) { __imp__sub_82254938(ctx,base); return; }
   const auto event=g_bulb_queue_event.fetch_add(1,std::memory_order_relaxed)+1;
-  if(event>4096){__imp__sub_82207008(ctx,base);return;}
+  if(event>4096){__imp__sub_82254938(ctx,base);return;}
   auto* source=g_bulb_source_observer;
   if(source)++source->queued;
   const auto frame=BulbSourceGuestFrame(base);
   const auto caller=ctx.lr;
-  const auto before=LoadU32(base,0x82BAFA8C);
+  const auto before=LoadU32(base,0x82BED60C);
   const auto position=BulbSourceFloats(base,ctx.r8.u32&~uint32_t{15},4);
   // r31 holds the attribute returned by the generated entity virtual getter at
   // these two call sites only. Never infer it for scripts or vehicle callers.
@@ -128,8 +128,8 @@ extern "C" void sub_82207008(PPCContext& ctx,uint8_t* base) {
   std::string attributes="unknown";
   if(entity_call && BulbSourceReadable(base,attribute,96))
     attributes=fmt::format("flags{:08X}:variant{}:params{}",LoadU32(base,attribute+76),LoadU8(base,attribute+88),BulbSourceFloats(base,attribute+36,10));
-  __imp__sub_82207008(ctx,base);
-  const auto after=LoadU32(base,0x82BAFA8C);
+  __imp__sub_82254938(ctx,base);
+  const auto after=LoadU32(base,0x82BED60C);
   const bool advanced=before<768 && after==before+1;
   REXLOG_INFO("gta4-bulb-source: point=corona-enqueue event={} source={} guest-frame={} caller={:08X} before={} after={} accepted={} "
               "position={} rgb={},{},{} size={:.8g} attribute={:08X} details={} gpu-drawn=unknown",

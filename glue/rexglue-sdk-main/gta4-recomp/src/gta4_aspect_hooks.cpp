@@ -103,12 +103,12 @@ void TraceLoadingMask(const UiContext& layout, const Rect& source, const char* k
       mapped.right, mapped.bottom, layout.transform.sx, layout.transform.sy, layout.transform.ox,
       layout.transform.oy);
 }
-constexpr uint32_t kCurrentViewport = 0x831C2200;
-constexpr uint32_t kStartupViewport = 0x831C21F4;
-constexpr uint32_t kFontStateIndex = 0x82A935A4;
-constexpr uint32_t kFontStates = 0x82B9A118;
+constexpr uint32_t kCurrentViewport = 0x83124A30;
+constexpr uint32_t kStartupViewport = 0x83124A24;
+constexpr uint32_t kFontStateIndex = 0x82A23394;
+constexpr uint32_t kFontStates = 0x82B8E5A8;
 // The exact address of the HUD object table is generated below from its PPC lis/addi.
-constexpr uint32_t kHudTable = 0x82B39990;
+constexpr uint32_t kHudTable = 0x82AAD0D8;
 
 uint32_t Owner(uint8_t* base, uint32_t viewport) {
   if (viewport < 16 || !Span(base, viewport - 16, 16))
@@ -241,7 +241,7 @@ UiContext HudContext(PPCContext& ctx, uint8_t* base) {
 }
 void DrawHud(PPCContext& ctx, uint8_t* base, GuestFunction original) {
   const Scope scope(HudContext(ctx, base));
-  if (original == __imp__sub_821C5148)
+  if (original == __imp__sub_82199B50)
     gta4::input::DrawTouchWeaponHudSprite(ctx, base, original);
   else
     original(ctx, base);
@@ -310,7 +310,7 @@ UiContext MenuBodyUi(uint8_t* base) {
     return ui_context;
   double divider_y = kDefaultMenuDividerY;
   // Retail frontend style pointer; entry zero is TOP_position_of_top_line.
-  constexpr uint32_t kFrontendStylePointer = 0x82BF9D98;
+  constexpr uint32_t kFrontendStylePointer = 0x82BEC4D8;
   if (Span(base, kFrontendStylePointer, sizeof(uint32_t))) {
     const uint32_t style = Read(base, kFrontendStylePointer);
     if (Span(base, style, sizeof(float)))
@@ -402,7 +402,7 @@ void PrepareViewport(PPCContext& ctx, uint8_t* base) {
   if (!screen && !phone)
     return;
   PPCContext query = ctx;
-  __imp__sub_821ED2F0(query, base);
+  __imp__sub_8226CC00(query, base);
   const auto screen_aspect = screen ? CameraAspect(base, viewport) : std::optional<double>{};
   const double aspect = screen_aspect ? *screen_aspect : query.f1.f64;
   const double authored = Float(base, viewport + 696);
@@ -422,7 +422,7 @@ void PrepareViewport(PPCContext& ctx, uint8_t* base) {
     // Derived owners can be assigned after the base constructor. At first bind,
     // rebuild both the framing and the shape, not just their aspect quotient.
     PPCContext call = ctx;
-    sub_828BDAD8(call, base);
+    sub_8284ECB8(call, base);
   }
 }
 
@@ -450,8 +450,8 @@ void DrawQuad(PPCContext& ctx, uint8_t* base, GuestFunction original, bool textu
     bounds.top = std::min(bounds.top, y);
     bounds.bottom = std::max(bounds.bottom, y);
   }
-  const bool solid = !textured && Span(base, 0x831C2910, 4) && Span(base, 0x831C2D48, 4) &&
-                     Read(base, 0x831C2910) == Read(base, 0x831C2D48);
+  const bool solid = !textured && Span(base, 0x83125180, 4) && Span(base, 0x83125590, 4) &&
+                     Read(base, 0x83125180) == Read(base, 0x83125590);
   if (solid)
     layout.transform = CoveringBackground(layout.transform, bounds);
   const EmitScope emit({layout.transform, !layout.transform.identity()});
@@ -465,7 +465,7 @@ void DrawRadarSection(PPCContext& ctx, uint8_t* base, GuestFunction original) {
   // distance growing away from that corner, so on wider-than-16:9 screens they
   // slid across the map as it scrolled. In the pause menu they follow the
   // frontend layout like the map itself.
-  constexpr uint32_t kPauseMenuVisibleAddress = 0x82BFA144;
+  constexpr uint32_t kPauseMenuVisibleAddress = 0x82BEC860;
   const bool pause_menu =
       Span(base, kPauseMenuVisibleAddress, 1) &&
       *reinterpret_cast<const uint8_t*>(rex::memory::GuestPtr(base, kPauseMenuVisibleAddress)) != 0;
@@ -482,7 +482,7 @@ void DrawRadarSection(PPCContext& ctx, uint8_t* base, GuestFunction original) {
 }
 void DrawWindow(PPCContext& ctx, uint8_t* base, GuestFunction original) {
   // Generated sub_821F6E38 forwards normalized measured bounds unchanged to
-  // sub_8224D1E0. Its tessellator preserves those units through sub_828C2290.
+  // sub_821B31E8. Its tessellator preserves those units through sub_8284FBC0.
   const auto layout = CurrentUi(base);
   const EmitScope emit({layout.transform, layout.active && !layout.transform.identity()});
   original(ctx, base);
@@ -491,7 +491,7 @@ FrontendLayoutScope::FrontendLayoutScope(PPCContext& ctx, uint8_t* base) {
   const auto layout = CurrentUi(base);
   if (!layout.active || layout.transform.sx >= 1 || ctx.r3.u32 > 2)
     return;
-  constexpr uint32_t table = 0x82CC7BD0;
+  constexpr uint32_t table = 0x82C192F4;
   if (!Span(base, table + ctx.r3.u32 * 4, 4))
     return;
   const uint32_t widget = Read(base, table + ctx.r3.u32 * 4);
@@ -524,16 +524,16 @@ FrontendLayoutScope::~FrontendLayoutScope() {
 }  // namespace gta4::aspect
 
 // Only new strong hooks live here; existing hooks call the shared adapters above.
-#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
-extern "C" void sub_821ED2F0(PPCContext& ctx, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_8226CC00(PPCContext& ctx, uint8_t* base) {
   const uint32_t viewport = ctx.r3.u32;
-  __imp__sub_821ED2F0(ctx, base);
+  __imp__sub_8226CC00(ctx, base);
   if (const auto aspect = gta4::aspect::CameraAspect(base, viewport))
     ctx.f1.f64 = *aspect;
 }
 #endif  // GTA4_PAL_SAFE_MODE sub_821ED2F0
-#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
-extern "C" void sub_828BDAD8(PPCContext& ctx, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_8284ECB8(PPCContext& ctx, uint8_t* base) {
   using namespace gta4::aspect;
   const uint32_t viewport = ctx.r3.u32;
   const auto aspect = CameraAspect(base, viewport);
@@ -557,15 +557,15 @@ extern "C" void sub_828BDAD8(PPCContext& ctx, uint8_t* base) {
           "resolved-fov={}",
           viewport, Owner(base, viewport), *aspect, original, resolved);
   }
-  __imp__sub_828BDAD8(ctx, base);
+  __imp__sub_8284ECB8(ctx, base);
   // Matrices, cached tangents and frustum remain resolved; the input FOV stays authored.
   if (changed)
     Write(base, viewport + 696, authored);
   phone_projection_build = previous_phone;
 }
 #endif  // GTA4_PAL_SAFE_MODE sub_828BDAD8
-#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
-extern "C" void sub_828BD1D8(PPCContext& ctx, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_8284E3B8(PPCContext& ctx, uint8_t* base) {
   using namespace gta4::aspect;
   const uint32_t viewport = ctx.r3.u32;
   if (viewport && phone_projection_build == viewport && Span(base, viewport + 448, 64, true)) {
@@ -576,11 +576,11 @@ extern "C" void sub_828BD1D8(PPCContext& ctx, uint8_t* base) {
     for (size_t i = 0; i < matrix.size(); ++i)
       Float(base, viewport + 448 + uint32_t(i) * 4, matrix[i]);
   }
-  __imp__sub_828BD1D8(ctx, base);
+  __imp__sub_8284E3B8(ctx, base);
 }
 #endif  // GTA4_PAL_SAFE_MODE sub_828BD1D8
-#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
-extern "C" void sub_828C2290(PPCContext& ctx, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_8284FBC0(PPCContext& ctx, uint8_t* base) {
   using namespace gta4::aspect;
   if (emission.active && !baked_font_depth) {
     const auto point = emission.transform.Map(Point{ctx.f1.f64, ctx.f2.f64});
@@ -597,7 +597,7 @@ extern "C" void sub_828C2290(PPCContext& ctx, uint8_t* base) {
           0.0, 1.0);
     }
   }
-  __imp__sub_828C2290(ctx, base);
+  __imp__sub_8284FBC0(ctx, base);
 }
 #endif  // GTA4_PAL_SAFE_MODE sub_828C2290
 #ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
@@ -624,16 +624,16 @@ extern "C" void sub_82143C88(PPCContext& ctx, uint8_t* base) {
   __imp__sub_82143C88(ctx, base);
 }
 #endif  // GTA4_PAL_SAFE_MODE sub_82143C88
-#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
-extern "C" void sub_8227F458(PPCContext& ctx, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_821EBDB8(PPCContext& ctx, uint8_t* base) {
   using namespace gta4::aspect;
   auto layout = CurrentUi(base);
   if (!layout.active || emission.active || baked_font_depth) {
-    __imp__sub_8227F458(ctx, base);
+    __imp__sub_821EBDB8(ctx, base);
     return;
   }
   if (!layout.render.valid()) {
-    __imp__sub_8227F458(ctx, base);
+    __imp__sub_821EBDB8(ctx, base);
     return;
   }
   const Rect bounds{ctx.f1.f64 / layout.render.width, ctx.f2.f64 / layout.render.height,
@@ -653,7 +653,7 @@ extern "C" void sub_8227F458(PPCContext& ctx, uint8_t* base) {
   }
   TraceLoadingMask(layout, {ctx.f1.f64, ctx.f2.f64, ctx.f3.f64, ctx.f4.f64}, "solid-mask");
   const EmitScope emit({layout.transform.Pixels(layout.render), !layout.transform.identity()});
-  __imp__sub_8227F458(ctx, base);
+  __imp__sub_821EBDB8(ctx, base);
 }
 #endif  // GTA4_PAL_SAFE_MODE sub_8227F458
 #ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
@@ -730,20 +730,20 @@ extern "C" void sub_821C4B90(PPCContext& ctx, uint8_t* base) {
   extern "C" void address(PPCContext& ctx, uint8_t* base) { \
     gta4::aspect::DrawHud(ctx, base, __imp__##address);     \
   }
-#ifndef GTA4_PAL_SAFE_MODE
-ASPECT_HUD_HOOK(sub_821C4CD8)
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+ASPECT_HUD_HOOK(sub_821996E0)
 #endif  // GTA4_PAL_SAFE_MODE sub_821C4CD8
-#ifndef GTA4_PAL_SAFE_MODE
-ASPECT_HUD_HOOK(sub_821C5148)
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+ASPECT_HUD_HOOK(sub_82199B50)
 #endif  // GTA4_PAL_SAFE_MODE sub_821C5148
-#ifndef GTA4_PAL_SAFE_MODE
-ASPECT_HUD_HOOK(sub_821C5480)
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+ASPECT_HUD_HOOK(sub_82199E88)
 #endif  // GTA4_PAL_SAFE_MODE sub_821C5480
-#ifndef GTA4_PAL_SAFE_MODE
-ASPECT_HUD_HOOK(sub_821C5660)
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+ASPECT_HUD_HOOK(sub_8219A068)
 #endif  // GTA4_PAL_SAFE_MODE sub_821C5660
-#ifndef GTA4_PAL_SAFE_MODE
-ASPECT_HUD_HOOK(sub_821C58E0)
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+ASPECT_HUD_HOOK(sub_8219A2E8)
 #endif  // GTA4_PAL_SAFE_MODE sub_821C58E0
 #undef ASPECT_HUD_HOOK
 #define ASPECT_DC_HOOK(address)                             \
@@ -751,36 +751,36 @@ ASPECT_HUD_HOOK(sub_821C58E0)
     const gta4::aspect::DcScope scope(ctx, base);           \
     __imp__##address(ctx, base);                            \
   }
-#ifndef GTA4_PAL_SAFE_MODE
-ASPECT_DC_HOOK(sub_821BCF80)
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+ASPECT_DC_HOOK(sub_8218E650)
 #endif  // GTA4_PAL_SAFE_MODE sub_821BCF80
-#ifndef GTA4_PAL_SAFE_MODE
-ASPECT_DC_HOOK(sub_821BCFA0)
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+ASPECT_DC_HOOK(sub_8218E670)
 #endif  // GTA4_PAL_SAFE_MODE sub_821BCFA0
-#ifndef GTA4_PAL_SAFE_MODE
-ASPECT_DC_HOOK(sub_821BD018)
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+ASPECT_DC_HOOK(sub_8218E6E8)
 #endif  // GTA4_PAL_SAFE_MODE sub_821BD018
-#ifndef GTA4_PAL_SAFE_MODE
-ASPECT_DC_HOOK(sub_821BD138)
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+ASPECT_DC_HOOK(sub_8218E800)
 #endif  // GTA4_PAL_SAFE_MODE sub_821BD138
-#ifndef GTA4_PAL_SAFE_MODE
-ASPECT_DC_HOOK(sub_821BD528)
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+ASPECT_DC_HOOK(sub_8218EB98)
 #endif  // GTA4_PAL_SAFE_MODE sub_821BD528
 #undef ASPECT_DC_HOOK
-#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
-extern "C" void sub_821BD218(PPCContext& ctx, uint8_t* base) {
-  gta4::aspect::DrawRadarSection(ctx, base, __imp__sub_821BD218);
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_8218E8E0(PPCContext& ctx, uint8_t* base) {
+  gta4::aspect::DrawRadarSection(ctx, base, __imp__sub_8218E8E0);
 }
 #endif  // GTA4_PAL_SAFE_MODE sub_821BD218
-#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
-extern "C" void sub_821BD238(PPCContext& ctx, uint8_t* base) {
-  gta4::aspect::DrawRadarSection(ctx, base, __imp__sub_821BD238);
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_8218E900(PPCContext& ctx, uint8_t* base) {
+  gta4::aspect::DrawRadarSection(ctx, base, __imp__sub_8218E900);
 }
 #endif  // GTA4_PAL_SAFE_MODE sub_821BD238
-#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
-extern "C" void sub_822551E0(PPCContext& ctx, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_82252560(PPCContext& ctx, uint8_t* base) {
   // This is the menu slider pass, not the footer. The retail compositor
-  // sub_82255CC8 draws row labels through sub_8229F0F8, then calls this routine
+  // sub_82253308 draws row labels through sub_82260AE0, then calls this routine
   // to walk type-101 items and emit their border, track and value fill. Both
   // phases must use the same divider-anchored body coordinates, including
   // immediate draw calls and queued text.
@@ -789,33 +789,33 @@ extern "C" void sub_822551E0(PPCContext& ctx, uint8_t* base) {
 }
 #endif  // GTA4_PAL_SAFE_MODE sub_822551E0
 
-#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
-extern "C" void sub_828BF708(PPCContext& ctx, uint8_t* base) {
-  __imp__sub_828BF708(ctx, base);
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_82850AA0(PPCContext& ctx, uint8_t* base) {
+  __imp__sub_82850AA0(ctx, base);
   if (gta4::aspect::Output().ready)
     ctx.r3.u64 = 1;
 }
 #endif  // GTA4_PAL_SAFE_MODE sub_828BF708
-#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
-extern "C" void sub_821F7208(PPCContext& ctx, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_821DFBF8(PPCContext& ctx, uint8_t* base) {
   const gta4::aspect::Scope scope(gta4::aspect::TextUi(ctx, base));
-  __imp__sub_821F7208(ctx, base);
+  __imp__sub_821DFBF8(ctx, base);
 }
 #endif  // GTA4_PAL_SAFE_MODE sub_821F7208
 
-// Both pixel-space textured-rectangle adapters meet here: sub_8227F5B8
-// supplies default UVs; sub_8227F608 supplies explicit UVs (generated .10).
+// Both pixel-space textured-rectangle adapters meet here: sub_821EBF18
+// supplies default UVs; sub_821EBF68 supplies explicit UVs (generated .10).
 // Transform their vertex positions once at the common emitter. UVs, colors,
 // blend state and animation inputs stay under the original game's control.
-#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
-extern "C" void sub_8227F2E8(PPCContext& ctx, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_821EBC48(PPCContext& ctx, uint8_t* base) {
   using namespace gta4::aspect;
   const auto layout = CurrentUi(base);
   if (layout.active && layout.render.valid() && !emission.active && !baked_font_depth)
     TraceLoadingMask(layout, {ctx.f1.f64, ctx.f2.f64, ctx.f3.f64, ctx.f4.f64}, "textured-mask");
   const EmitScope emit({layout.transform.Pixels(layout.render),
                         layout.active && layout.render.valid() && !layout.transform.identity()});
-  __imp__sub_8227F2E8(ctx, base);
+  __imp__sub_821EBC48(ctx, base);
 }
 #endif  // GTA4_PAL_SAFE_MODE sub_8227F2E8
 
@@ -829,19 +829,19 @@ extern "C" void sub_821B5C90(PPCContext& ctx, uint8_t* base) {
   __imp__sub_821B5C90(ctx, base);
 }
 #endif  // GTA4_PAL_SAFE_MODE sub_821B5C90
-#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
-extern "C" void sub_82255CC8(PPCContext& ctx, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_82253308(PPCContext& ctx, uint8_t* base) {
   const gta4::aspect::Scope scope(gta4::aspect::MenuBodyUi(base));
-  __imp__sub_82255CC8(ctx, base);
+  __imp__sub_82253308(ctx, base);
 }
 #endif  // GTA4_PAL_SAFE_MODE sub_82255CC8
 
-// The frontend appends this command inline, bypassing sub_82146790. Capture the
+// The frontend appends this command inline, bypassing sub_821251A0. Capture the
 // component at construction as well; StableDcToken survives size publication.
-#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
-extern "C" void sub_821BF598(PPCContext& ctx, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_82190B28(PPCContext& ctx, uint8_t* base) {
   const uint32_t dc = ctx.r3.u32;
-  __imp__sub_821BF598(ctx, base);
+  __imp__sub_82190B28(ctx, base);
   gta4::aspect::FinalizeDc(base, dc);
 }
 #endif  // GTA4_PAL_SAFE_MODE sub_821BF598

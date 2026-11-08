@@ -1,7 +1,7 @@
 // Opt-in observation of the compiled retail fade path. Every hook invokes the
 // original generated implementation exactly once and retains its register result.
-// Evidence: generated .17 sub_8233C3F0 / sub_8233C2F8 / sub_8233BA30;
-// generated .19 sub_82369F08. Generated translation units are not modified.
+// Evidence: generated .17 sub_821D10C8 / sub_821D0FD0 / sub_821D06F0;
+// generated .19 sub_82326B28. Generated translation units are not modified.
 namespace {
 struct FadeObservedState {
   uint32_t alpha = UINT32_MAX;
@@ -71,7 +71,7 @@ void ArmFadeTraceWindow(uint8_t* base, uint32_t object, std::string_view reason)
   FadeTraceLog("armed", fmt::format("run={} cycle={} frame={} object={:08X} reason={} frames={}",
       run, g_phone_arm_runs, GetNativeLightSubmittedFrame(base), object, reason, PhoneTraceConfig().frames));
   PhoneTraceLog("arm-state", fmt::format("run={} cycle={} phone-visible={} lineage={} allow-closed={} source=fade",
-      run, g_phone_arm_runs, LoadU8(base, 0x831D4DD4), PhoneTraceConfig().lineage, PhoneTraceConfig().allow_closed));
+      run, g_phone_arm_runs, LoadU8(base, 0x83137668), PhoneTraceConfig().lineage, PhoneTraceConfig().allow_closed));
 }
 
 void ObserveFadeAlpha(uint8_t* base, uint32_t object, uint32_t caller, uint32_t raw_alpha) {
@@ -128,7 +128,7 @@ void ObserveScreenFadeColor(uint8_t* base, uint32_t color) {
 
 void TraceFadeDcReady(uint8_t* base, uint32_t dc, uint32_t creator) {
   if (!FadeTraceEnabled() || !dc ||
-      LoadU32(base, dc) != 0x82009098 || LoadU32(base, dc + 8) != 0x82369F08) return;
+      LoadU32(base, dc) != 0x820034EC || LoadU32(base, dc + 8) != 0x82326B28) return;
   // Capture before publication: the generated finalize call can make the DC
   // visible to another thread. Identity is checked again at callback execution.
   const uint32_t color = LoadU32(base, dc + 12);
@@ -157,35 +157,35 @@ void TraceFadeDcReady(uint8_t* base, uint32_t dc, uint32_t creator) {
 }
 }  // namespace
 
-#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
-extern "C" void sub_8233BA30(PPCContext& ctx, uint8_t* base) {
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_821D06F0(PPCContext& ctx, uint8_t* base) {
   const uint32_t object = ctx.r3.u32, caller = uint32_t(ctx.lr);
-  __imp__sub_8233BA30(ctx, base);
+  __imp__sub_821D06F0(ctx, base);
   if (FadeTraceEnabled() && caller == 0x821D0FE8)
     ObserveFadeAlpha(base, object, caller, ctx.r3.u32);
 }
 #endif  // GTA4_PAL_SAFE_MODE sub_8233BA30
 
-#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
-extern "C" void sub_8233C2F8(PPCContext& ctx, uint8_t* base) {
-  if (!FadeTraceEnabled()) { __imp__sub_8233C2F8(ctx, base); return; }
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_821D0FD0(PPCContext& ctx, uint8_t* base) {
+  if (!FadeTraceEnabled()) { __imp__sub_821D0FD0(ctx, base); return; }
   const uint32_t previous = g_fade_builder_object;
   g_fade_builder_object = ctx.r3.u32;
   const auto previous_kind = g_fade_builder_kind;
   g_fade_builder_kind = 1;
   ScopedPhoneTrace scope(PhoneTraceScope::kScreenFadeBuilder, base, ctx.r3.u32, uint32_t(ctx.lr));
-  __imp__sub_8233C2F8(ctx, base);
+  __imp__sub_821D0FD0(ctx, base);
   g_fade_builder_object = previous;
   g_fade_builder_kind = previous_kind;
 }
 #endif  // GTA4_PAL_SAFE_MODE sub_8233C2F8
 
-#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
-extern "C" void sub_8233C110(PPCContext& ctx, uint8_t* base) {
-  if (!FadeTraceEnabled()) { __imp__sub_8233C110(ctx, base); return; }
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_821D0DD0(PPCContext& ctx, uint8_t* base) {
+  if (!FadeTraceEnabled()) { __imp__sub_821D0DD0(ctx, base); return; }
   const uint32_t object = ctx.r3.u32, caller = uint32_t(ctx.lr);
   const uint32_t before_mode = LoadU32(base, object), before_flags = LoadU8(base, object + 32);
-  __imp__sub_8233C110(ctx, base);
+  __imp__sub_821D0DD0(ctx, base);
   const uint32_t after_mode = LoadU32(base, object), after_flags = LoadU8(base, object + 32);
   // .17:26372-26428 can set mode to -1 and clear active bits without a final
   // zero-alpha draw dispatch. Observe that real retirement, not a guessed alpha.
@@ -202,9 +202,9 @@ extern "C" void sub_8233C110(PPCContext& ctx, uint8_t* base) {
 }
 #endif  // GTA4_PAL_SAFE_MODE sub_8233C110
 
-#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
-extern "C" void sub_8233C3F0(PPCContext& ctx, uint8_t* base) {
-  if (!FadeTraceEnabled()) { __imp__sub_8233C3F0(ctx, base); return; }
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_821D10C8(PPCContext& ctx, uint8_t* base) {
+  if (!FadeTraceEnabled()) { __imp__sub_821D10C8(ctx, base); return; }
   const uint32_t object = ctx.r3.u32, phase = ctx.r4.u8, caller = uint32_t(ctx.lr);
   const uint32_t mode = LoadU32(base, object), flags = LoadU8(base, object + 32);
   if (!phase && !mode) {
@@ -224,7 +224,7 @@ extern "C" void sub_8233C3F0(PPCContext& ctx, uint8_t* base) {
         PhoneCaptureActive() ? g_phone_run.load() : 0, GetNativeLightSubmittedFrame(base), object,
         caller, phase, mode, flags, previous, flags & 0x60));
   }
-  __imp__sub_8233C3F0(ctx, base);
+  __imp__sub_821D10C8(ctx, base);
 }
 #endif  // GTA4_PAL_SAFE_MODE sub_8233C3F0
 
@@ -270,9 +270,9 @@ extern "C" void sub_82333800(PPCContext& ctx, uint8_t* base) {
 }
 #endif  // GTA4_PAL_SAFE_MODE sub_82333800
 
-#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
-extern "C" void sub_82369F08(PPCContext& ctx, uint8_t* base) {
-  if (!FadeTraceEnabled()) { __imp__sub_82369F08(ctx, base); return; }
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_82326B28(PPCContext& ctx, uint8_t* base) {
+  if (!FadeTraceEnabled()) { __imp__sub_82326B28(ctx, base); return; }
   const uint32_t color = ctx.r3.u32, caller = uint32_t(ctx.lr);
   if (g_fade_builder_kind == 2) ObserveScreenFadeColor(base, color);
   ScopedPhoneTrace scope(PhoneTraceScope::kScreenColorDraw, base, color, caller);
@@ -283,15 +283,15 @@ extern "C" void sub_82369F08(PPCContext& ctx, uint8_t* base) {
       color, color >> 24, caller == 0x821D10B4, g_fade_builder_object,
       g_fade_executing_dc, g_fade_executing_origin.object != 0, g_fade_executing_origin.object,
       g_fade_executing_origin.run, g_fade_executing_origin.event, g_fade_executing_origin.creator, g_fade_executing_origin.kind));
-  __imp__sub_82369F08(ctx, base);
+  __imp__sub_82326B28(ctx, base);
 }
 #endif  // GTA4_PAL_SAFE_MODE sub_82369F08
 
 // The main screen fade is separate from the viewport-effect fade. Generated .9
-// sub_82252DE8 either emits the actual packed ARGB callback or emits no such draw.
-#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
-extern "C" void sub_82252DE8(PPCContext& ctx, uint8_t* base) {
-  if (!FadeTraceEnabled()) { __imp__sub_82252DE8(ctx, base); return; }
+// sub_8224F5F8 either emits the actual packed ARGB callback or emits no such draw.
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_8224F5F8(PPCContext& ctx, uint8_t* base) {
+  if (!FadeTraceEnabled()) { __imp__sub_8224F5F8(ctx, base); return; }
   const uint32_t object = ctx.r3.u32, caller = uint32_t(ctx.lr);
   const auto previous_object = g_fade_builder_object, previous_kind = g_fade_builder_kind;
   const auto previous_emissions = g_screen_fade_emissions;
@@ -310,7 +310,7 @@ extern "C" void sub_82252DE8(PPCContext& ctx, uint8_t* base) {
     }
   }
   ScopedPhoneTrace scope(PhoneTraceScope::kScreenFadeBuilder, base, object, caller);
-  __imp__sub_82252DE8(ctx, base);
+  __imp__sub_8224F5F8(ctx, base);
   const uint32_t emitted = g_screen_fade_emissions;
   const uint32_t active = LoadU8(base, object), mode = LoadU32(base, object + 20);
   if (was_drawing && !emitted) ArmFadeTraceWindow(base, object, "main-screen-fade-draw-stopped");

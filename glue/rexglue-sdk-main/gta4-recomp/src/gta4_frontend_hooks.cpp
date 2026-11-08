@@ -1461,7 +1461,7 @@ void InstallDisplayExtension(PPCContext& ctx, uint8_t* base) {
   }
 
   const uint32_t allocation =
-      InvokeGuest(ctx, base, sub_821B3510, static_cast<uint32_t>(allocation_bytes)).r3.u32;
+      InvokeGuest(ctx, base, sub_8218BE28, static_cast<uint32_t>(allocation_bytes)).r3.u32;
   if (allocation == 0) {
     REXLOG_ERROR("GTA IV Advanced Graphics disabled: allocation of {} bytes failed",
                  allocation_bytes);
@@ -2146,9 +2146,9 @@ extern "C" void sub_82258FB0(PPCContext& ctx, uint8_t* base) {
 }
 #endif  // GTA4_PAL_SAFE_MODE sub_82258FB0
 
-#ifndef GTA4_PAL_SAFE_MODE  // USA address, see tools/pal_guard_hooks.py
-extern "C" void sub_8229C4F8(PPCContext& ctx, uint8_t* base) {
-  __imp__sub_8229C4F8(ctx, base);
+#ifndef GTA4_PAL_SAFE_MODE_RETARGETED  // PAL-retargeted, see tools/pal_retarget_hooks.py
+extern "C" void sub_8225E148(PPCContext& ctx, uint8_t* base) {
+  __imp__sub_8225E148(ctx, base);
   if (g_adjustment.active && ctx.lr == kAdjustmentDeltaReturnAddress) {
     g_adjustment.delta = ctx.r3.s32;
     if (FrontendDiagnosticsEnabled()) {

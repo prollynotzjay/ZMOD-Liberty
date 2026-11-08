@@ -76,7 +76,7 @@ inline double ConstrainMousePitch(double angle, double displacement,
 }
 
 inline double WrapMouseYaw(double displacement) {
-  // sub_82369828 wraps only one revolution. Keep a large mouse flick within
+  // sub_82326448 wraps only one revolution. Keep a large mouse flick within
   // that contract without discarding its final orientation.
   return std::isfinite(displacement)
       ? std::remainder(displacement, 6.283185307179586) : 0;

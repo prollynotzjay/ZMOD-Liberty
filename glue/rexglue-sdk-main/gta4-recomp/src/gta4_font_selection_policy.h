@@ -7,7 +7,7 @@ struct Selection {
   uint32_t font;
   uint32_t bank;
 };
-// sub_821F2ED0, generated gta4_recomp.6.cpp:2390-2541. FONTS.DAT IDs
+// sub_821DCD38, generated gta4_recomp.6.cpp:2390-2541. FONTS.DAT IDs
 // are not texture filename suffixes: IDs 0,1,2 address font1,font3,font2.
 constexpr Selection DecodeStyle(int32_t style) noexcept {
   switch (style) {
