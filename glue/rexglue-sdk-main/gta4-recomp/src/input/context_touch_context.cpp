@@ -74,7 +74,7 @@ void ReadPhone(const Reader& read, TouchContextSnapshot& out) noexcept {
     out.phone_visibility_known = true;
     return;
   }
-  // CAN_PHONE_BE_SEEN_ON_SCREEN (sub_8217D3E0) intentionally tests
+  // CAN_PHONE_BE_SEEN_ON_SCREEN (sub_821531D0) intentionally tests
   // HUD_WEAPON_SCOPE: a visible scope obscures the phone. The widget's
   // index is HUD layout +1624, and sub_821C4B90's next-index counter
   // follows the 64-pointer HUD widget table.
@@ -89,7 +89,7 @@ void ReadPhone(const Reader& read, TouchContextSnapshot& out) noexcept {
 }
 
 // Checked bounded equivalent of sub_82128400 with r5=0, as called by
-// IS_PED_IN_COVER (sub_825BE450). The status id is 1054, not the task's 1046.
+// IS_PED_IN_COVER (sub_82581D68). The status id is 1054, not the task's 1046.
 std::optional<bool> InCover(const Reader& read, uint32_t intelligence) noexcept {
   auto node = read.U32(intelligence, 736);
   if (!node) return std::nullopt;
@@ -127,7 +127,7 @@ std::optional<bool> MeleeChain(const Reader& read, uint32_t task,
 }
 
 std::optional<bool> InMelee(const Reader& read, uint32_t intelligence) noexcept {
-  // sub_823C0E88 -> sub_821282B0: first occupied primary slot, the first
+  // sub_823B2460 -> sub_821282B0: first occupied primary slot, the first
   // uninhibited extra slot selected by sub_82128260, then six secondary slots.
   constexpr std::array<uint32_t, 5> primary = {0, 4, 8, 12, 16};
   constexpr std::array<uint32_t, 3> extra = {44, 48, 52};
@@ -221,7 +221,7 @@ void ReadVehicleEntry(const Reader& read, uint32_t ped, TouchContextQueries quer
   if (!queries.vehicle_player_would_enter || !out.gameplay_allowed ||
       out.base_mode != ContextTouchMode::kOnFoot) return;
   // sub_8223ADB8 uses CPed +544 for the native preferred vehicle and rejects
-  // flag 0x40000 at +568. Its script caller sub_825B6A10 passes the ped's
+  // flag 0x40000 at +568. Its script caller sub_8257AAD8 passes the ped's
   // transform +16, matching the normal forward vector in sub_823CCBC8.
   const auto flags = read.U32(ped, 568), info = read.U32(ped, 544);
   const auto transform = read.U32(ped, 32);
@@ -356,7 +356,7 @@ TouchContextSnapshot ReadTouchContextFacts(const TouchContextMemory& memory,
   // sub_82144188 gates loading drawing on this byte; sub_82145770 clears
   // it after teardown. Read only that byte, not the adjacent ready/done flags.
   out.loading = !loading || *loading != 0;
-  // sub_821E3788 tests the main state. sub_821EC8C8 also processes native
+  // sub_822D4CB0 tests the main state. sub_821EC8C8 also processes native
   // preparation when that state is zero, before playback has begun.
   out.cutscene = !cutscene || !preparation || *cutscene != 0 || *preparation != 0;
   const auto threshold = read.U8(0x82A318DF), alternate = read.U8(0x82F0C9D4);
