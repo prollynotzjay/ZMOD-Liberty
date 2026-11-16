@@ -80,8 +80,12 @@ final class DriverBridge {
                                     String driverFilename, boolean custom,
                                     boolean allowSystemFallback);
 
-    /** VK_API_VERSION_1_2: the native renderer's minimum. */
-    private static final long VULKAN_1_2 = (1L << 22) | (2L << 12);
+    /**
+     * VK_API_VERSION_1_1: the native renderer's minimum (ZMOD Liberty). A 1.1
+     * driver must offer the 1.2 features as extensions; the feature check below
+     * and the renderer verify that.
+     */
+    private static final long VULKAN_1_1 = (1L << 22) | (1L << 12);
 
     /** Loads and initializes the proxy. Returns the native status JSON. */
     static synchronized String initialize(Context context, String mode) {
@@ -202,17 +206,18 @@ final class DriverBridge {
                 bestFeatures = device.optJSONObject("features");
             }
         }
-        if (best >= VULKAN_1_2) {
+        if (best >= VULKAN_1_1) {
             String missing = missingFeatures(bestFeatures);
             if (missing.isEmpty()) return null;
-            return "This device's GPU (" + name + ") has Vulkan 1.2 but its driver lacks "
+            return "This device's GPU (" + name + ") has Vulkan " + (best >> 22) + "."
+                    + ((best >> 12) & 0x3FF) + " but its driver lacks "
                     + "features the game's renderer requires: " + missing + "."
                     + "\n\nA newer system update may add them. Please attach the launch report "
                     + "when reporting this.";
         }
         String fallbackFrom = json.optString("fallback_from");
         return "This device's GPU (" + name + ") only offers Vulkan " + (best >> 22) + "."
-                + ((best >> 12) & 0x3FF) + " through its own driver, and the game needs Vulkan 1.2."
+                + ((best >> 12) & 0x3FF) + " through its own driver, and the game needs Vulkan 1.1 or newer."
                 + (fallbackFrom.isEmpty()
                         ? (isMaliBuild()
                                 ? "\n\nThe phone's system GPU driver is too old for the game. Updating the "

@@ -314,13 +314,13 @@ void InstallDialog::OnDraw(ImGuiIO& io) {
   ImGui::SetNextWindowBgAlpha(0.98f);
   constexpr ImGuiWindowFlags kWindowFlags =
       ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings;
-  if (!ImGui::Begin("Liberty Recompiled Setup##installer", nullptr, kWindowFlags)) {
+  if (!ImGui::Begin("ZMOD Liberty Setup##installer", nullptr, kWindowFlags)) {
     ImGui::End();
     return;
   }
 
   ImGui::SetWindowFontScale(1.45f);
-  ImGui::TextUnformatted(dlc_only_ ? "INSTALL EPISODES" : "INSTALL LIBERTY RECOMPILED");
+  ImGui::TextUnformatted(dlc_only_ ? "INSTALL EPISODES" : "INSTALL ZMOD LIBERTY");
   ImGui::SetWindowFontScale(1.0f);
   ImGui::Separator();
   ImGui::Spacing();

@@ -225,6 +225,36 @@ std::string CapabilityJson(VkInstance instance, VkPhysicalDevice device, uint32_
     runtime_array = v12.runtimeDescriptorArray ? 1 : 0;
     partially_bound = v12.descriptorBindingPartiallyBound ? 1 : 0;
     device_address = v12.bufferDeviceAddress ? 1 : 0;
+  } else if (features2 && requested_api >= VK_API_VERSION_1_1 && device_api >= VK_API_VERSION_1_1) {
+    // ZMOD Liberty: a Vulkan 1.1 device offers the same features through
+    // VK_EXT_descriptor_indexing and VK_KHR_buffer_device_address.
+    const auto extensions = Get<PFN_vkEnumerateDeviceExtensionProperties>(
+        instance, "vkEnumerateDeviceExtensionProperties");
+    bool has_indexing = false, has_address = false;
+    uint32_t extension_count = 0;
+    if (extensions && extensions(device, nullptr, &extension_count, nullptr) == VK_SUCCESS &&
+        extension_count) {
+      std::vector<VkExtensionProperties> list(extension_count);
+      if (extensions(device, nullptr, &extension_count, list.data()) == VK_SUCCESS) {
+        for (uint32_t e = 0; e < extension_count; ++e) {
+          has_indexing |= !std::strcmp(list[e].extensionName, "VK_EXT_descriptor_indexing");
+          has_address |= !std::strcmp(list[e].extensionName, "VK_KHR_buffer_device_address");
+        }
+      }
+      VkPhysicalDeviceDescriptorIndexingFeatures indexing{};
+      indexing.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_FEATURES;
+      VkPhysicalDeviceBufferDeviceAddressFeatures address{};
+      address.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_BUFFER_DEVICE_ADDRESS_FEATURES;
+      VkPhysicalDeviceFeatures2 extended{};
+      extended.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2;
+      void** next = &extended.pNext;
+      if (has_indexing) { *next = &indexing; next = &indexing.pNext; }
+      if (has_address) { *next = &address; next = &address.pNext; }
+      features2(device, &extended);
+      runtime_array = has_indexing && indexing.runtimeDescriptorArray ? 1 : 0;
+      partially_bound = has_indexing && indexing.descriptorBindingPartiallyBound ? 1 : 0;
+      device_address = has_address && address.bufferDeviceAddress ? 1 : 0;
+    }
   }
   return "{\"shaderInt64\":" + flag(int64) + ",\"depthClamp\":" + flag(clamp) +
          ",\"shaderClipDistance\":" + flag(clip) + ",\"sampleRateShading\":" + flag(sample_rate) +

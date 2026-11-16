@@ -16430,12 +16430,11 @@ bool Gta4NativeGraphicsSystem::CreateTextureDetileObjects() {
       VK_SUCCESS) {
     return false;
   }
-  VkShaderModuleCreateInfo module_info{};
-  module_info.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
-  module_info.codeSize = sizeof(gta4_native_texture_detile_cs);
-  module_info.pCode = gta4_native_texture_detile_cs;
-  VkShaderModule module = VK_NULL_HANDLE;
-  if (dfn.vkCreateShaderModule(device, &module_info, nullptr, &module) != VK_SUCCESS) {
+  // Through util::CreateShaderModule so Vulkan 1.1 drivers get the SPIR-V 1.3
+  // form of this SPIR-V 1.5 shader.
+  const VkShaderModule module = ui::vulkan::util::CreateShaderModule(
+      vulkan_device, gta4_native_texture_detile_cs, sizeof(gta4_native_texture_detile_cs));
+  if (module == VK_NULL_HANDLE) {
     return false;
   }
   VkComputePipelineCreateInfo pipeline_info{};

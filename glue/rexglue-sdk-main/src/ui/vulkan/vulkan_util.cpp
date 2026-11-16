@@ -22,6 +22,7 @@
 #include <rex/ui/vulkan/device.h>
 #include <rex/ui/vulkan/util.h>
 #include <rex/ui/vulkan/spirv_int64_lowering.h>
+#include <rex/ui/vulkan/spirv_version_downgrade.h>
 #include <rex/cvar.h>
 
 REXCVAR_DEFINE_BOOL(vulkan_force_int64_lowering, false, "Vulkan",
@@ -267,6 +268,23 @@ VkPipeline CreateComputePipeline(const VulkanDevice* const vulkan_device, VkPipe
       CreateComputePipeline(vulkan_device, layout, shader, specialization_info, entry_point);
   vulkan_device->functions().vkDestroyShaderModule(vulkan_device->device(), shader, nullptr);
   return pipeline;
+}
+
+bool DowngradeSpirvForDevice(const VulkanDevice* const vulkan_device, const uint32_t* const code,
+                             const size_t code_size_bytes, std::vector<uint32_t>& downgraded) {
+  if (vulkan_device->properties().apiVersion >= VK_MAKE_API_VERSION(0, 1, 2, 0)) return false;
+  const size_t word_count = code_size_bytes / sizeof(uint32_t);
+  if (word_count < 5 || code[1] <= 0x00010300u) return false;
+  std::string why;
+  const bool ok = spirv_version::DowngradeTo13(code, word_count, downgraded, &why);
+  if (ok) {
+    REXLOG_INFO("vulkan: Vulkan 1.1 device: SPIR-V {}.{} shader rewritten as SPIR-V 1.3",
+                (code[1] >> 16) & 0xff, (code[1] >> 8) & 0xff);
+  } else {
+    REXLOG_WARN("vulkan: SPIR-V {}.{} shader cannot be rewritten for Vulkan 1.1 ({})",
+                (code[1] >> 16) & 0xff, (code[1] >> 8) & 0xff, why);
+  }
+  return ok;
 }
 
 bool LowerUnsupportedInt64(const VulkanDevice* const vulkan_device, const uint32_t* const code,

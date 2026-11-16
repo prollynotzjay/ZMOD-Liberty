@@ -92,7 +92,7 @@ public class LauncherActivity extends Activity {
     private RadioGroup mDrivers;
     private TextView mDriverNote;
     private View mPlay;
-    // GTA IV-style launcher (Mali Edition): fonts, menu sounds, menu panels.
+    // ZMOD Liberty launcher (GTA IV-style): fonts, menu sounds, menu panels.
     private Typeface mFontBold;
     private Typeface mFontBlack;
     private android.media.SoundPool mSounds;
@@ -288,13 +288,13 @@ public class LauncherActivity extends Activity {
         // Left: logo, version, and the GTA-style menu.
         LinearLayout left = new LinearLayout(this);
         left.setOrientation(LinearLayout.VERTICAL);
-        left.setClipChildren(false);  // the handwriting may reach just below the banner
+        left.setClipChildren(false);
         ImageView banner = new ImageView(this);
         banner.setImageResource(R.drawable.launcher_banner);
         banner.setAdjustViewBounds(true);
         banner.setScaleType(ImageView.ScaleType.FIT_START);
         banner.setMaxHeight(getResources().getDisplayMetrics().heightPixels / 6);
-        left.addView(buildBannerWithEdition(banner), new LinearLayout.LayoutParams(
+        left.addView(banner, new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         TextView version = text(versionLine(), 12, R.color.picker_muted);
         left.addView(version, matchWrap(dp(6)));
@@ -445,9 +445,10 @@ public class LauncherActivity extends Activity {
         panel.setPadding(dp(22), dp(18), dp(22), dp(18));
         panel.addView(heading("ABOUT", 24));
         panel.addView(text(versionLine(), 14, R.color.picker_text), matchWrap(dp(8)));
-        panel.addView(text("GTA IV (Xbox 360) running natively through static recompilation, "
-                + "on the phone's own Mali Vulkan driver. Liberty Recompiled team and ReXGlue "
-                + "SDK; Android port by vaduur; Mali Support and Extraz by prollynotzjay.",
+        panel.addView(text("ZMOD Liberty: GTA IV (Xbox 360) running natively through static "
+                + "recompilation, on the phone's own Vulkan driver. Based on Liberty Recompiled "
+                + "(Liberty Recompiled team) and the ReXGlue SDK; Android port by vaduur; "
+                + "ZMOD Liberty (Mali Support and Extraz) by prollynotzjay.",
                 13, R.color.picker_muted), matchWrap(dp(8)));
         panel.addView(text("The debug log is saved to Android/data/" + getPackageName()
                 + "/files/" + DebugLog.DIRECTORY + "/. Attach the newest one when you open an issue "
@@ -490,7 +491,7 @@ public class LauncherActivity extends Activity {
         right.addView(actions, matchWrap(dp(12)));
 
         right.addView(text("Turnip packages for AdrenoTools (a zip with a .so and meta.json) "
-                + "work here. The game needs Vulkan 1.2; if a driver cannot start, the game "
+                + "work here. The game needs Vulkan 1.1 or newer; if a driver cannot start, the game "
                 + "falls back to the device's own driver.", 12, R.color.picker_muted),
                 matchWrap(dp(10)));
 
@@ -597,56 +598,6 @@ public class LauncherActivity extends Activity {
 
     private LinearLayout mCrashCard;
     private TextView mCrashText;
-
-    // "Mali Edition" scribbled under the logo in a handwriting font (Rock Salt,
-    // Apache License 2.0, assets/fonts/). Positioned from where the banner
-    // image is actually drawn, so it lines up at any screen size.
-    private View buildBannerWithEdition(ImageView banner) {
-        android.widget.FrameLayout frame = new android.widget.FrameLayout(this);
-        frame.setClipChildren(false);
-        frame.addView(banner, new android.widget.FrameLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-
-        TextView edition = new TextView(this);
-        edition.setText("Mali Edition");
-        edition.setTextColor(0xF0FFFFFF);
-        edition.setIncludeFontPadding(false);
-        edition.setSingleLine(true);
-        try {
-            edition.setTypeface(Typeface.createFromAsset(getAssets(), "fonts/RockSalt-Regular.ttf"));
-        } catch (RuntimeException e) {
-            edition.setTypeface(Typeface.create("casual", Typeface.ITALIC));
-        }
-        edition.setRotation(-4f);
-        edition.setPivotX(0f);
-        edition.setVisibility(View.INVISIBLE);
-        frame.addView(edition, new android.widget.FrameLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-
-        banner.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight,
-                oldBottom) -> {
-            android.graphics.drawable.Drawable image = banner.getDrawable();
-            int viewWidth = right - left;
-            int viewHeight = bottom - top;
-            if (image == null || viewWidth <= 0 || viewHeight <= 0) return;
-            int imageWidth = image.getIntrinsicWidth();
-            int imageHeight = image.getIntrinsicHeight();
-            if (imageWidth <= 0 || imageHeight <= 0) return;
-            // FIT_CENTER: scale to fit, centred.
-            float scale = Math.min(viewWidth / (float) imageWidth, viewHeight / (float) imageHeight);
-            float drawnWidth = imageWidth * scale;
-            float drawnHeight = imageHeight * scale;
-            float offsetX = (viewWidth - drawnWidth) / 2f;
-            float offsetY = (viewHeight - drawnHeight) / 2f;
-            float textSize = drawnHeight * 0.15f;
-            edition.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
-            // Under the underline, left of "FOR ANDROID".
-            edition.setTranslationX(offsetX + drawnWidth * 0.215f);
-            edition.setTranslationY(offsetY + drawnHeight * 0.70f);
-            edition.setVisibility(View.VISIBLE);
-        });
-        return frame;
-    }
 
     // Graphics settings: one dropdown per setting, saved to graphics.txt, which
     // LibertyActivity appends after args.txt. "Default" writes nothing, so the
@@ -1070,6 +1021,7 @@ public class LauncherActivity extends Activity {
     private static final String[][] OVERLAY_OPTIONS = {
             {"gta4_overlay_fps", "FPS counter", "The game's real frame rate (how often the world moves)"},
             {"gta4_overlay_frametime", "Frame time (ms)", "Milliseconds per game frame"},
+            {"gta4_overlay_lows", "1% / 0.1% lows", "Lowest recent FPS and the longest frame: shows stutter"},
             {"gta4_overlay_cpu", "CPU usage", "The game's CPU usage and clock speed"},
             {"gta4_overlay_gpu", "GPU usage", "Shows n/a if your phone does not allow apps to read it"},
             {"gta4_overlay_memory", "Memory", "RAM used by the game"},
@@ -1199,7 +1151,7 @@ public class LauncherActivity extends Activity {
         if (text.length() > 100000) text = text.substring(0, 100000) + "\n... (truncated)";
         Intent send = new Intent(Intent.ACTION_SEND);
         send.setType("text/plain");
-        send.putExtra(Intent.EXTRA_SUBJECT, "Liberty Recompiled crash report: " + mCrash.headline);
+        send.putExtra(Intent.EXTRA_SUBJECT, "ZMOD Liberty crash report: " + mCrash.headline);
         send.putExtra(Intent.EXTRA_TEXT, text);
         try {
             startActivity(Intent.createChooser(send, "Share crash report"));
@@ -1527,8 +1479,8 @@ public class LauncherActivity extends Activity {
                 mali ? "Adreno GPUs only; does not work on Mali"
                      : "Recommended for Adreno 6xx/7xx");
         addDriver(DriverBridge.SYSTEM, "System driver",
-                mali ? "Recommended for Mali / Immortalis (needs Vulkan 1.2)"
-                     : "The device's own Vulkan driver (needs Vulkan 1.2)");
+                mali ? "Recommended for Mali / Immortalis (needs Vulkan 1.1+)"
+                     : "The device's own Vulkan driver (needs Vulkan 1.1+)");
         File[] packages = customRoot().listFiles();
         if (packages != null) {
             Arrays.sort(packages);

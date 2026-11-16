@@ -156,10 +156,22 @@ bool RewriteUnsupportedClipCullDistances(const VulkanDevice* vulkan_device, cons
 bool LowerUnsupportedInt64(const VulkanDevice* vulkan_device, const uint32_t* code,
                            size_t code_size_bytes, std::vector<uint32_t>& lowered);
 
+// For Vulkan 1.1 devices, which accept SPIR-V 1.0-1.3 only: rewrites a SPIR-V
+// 1.4-1.6 module that uses nothing newer as SPIR-V 1.3
+// (rex/ui/vulkan/spirv_version_downgrade.h). Returns false when the module
+// needs no change or cannot be rewritten; the original code is used then.
+bool DowngradeSpirvForDevice(const VulkanDevice* vulkan_device, const uint32_t* code,
+                             size_t code_size_bytes, std::vector<uint32_t>& downgraded);
+
 // Explicitly accepting const uint32_t* to make sure attention is paid to the
 // alignment where this is called for safety on different host architectures.
 inline VkShaderModule CreateShaderModule(const VulkanDevice* const vulkan_device,
                                          const uint32_t* code, size_t code_size_bytes) {
+  std::vector<uint32_t> downgraded;
+  if (DowngradeSpirvForDevice(vulkan_device, code, code_size_bytes, downgraded)) {
+    code = downgraded.data();
+    code_size_bytes = downgraded.size() * sizeof(uint32_t);
+  }
   std::vector<uint32_t> rewritten;
   if (RewriteUnsupportedClipCullDistances(vulkan_device, code, code_size_bytes, rewritten)) {
     code = rewritten.data();

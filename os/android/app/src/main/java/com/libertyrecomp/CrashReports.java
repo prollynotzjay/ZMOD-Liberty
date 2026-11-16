@@ -176,7 +176,7 @@ final class CrashReports {
             summary += " (status " + exit.getStatus() + ")";
         }
 
-        text.append("Liberty Recompiled for Android - crash report\n");
+        text.append("ZMOD Liberty for Android - crash report\n");
         text.append("summary: ").append(summary).append('\n');
         text.append("time: ").append(new Date(exit.getTimestamp())).append('\n');
         text.append("process: ").append(exit.getProcessName()).append(" pid ").append(exit.getPid())

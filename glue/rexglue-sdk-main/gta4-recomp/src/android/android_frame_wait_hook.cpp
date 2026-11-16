@@ -14,6 +14,7 @@
 
 #include <android/log.h>
 
+#include "android/android_frame_stats.h"
 #include "android/android_performance_hint.h"
 
 #include <atomic>
@@ -54,6 +55,7 @@ extern "C" void sub_82A46D70(PPCContext& ctx, uint8_t* base) {
       last_submitted = submitted;
       ++submitted_count;
       gta4::android::NoteTitleFrame();
+      gta4::android::RecordTitleFrame();
     }
     timespec now{};
     clock_gettime(CLOCK_MONOTONIC, &now);
@@ -64,9 +66,20 @@ extern "C" void sub_82A46D70(PPCContext& ctx, uint8_t* base) {
       g_liberty_title_fps.store(float(submitted_count / elapsed), std::memory_order_relaxed);
     }
     if (elapsed >= 2.0) {
-      __android_log_print(ANDROID_LOG_WARN, "LibertyRecomp",
-                          "title-fps: %.1f (game frames submitted per second)",
-                          submitted_count / elapsed);
+      gta4::android::FrameStats stats;
+      if (gta4::android::ComputeFrameStats(&stats)) {
+        __android_log_print(ANDROID_LOG_WARN, "LibertyRecomp",
+                            "title-fps: %.1f (game frames submitted per second) | last %u "
+                            "frames: avg %.1f ms, 1%% low %.1f FPS, 0.1%% low %.1f FPS, "
+                            "worst %.1f ms, spikes %u",
+                            submitted_count / elapsed, stats.frames, stats.average_ms,
+                            1000.0f / stats.p99_ms, 1000.0f / stats.p999_ms, stats.worst_ms,
+                            stats.spikes);
+      } else {
+        __android_log_print(ANDROID_LOG_WARN, "LibertyRecomp",
+                            "title-fps: %.1f (game frames submitted per second)",
+                            submitted_count / elapsed);
+      }
       submitted_count = 0;
       window_start = now;
     }

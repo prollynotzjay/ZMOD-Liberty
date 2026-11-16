@@ -409,8 +409,8 @@ void MainMenu::DrawHeader()
             alpha = std::max(0.0f, 1.0f - (float)(elapsed / MENU_FADE_DURATION));
     }
     
-    // Draw title: "LIBERTY RECOMP"
-    const char* title = "LIBERTY RECOMP";
+    // Draw title: "ZMOD LIBERTY"
+    const char* title = "ZMOD LIBERTY";
     float titleFontSize = Scale(48.0f);
     ImVec2 titleSize = g_pFntNewRodin->CalcTextSizeA(titleFontSize, FLT_MAX, 0.0f, title);
     float titleX = Scale(MENU_LEFT_MARGIN);

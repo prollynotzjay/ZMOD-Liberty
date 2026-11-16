@@ -16,10 +16,14 @@
 
 #include <rex/cvar.h>
 
+#include "android/android_frame_stats.h"
+
 REXCVAR_DEFINE_BOOL(gta4_overlay_fps, false, "GTA IV/Overlay",
                     "Overlay: the game's real update rate (world frames per second)");
 REXCVAR_DEFINE_BOOL(gta4_overlay_frametime, false, "GTA IV/Overlay",
                     "Overlay: game frame time in milliseconds");
+REXCVAR_DEFINE_BOOL(gta4_overlay_lows, false, "GTA IV/Overlay",
+                    "Overlay: 1% and 0.1% low FPS and the longest recent frame (stutter)");
 REXCVAR_DEFINE_BOOL(gta4_overlay_cpu, false, "GTA IV/Overlay",
                     "Overlay: the game's CPU usage and the fastest core's clock");
 REXCVAR_DEFINE_BOOL(gta4_overlay_gpu, false, "GTA IV/Overlay",
@@ -137,6 +141,8 @@ struct Sample {
   int gpu_percent = -1;
   double memory_mb = -1.0;
   double battery_c = -1000.0;
+  bool have_frames = false;
+  FrameStats frames;
 };
 
 Sample g_sample;
@@ -161,6 +167,7 @@ void Refresh() {
   if (REXCVAR_GET(gta4_overlay_gpu)) g_sample.gpu_percent = GpuUsagePercent();
   if (REXCVAR_GET(gta4_overlay_memory)) g_sample.memory_mb = ResidentMegabytes();
   if (REXCVAR_GET(gta4_overlay_temperature)) g_sample.battery_c = BatteryCelsius();
+  if (REXCVAR_GET(gta4_overlay_lows)) g_sample.have_frames = ComputeFrameStats(&g_sample.frames);
   g_sample.time = now;
 }
 
@@ -168,7 +175,7 @@ void Refresh() {
 
 bool PerfOverlayEnabled() noexcept {
   return REXCVAR_GET(gta4_overlay_fps) || REXCVAR_GET(gta4_overlay_frametime) ||
-         REXCVAR_GET(gta4_overlay_cpu) || REXCVAR_GET(gta4_overlay_gpu) ||
+         REXCVAR_GET(gta4_overlay_lows) || REXCVAR_GET(gta4_overlay_cpu) || REXCVAR_GET(gta4_overlay_gpu) ||
          REXCVAR_GET(gta4_overlay_memory) || REXCVAR_GET(gta4_overlay_temperature);
 }
 
@@ -197,6 +204,16 @@ void DrawPerfOverlay(ImDrawList* draw, ImFont* font, float width, float height) 
   if (REXCVAR_GET(gta4_overlay_frametime)) {
     if (fps > 0.5f) add(white, "MS   %.1f", 1000.0f / fps);
     else add(white, "%s", "MS   --");
+  }
+  if (REXCVAR_GET(gta4_overlay_lows)) {
+    if (g_sample.have_frames && g_sample.frames.p99_ms > 0.0f && g_sample.frames.p999_ms > 0.0f) {
+      const float low1 = 1000.0f / g_sample.frames.p99_ms;
+      const float low01 = 1000.0f / g_sample.frames.p999_ms;
+      add(low1 >= 20.0f ? white : IM_COL32(240, 210, 90, 255), "LOW  %.0f / %.0f", low1, low01);
+      add(white, "MAX  %.0fms", g_sample.frames.worst_ms);
+    } else {
+      add(white, "%s", "LOW  --");
+    }
   }
   if (REXCVAR_GET(gta4_overlay_cpu)) {
     if (g_sample.cpu_percent >= 0 && g_sample.cpu_mhz > 0)

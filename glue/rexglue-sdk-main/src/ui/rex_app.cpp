@@ -288,7 +288,7 @@ bool ReXApp::ConstructRuntime(const PathConfig& paths) {
                     status);
     // SDL shows a real Android dialog and waits for OK; the POSIX message box
     // only prints to stderr.
-    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Liberty Recompiled", message.c_str(), nullptr);
+    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "ZMOD Liberty", message.c_str(), nullptr);
     rex::FlushLogging();
     std::_Exit(3);
 #endif

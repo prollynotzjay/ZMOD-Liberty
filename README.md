@@ -1,8 +1,10 @@
 <p align="center">
-    <img src="docs/android/images/banner_android_mali_edition.png" alt="Liberty Recompiled for Android - Mali Edition" width="800"/>
+    <img src="docs/android/images/banner_zmod_liberty.png" alt="ZMOD Liberty" width="700"/>
 </p>
 
-# LibertyRecompAndroid — Mali Edition (Alpha)
+# ZMOD Liberty (Alpha)
+
+*Formerly LibertyRecompAndroid — Mali Edition.*
 
 > [!WARNING]
 > **Alpha, work in progress.** This is a fork of
@@ -30,10 +32,11 @@ Android; there is no emulator in between. This fork uses the phone's own Mali Vu
 | Mali-G615, Mali-G710 / G715 | Dimensity 8300, Google Pixel (Tensor) | 🟡 Should work (untested) |
 | **Mali-G68, Mali-G610** and other GPUs without `shaderInt64` | Galaxy A35 / A55, Nothing Phone (2a) Plus, Dimensity 900 / 1080 / 7350, Exynos 1280 / 1380 | 🟡 **New in alpha 1.5:** runs with the 64-bit shader fallback (untested) |
 
-Requirements: arm64, Android 10+, a Mali GPU with Vulkan 1.2 and `bufferDeviceAddress`, about
-15 GB free during install. `shaderInt64` is **no longer required**.
+Requirements: arm64, Android 10+, a Mali GPU with Vulkan 1.1 or newer and `bufferDeviceAddress`
+(on Vulkan 1.1 drivers: the `VK_KHR_buffer_device_address` and `VK_EXT_descriptor_indexing`
+extensions), about 15 GB free during install. `shaderInt64` is **not required**.
 
-## What's in the Mali Edition
+## What's in ZMOD Liberty
 
 ### GTA IV-style launcher
 - A launcher in the style of **GTA IV's menus**: Liberty City in the background, a menu on the

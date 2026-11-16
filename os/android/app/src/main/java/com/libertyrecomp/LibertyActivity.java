@@ -119,7 +119,7 @@ public class LibertyActivity extends SDLActivity {
         if (reason != null) {
             throw new UnsatisfiedLinkError(reason
                     + (DriverBridge.isMaliBuild()
-                            ? "\n\nThis is the Mali build: it needs a GPU driver with Vulkan 1.2 or newer."
+                            ? "\n\nThis is the Mali build: it needs a GPU driver with Vulkan 1.1 or newer."
                             : "\n\nSupported GPUs: Qualcomm Adreno 6xx and 7xx.")
                     + "\nA report was saved to Android/data/" + getPackageName()
                     + "/files/" + LAUNCH_REPORT + ".");
@@ -141,7 +141,7 @@ public class LibertyActivity extends SDLActivity {
             version = info.versionName + " (" + info.versionCode + ")";
         } catch (Exception ignored) {
         }
-        report.append("Liberty Recompiled for Android ").append(version).append('\n');
+        report.append("ZMOD Liberty for Android ").append(version).append('\n');
         report.append("time: ").append(new java.util.Date()).append('\n');
         report.append("device: ").append(Build.MANUFACTURER).append(' ').append(Build.MODEL)
                 .append(" (").append(Build.DEVICE).append(", board ").append(Build.BOARD)
