@@ -20,6 +20,8 @@ on:
       - '.github/ISSUE_TEMPLATE/**'
       - '.github/workflows/build-macos.yml'
       - '.github/workflows/repository-checks.yml'
+      # Profile recordings only matter to a "pgo: use" build started by hand.
+      - 'os/android/pgo/**'
   workflow_dispatch:
     inputs:
       gpu:
@@ -32,6 +34,11 @@ on:
         type: choice
         options: [compatible, armv9]
         default: compatible
+      pgo:
+        description: 'Profile-guided optimization: off = normal; generate = recording APK (slower, for collecting a profile); use = optimized with the recordings in os/android/pgo'
+        type: choice
+        options: ['off', generate, use]
+        default: 'off'
 
 permissions:
   contents: read
@@ -42,7 +49,7 @@ concurrency:
 
 jobs:
   apk:
-    name: APK (${{ inputs.gpu || 'mali' }}, ${{ inputs.cpu || 'compatible' }})
+    name: APK (${{ inputs.gpu || 'mali' }}, ${{ inputs.cpu || 'compatible' }}, pgo ${{ inputs.pgo || 'off' }})
     runs-on: windows-2022
     timeout-minutes: 360
     defaults:
@@ -51,6 +58,7 @@ jobs:
     env:
       LIBERTY_GPU: ${{ inputs.gpu || 'mali' }}
       LIBERTY_CPU: ${{ inputs.cpu || 'compatible' }}
+      LIBERTY_PGO: ${{ inputs.pgo || 'off' }}
       NDK_VER: 29.0.14206865
       STRIP: '1'
 
@@ -91,10 +99,10 @@ jobs:
           path: |
             out/build
             out/host-tools
-          key: android-${{ env.LIBERTY_GPU }}-${{ env.LIBERTY_CPU }}-${{ github.sha }}
+          key: android-${{ env.LIBERTY_GPU }}-${{ env.LIBERTY_CPU }}-pgo-${{ env.LIBERTY_PGO }}-${{ github.sha }}
           restore-keys: |
+            android-${{ env.LIBERTY_GPU }}-${{ env.LIBERTY_CPU }}-pgo-${{ env.LIBERTY_PGO }}-
             android-${{ env.LIBERTY_GPU }}-${{ env.LIBERTY_CPU }}-
-            android-${{ env.LIBERTY_GPU }}-
 
       - name: Fetch pinned dependencies and apply patches
         run: python tools/setup_repo.py
@@ -121,7 +129,7 @@ jobs:
           path: |
             out/build
             out/host-tools
-          key: android-${{ env.LIBERTY_GPU }}-${{ env.LIBERTY_CPU }}-${{ github.sha }}
+          key: android-${{ env.LIBERTY_GPU }}-${{ env.LIBERTY_CPU }}-pgo-${{ env.LIBERTY_PGO }}-${{ github.sha }}
 
       - name: Package the APK
         run: |
@@ -137,9 +145,11 @@ jobs:
           SUFFIX="$(grep -o 'versionSuffix *= *"[^"]*"' os/android/app/build.gradle.kts | head -1 | sed 's/.*"\(.*\)"/\1/')"
           VERSION="$VERSION$SUFFIX"
           [ "$LIBERTY_CPU" = "armv9" ] && VERSION="$VERSION-armv9"
-          cp os/android/app/build/outputs/apk/debug/app-debug.apk "LibertyRecompAndroid-$VERSION.apk"
-          echo "APK_NAME=LibertyRecompAndroid-$VERSION.apk" >> "$GITHUB_ENV"
-          ls -la LibertyRecompAndroid-*.apk
+          [ "$LIBERTY_PGO" = "generate" ] && VERSION="$VERSION-pgo-recording"
+          [ "$LIBERTY_PGO" = "use" ] && VERSION="$VERSION-pgo"
+          cp os/android/app/build/outputs/apk/debug/app-debug.apk "ZMOD-Liberty-$VERSION.apk"
+          echo "APK_NAME=ZMOD-Liberty-$VERSION.apk" >> "$GITHUB_ENV"
+          ls -la ZMOD-Liberty-*.apk
 
       - name: Upload the APK
         uses: actions/upload-artifact@v4
