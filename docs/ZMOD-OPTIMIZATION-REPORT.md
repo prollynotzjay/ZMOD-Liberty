@@ -99,3 +99,33 @@ Three commits, each on its own:
 - **Vulkan 1.1:** on a 1.1 Mali phone the log shows `Vulkan 1.1 device '...': VK_KHR_buffer_device_address=true ...` and `SPIR-V 1.x shader rewritten as SPIR-V 1.3`. On 1.2+ phones nothing changes (the rewrite never runs).
 - **Lows:** enable Overlay > "1% / 0.1% lows", drive the same route for 2 minutes before and after a change, and compare the `title-fps` log lines.
 - Not tested on a real Vulkan 1.1 Mali device yet. Reports from G57/G68 owners on older firmware are needed.
+
+---
+
+## 8. Phase 2 (CPU): findings and changes
+
+### What the investigation found
+
+| Phase 2 item | State before this update |
+|---|---|
+| Compiler settings | Already strong: `-O3` for the recompiled game, ThinLTO, `-Bsymbolic-functions` (no PLT between game functions), hot-first symbol ordering, ARMv8.2 with inline LSE atomics and native TLS (`gta4-recomp/CMakeLists.txt`, `os/android/scripts/build_native.sh`). |
+| PGO | Wired up in CMake, but the recording went to a private folder that needs a PC (`adb run-as`) and the GitHub build had no way to use a profile. Never shipped. |
+| Direct calls / indirect calls | `tools/direct_calls.py` was measured upstream: no gain at the time, and its first build crashed. Left off. |
+| Busy-waits | Frame-slot wait, guest spinlocks and the UI loop already sleep or back off. The guest **critical section** spin still hammered the lock with compare-and-swap and had no CPU hint. |
+| Thread placement | Already adaptive (busiest threads to the fastest cores, re-ranked every 2 s); no fixed core numbers. Not changed. |
+| Allocation overhead | The renderer's command path is pooled and recycled (upstream 0.5). `XObject::WaitMultiple` still allocates a small vector per wait; not changed (cross-platform API, unmeasured cost). |
+
+### Changes (two commits)
+
+1. **Critical sections** (`src/kernel/xboxkrnl/xboxkrnl_rtl.cpp`): read-only spinning with an ARM `yield` hint, optional longer spin before sleeping (`kernel_critical_section_spins`, launcher "Lock waiting"), and per-thread counters in the 5-second `thermal:` log line (`name=yields/spins/cs-contended/cs-slept`). Default behaviour is the game's own spin count.
+2. **PGO pipeline**: record on the phone, collect from Download/ZMOD-PGO, upload to `os/android/pgo/`, build with `pgo: use`. Steps in `os/android/pgo/README.md`.
+
+### How to measure
+
+- **Lock waiting:** same route, 2 minutes each at Default / Medium / Long. Compare the `title-fps` lows and the `cs-slept` counts. Keep the setting only if the 1% low improves without higher CPU temperature.
+- **PGO:** normal APK vs `-pgo` APK on the same route; compare average FPS and 1% lows.
+
+### Not yet done in Phase 2
+
+- PGO for `librexruntime.so` (kernel, memory, threads): only the game and the renderer are profiled now.
+- Hot-function work in the recompiled code needs a CPU profile from a phone first (simpleperf); the PGO recording can also show which functions are hottest.

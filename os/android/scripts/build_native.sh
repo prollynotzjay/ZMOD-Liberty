@@ -32,10 +32,50 @@ case "${LIBERTY_CPU:-compatible}" in
 esac
 CPU_FLAGS="$CPU_TARGET -fno-emulated-tls"
 echo "== CPU target: ${LIBERTY_CPU:-compatible} ($CPU_FLAGS)"
+
+# Profile-guided optimization (ZMOD Liberty, Phase 2), LIBERTY_PGO:
+#   off (default)  normal build
+#   generate       recording build: the game writes .profraw files every minute
+#                  (os/android/pgo/README.md says where and what to do)
+#   use            merges the recordings in os/android/pgo (.profraw files, or
+#                  .zip files holding them) with the NDK's llvm-profdata and
+#                  builds libmain and the renderer optimized with them
+case "${LIBERTY_PGO:-off}" in
+  off) PGO_VALUE="" ;;
+  generate) PGO_VALUE="generate" ;;
+  use)
+    PGO_IN="$APP_DIR/pgo"
+    PGO_WORK="$REPO/out/pgo"
+    rm -rf "$PGO_WORK/raw" && mkdir -p "$PGO_WORK/raw"
+    shopt -s nullglob
+    for archive in "$PGO_IN"/*.zip; do
+      python -m zipfile -e "$(cygpath -m "$archive" 2>/dev/null || echo "$archive")" \
+        "$(cygpath -m "$PGO_WORK/raw" 2>/dev/null || echo "$PGO_WORK/raw")"
+    done
+    raws=("$PGO_IN"/*.profraw)
+    while IFS= read -r -d '' found; do raws+=("$found"); done \
+      < <(find "$PGO_WORK/raw" -name '*.profraw' -print0)
+    shopt -u nullglob
+    [ ${#raws[@]} -gt 0 ] || { echo "!! LIBERTY_PGO=use, but os/android/pgo has no .profraw or .zip files"; exit 1; }
+    echo "== PGO: merging ${#raws[@]} recording(s)"
+    "$NDK_BIN/llvm-profdata" merge -o "$PGO_WORK/merged.profdata" "${raws[@]}" \
+      || { echo "!! llvm-profdata merge failed"; exit 1; }
+    # The file name carries the profile's hash: a new profile changes the
+    # compile flags, so every object is rebuilt with it (clang does not track
+    # the .profdata file as a dependency).
+    PGO_HASH="$(sha1sum "$PGO_WORK/merged.profdata" | cut -c1-12)"
+    PGO_FILE="$PGO_WORK/liberty-$PGO_HASH.profdata"
+    mv -f "$PGO_WORK/merged.profdata" "$PGO_FILE"
+    PGO_VALUE="$(cygpath -m "$PGO_FILE" 2>/dev/null || echo "$PGO_FILE")"
+    ;;
+  *) echo "unknown LIBERTY_PGO '$LIBERTY_PGO' (use off, generate or use)"; exit 1 ;;
+esac
+echo "== PGO: ${LIBERTY_PGO:-off}${PGO_VALUE:+ ($PGO_VALUE)}"
 # Reconfigure whenever the flags differ from the cached configuration, so a
 # new CPU target really recompiles everything instead of reusing old objects.
 if [ ! -f "$BUILD_DIR/build.ninja" ] || \
-   ! grep -qxF -- "CMAKE_CXX_FLAGS:STRING=$CPU_FLAGS" "$BUILD_DIR/CMakeCache.txt"; then
+   ! grep -qxF -- "CMAKE_CXX_FLAGS:STRING=$CPU_FLAGS" "$BUILD_DIR/CMakeCache.txt" || \
+   ! grep -qxF -- "LIBERTY_ANDROID_PGO:STRING=$PGO_VALUE" "$BUILD_DIR/CMakeCache.txt"; then
   echo "== configuring $BUILD_TYPE in $BUILD_DIR"
   cmake -S "$REPO" -B "$BUILD_DIR" -G Ninja \
     -DCMAKE_C_FLAGS="$CPU_FLAGS" \
@@ -48,6 +88,7 @@ if [ ! -f "$BUILD_DIR/build.ninja" ] || \
     -DLIBERTY_RECOMP_TARGET_PLATFORM=android \
     -DLIBERTY_RECOMP_ANDROID_RUNTIME_ASSETS=ON \
     -DCMAKE_BUILD_TYPE="$BUILD_TYPE" \
+    -DLIBERTY_ANDROID_PGO="$PGO_VALUE" \
     -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
     -DREXGLUE_ENABLE_TRACY=OFF \
     -DGTA4_NATIVE_SPIRV_VAL="$(cygpath -m "$ANDROID_NDK/shader-tools/windows-x86_64/spirv-val.exe")" \

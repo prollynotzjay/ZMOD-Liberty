@@ -682,6 +682,13 @@ public class LauncherActivity extends Activity {
                     new String[] {"kernel_spinlock_spins"},
                     new String[] {"Default", "Minimal", "Short", "Normal", "Long"},
                     new String[] {"4", "16", "64", "256"}),
+            new GraphicsSetting("Lock waiting",
+                    "How long a game thread waits on the CPU for a busy lock before it sleeps. "
+                            + "Default uses the game's own value; longer can cut stutter from "
+                            + "thread handoffs, but uses more CPU. Compare with the 1% lows",
+                    new String[] {"kernel_critical_section_spins"},
+                    new String[] {"Default", "Short", "Medium", "Long"},
+                    new String[] {"256", "1024", "4096"}),
             new GraphicsSetting("Heat guard",
                     "Lowers the draw distance a little before the phone overheats and restores "
                             + "it once it cools, for steadier clocks instead of throttling",
@@ -828,6 +835,7 @@ public class LauncherActivity extends Activity {
             case "CPU boost":
             case "Heat guard":
             case "Thread waiting":
+            case "Lock waiting":
                 return 1;
             default:
                 return 0;

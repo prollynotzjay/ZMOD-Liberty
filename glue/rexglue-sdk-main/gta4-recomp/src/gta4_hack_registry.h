@@ -122,6 +122,7 @@ inline constexpr auto kRegistry = std::to_array<Entry>({
     {"gta4_thread_pinning", Kind::kShortcut, "0", "busiest threads pinned to big cores"},
     {"android_pin_hot_threads", Kind::kShortcut, "false", "hot threads pinned"},
     {"kernel_spinlock_spins", Kind::kShortcut, "0", "guest spinlocks spin before yielding"},
+    {"kernel_critical_section_spins", Kind::kShortcut, "0", "contended critical sections spin before sleeping"},
     {"android_perf_hint", Kind::kShortcut, "false", "Android performance hint session"},
     {"android_perf_hint_target_ms", Kind::kSetting, "", "performance hint target"},
     {"android_gpu_turbo", Kind::kSetting, "false", "GPU held at its highest clock"},

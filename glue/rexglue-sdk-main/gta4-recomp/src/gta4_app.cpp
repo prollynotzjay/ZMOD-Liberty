@@ -880,7 +880,7 @@ void StartThermalLog() {
       const std::string yields = rex::kernel::xboxkrnl::TakeYieldCountSummary(4);
       __android_log_print(ANDROID_LOG_WARN, "LibertyRecomp",
                           "thermal: gpu-level=%s gpu-max=%s gpu-clk=%s gpu-busy=%s gpu-temp=%s "
-                          "cpu-max-khz=%s yields/spins-5s=%s",
+                          "cpu-max-khz=%s yields/spins/cs-contended/cs-slept-5s=%s",
                           read((kgsl + "thermal_pwrlevel").c_str()).c_str(),
                           read((kgsl + "max_gpuclk").c_str()).c_str(),
                           read((kgsl + "gpuclk").c_str()).c_str(),

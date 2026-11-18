@@ -420,8 +420,12 @@ namespace {
 struct YieldCounter {
   std::atomic<uint64_t> yields{0};
   std::atomic<uint64_t> spins{0};
+  std::atomic<uint64_t> cs_contended{0};  // RtlEnterCriticalSection found it taken
+  std::atomic<uint64_t> cs_slept{0};      // ... and went to sleep on its event
   uint64_t reported_yields = 0;
   uint64_t reported_spins = 0;
+  uint64_t reported_cs_contended = 0;
+  uint64_t reported_cs_slept = 0;
   char name[16] = "?";
 };
 
@@ -448,6 +452,8 @@ std::string TakeYieldCountSummary(size_t max_threads) {
     const char* name;
     uint64_t yields;
     uint64_t spins;
+    uint64_t cs_contended;
+    uint64_t cs_slept;
   };
   std::vector<Delta> deltas;
   {
@@ -455,23 +461,36 @@ std::string TakeYieldCountSummary(size_t max_threads) {
     for (YieldCounter* counter : g_yield_counters) {
       const uint64_t yields = counter->yields.load(std::memory_order_relaxed);
       const uint64_t spins = counter->spins.load(std::memory_order_relaxed);
+      const uint64_t cs_contended = counter->cs_contended.load(std::memory_order_relaxed);
+      const uint64_t cs_slept = counter->cs_slept.load(std::memory_order_relaxed);
       Delta delta{counter->name, yields - counter->reported_yields,
-                  spins - counter->reported_spins};
+                  spins - counter->reported_spins, cs_contended - counter->reported_cs_contended,
+                  cs_slept - counter->reported_cs_slept};
       counter->reported_yields = yields;
       counter->reported_spins = spins;
-      if (delta.yields || delta.spins) deltas.push_back(delta);
+      counter->reported_cs_contended = cs_contended;
+      counter->reported_cs_slept = cs_slept;
+      if (delta.yields || delta.spins || delta.cs_contended) deltas.push_back(delta);
     }
   }
   std::sort(deltas.begin(), deltas.end(), [](const Delta& a, const Delta& b) {
-    return a.yields + a.spins > b.yields + b.spins;
+    return a.yields + a.spins + a.cs_contended > b.yields + b.spins + b.cs_contended;
   });
   std::string summary;
   for (size_t i = 0; i < deltas.size() && i < max_threads; ++i) {
     if (!summary.empty()) summary += ' ';
     summary += deltas[i].name;
-    summary += '=' + std::to_string(deltas[i].yields) + '/' + std::to_string(deltas[i].spins);
+    summary += '=' + std::to_string(deltas[i].yields) + '/' + std::to_string(deltas[i].spins) +
+               '/' + std::to_string(deltas[i].cs_contended) + '/' +
+               std::to_string(deltas[i].cs_slept);
   }
   return summary;
+}
+
+void NoteCriticalSectionContention(bool slept) {
+  YieldCounter& counter = CurrentYieldCounter();
+  counter.cs_contended.fetch_add(1, std::memory_order_relaxed);
+  if (slept) counter.cs_slept.fetch_add(1, std::memory_order_relaxed);
 }
 
 u32 NtYieldExecution_entry() {

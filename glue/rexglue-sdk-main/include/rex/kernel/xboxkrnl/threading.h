@@ -38,10 +38,15 @@ void xeKeKfReleaseSpinLock(PPCContext* ctx, rex::X_KSPINLOCK* lock, uint32_t old
                            bool change_irql = true);
 
 // Guest threads that spin through NtYieldExecution or a contended guest
-// spinlock, as "name=yields/spins" since the previous call, busiest first
+// spinlock, or wait on a taken critical section, as
+// "name=yields/spins/cs-contended/cs-slept" since the previous call, busiest first
 // (at most `max_threads`); empty when nothing yielded. A yield returns at once
 // on the host, so a title loop that counts yields as time spins instead.
 std::string TakeYieldCountSummary(size_t max_threads);
+
+// RtlEnterCriticalSection found the section taken; `slept` when spinning did
+// not get it and the thread waited on the section's event.
+void NoteCriticalSectionContention(bool slept);
 
 // Guest-memory APC helpers
 void xeKeInitializeApc(rex::system::XAPC* apc, uint32_t thread_ptr, uint32_t kernel_routine,

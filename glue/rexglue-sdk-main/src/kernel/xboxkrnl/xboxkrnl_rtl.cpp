@@ -16,6 +16,7 @@
 #include <string>
 
 #include <rex/chrono/chrono_steady_cast.h>
+#include <rex/cvar.h>
 #include <rex/kernel/xboxkrnl/private.h>
 #include <rex/kernel/xboxkrnl/rtl.h>
 #include <rex/kernel/xboxkrnl/threading.h>
@@ -30,6 +31,10 @@
 #include <rex/system/xthread.h>
 #include <rex/thread.h>
 #include <rex/thread/atomic.h>
+
+REXCVAR_DEFINE_UINT32(kernel_critical_section_spins, 0, "Kernel",
+                      "Minimum rounds a contended guest critical section waits on the CPU "
+                      "before its thread sleeps; 0 uses only the game's own spin count");
 
 namespace rex::kernel::xboxkrnl {
 using namespace rex::system;
@@ -387,19 +392,41 @@ void RtlEnterCriticalSection_entry(ppc_ptr_t<X_RTL_CRITICAL_SECTION> cs) {
     return;
   }
 
-  // Spin loop
+  // Free: take it at once (the common case). Same result as the atomic_inc
+  // below when the section is free, without touching it when it is not.
+  if (rex::thread::atomic_cas(-1, 0, &cs->lock_count)) {
+    cs->owning_thread = cur_thread;
+    cs->recursion_count = 1;
+    return;
+  }
+
+  // Taken. Spin first: the owner usually leaves within a few microseconds,
+  // and sleeping on the event costs a futex wait, a wake-up and a trip
+  // through the scheduler. Each round only reads the lock word (no
+  // read-modify-write until it looks free, so the owner's cache line is not
+  // stolen on every round) and gives the core a "yield" hint.
+  spin_count = std::max(spin_count, REXCVAR_GET(kernel_critical_section_spins));
   while (spin_count--) {
-    if (rex::thread::atomic_cas(-1, 0, &cs->lock_count)) {
-      // Acquired.
+    if (__atomic_load_n(&cs->lock_count, __ATOMIC_RELAXED) == -1 &&
+        rex::thread::atomic_cas(-1, 0, &cs->lock_count)) {
+      NoteCriticalSectionContention(false);
       cs->owning_thread = cur_thread;
       cs->recursion_count = 1;
       return;
     }
+#if defined(__aarch64__)
+    __asm__ __volatile__("yield");
+#elif defined(__x86_64__) || defined(_M_X64)
+    __builtin_ia32_pause();
+#endif
   }
 
   if (rex::thread::atomic_inc(&cs->lock_count) != 0) {
     // Create a full waiter.
+    NoteCriticalSectionContention(true);
     xeKeWaitForSingleObject(reinterpret_cast<void*>(cs.host_address()), 8, 0, 0, nullptr);
+  } else {
+    NoteCriticalSectionContention(false);  // freed just as the spinning ended
   }
 
   assert_true(cs->owning_thread == 0);
