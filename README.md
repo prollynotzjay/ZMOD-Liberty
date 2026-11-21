@@ -88,7 +88,6 @@ The game is limited by its **CPU work**, not the GPU, so:
   (for example Xiaomi Game Turbo → performance), and avoid playing while charging.
 - About **20–30 FPS** in the city and 30 FPS indoors on the Dimensity 8400. Phones with slower
   CPUs will run lower.
-- Use PanVK drivers by [FristOneRR.](https://github.com/FristOneRR/FristOneRR-Panvk-Driver/releases/latest)
 
 ## Known issues
 - Performance drops in busy city areas; clocks still vary with heat.
